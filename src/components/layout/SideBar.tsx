@@ -86,6 +86,11 @@ const navigationItems = [
     label: "Manage Website",
   },
   {
+    path: "/manage-questions",
+    icon: <IoBookOutline className="h-6 w-6" />,
+    label: "Manage Website",
+  },
+  {
     path: "/add-admin",
     icon: <HiOutlineUserAdd className="h-6 w-6" />,
     label: "Add Admin",

@@ -4,6 +4,7 @@ import Dashboard from "@/pages/Dashboard";
 import AddSection from "@/pages/AddSections";
 import Login from '@/pages/Login'
 import Sections from "@/pages/Sections";
+import Questions from "@/pages/questions";
 
 const routes: RouteObject[] = [
   {
@@ -21,6 +22,10 @@ const routes: RouteObject[] = [
       {
         path:'manage-sections',
         element: <Sections />
+      },
+      {
+        path:'manage-questions',
+        element: <Questions />
       }
     ],
   },
