@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { 
-  AlertDialog, 
+import {
+  AlertDialog,
   AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogTitle,
@@ -14,44 +14,15 @@ import { Badge } from "@/components/ui/badge";
 import { PencilIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-interface SectionFeatureKeyVal {
-  id: number;
-  icon: string;
-  key: string | null;
-  value: string;
-  is_active?: boolean;
-}
-
-interface SectionFeatureDetailed {
-  id: number;
-  icon: string;
-  background: string;
-  title: string;
-  description: string;
-}
-
-type SectionType = "HeroBanner" | "CategoryBanner" | "PromoBanner"; // Add your actual types
-
-type APISection = {
-  id: number;
-  type: SectionType;
-  title: string;
-  description: string;
-  image: string;
-  icon: string;
-  is_active: boolean;
-  features: (SectionFeatureKeyVal | SectionFeatureDetailed)[];
-};
-
 interface SectionProps {
-  section: APISection;
+  section: Section;
   children: React.ReactNode;
   onDelete?: (sectionId: number) => void;
 }
 
-function Section({ section, children, onDelete }: SectionProps) {
+function SectionCard({ section, children, onDelete }: SectionProps) {
   const [isActive, setIsActive] = useState(section.is_active);
-  
+
   const handleStatusToggle = async (checked: boolean) => {
     try {
       // Add actual API call here
@@ -83,7 +54,7 @@ function Section({ section, children, onDelete }: SectionProps) {
             {isActive ? "Active" : "Inactive"}
           </span>
         </div>
-        
+
         <div className="flex gap-2">
           {/* Edit Dialog */}
           <Dialog>
@@ -93,9 +64,7 @@ function Section({ section, children, onDelete }: SectionProps) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl">
-              {children}
-            </DialogContent>
+            <DialogContent className="max-w-4xl">{children}</DialogContent>
           </Dialog>
 
           {/* Delete Confirmation */}
@@ -109,11 +78,11 @@ function Section({ section, children, onDelete }: SectionProps) {
             <AlertDialogContent>
               <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete this section? 
+                Are you sure you want to delete this section?
               </AlertDialogDescription>
               <div className="flex justify-end gap-4 mt-4">
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
+                <AlertDialogAction
                   onClick={handleDelete}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
@@ -130,17 +99,17 @@ function Section({ section, children, onDelete }: SectionProps) {
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             {section.icon && (
-              <img 
-                src={section.icon} 
+              <img
+                src={section.icon}
                 alt="Section icon"
                 className="w-12 h-12 object-contain"
               />
             )}
             <h3 className="text-xl font-semibold">{section.title}</h3>
           </div>
-          
+
           <p className="text-muted-foreground">{section.description}</p>
-          
+
           {section.image && (
             <div className="relative aspect-video rounded-lg overflow-hidden">
               <img
@@ -161,11 +130,14 @@ function Section({ section, children, onDelete }: SectionProps) {
                 {"title" in feature ? (
                   // Detailed Feature
                   <div className="space-y-2">
-                    <div 
-                      className="w-full h-16 rounded-md"
-                      style={{ backgroundColor: feature.background }}
-                    />
-                    <h5 className="font-medium">{feature.title}</h5>
+                    <div className="flex gap-2">
+                      <img
+                        src={feature.icon}
+                        alt="Feature icon"
+                        className="w-8 h-8 object-contain"
+                      />
+                      <h5 className="font-medium">{feature.title}</h5>
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {feature.description}
                     </p>
@@ -199,4 +171,4 @@ function Section({ section, children, onDelete }: SectionProps) {
   );
 }
 
-export default Section;
+export default SectionCard;

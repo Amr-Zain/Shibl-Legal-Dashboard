@@ -9,7 +9,7 @@ export const sections: { type: BannerTypes, text: string }[] = [
   { type: 'privacy_policy', text: 'Privacy policy' },
 ]
 
-export const sectionsData: APISection[] = [
+export const sectionsData: Section[] = [
  
   {
     id: 23,
@@ -308,5 +308,76 @@ export const sectionsData: APISection[] = [
     icon: "https://shebl9.azmy.aait-d.com/dashboardAssets/images/cover/cover_sm.png",
     is_active: true,
     features: []
+  },
+];
+ export const questionsData: Question[] = [
+            {
+                "id": 1,
+                "is_active": 1,
+                "question": "What Legal Services Does Shibl Legal Offer?",
+                "answer": "We offer a wide range of legal services, including legal consultation, pleading and defense before courts, contract drafting, company formation, and legal representation."
+            },
+            {
+                "id": 3,
+                "is_active": 1,
+                "question": "How Can I Contact the Shibl Legal Team?",
+                "answer": "You can reach us through our official channels, including phone, email, or our website."
+            },
+            {
+                "id": 4,
+                "is_active": 1,
+                "question": "How Can I Book a Legal Consultation?",
+                "answer": "You can book a consultation by contacting us directly or filling out the appointment request form on our website."
+            },
+            {
+                "id": 5,
+                "is_active": 1,
+                "question": "Do You Provide Legal Services Only for Companies or for Individuals as Well?",
+                "answer": "We offer legal services for both companies and individuals, tailored to meet their specific needs."
+            }
+        ]
+
+
+export 
+const contactData = [
+  {
+    id: 1,
+    key: "phone",
+    value: "+966 18637 1873",
+  },
+  {
+    id: 2,
+    key: "facebook",
+    value: "https://www.facebook.com/example",
+  },
+  {
+    id: 3,
+    key: "x",
+    value: "https://www.twitter.com/example",
+  },
+  {
+    id: 4,
+    key: "instagram",
+    value: "https://www.instagram.com/example",
+  },
+  {
+    id: 5,
+    key: "address",
+    value: "الرياض, المملكة العربية السعودية",
+  },
+  {
+    id: 6,
+    key: "email",
+    value: "example@gmail.com",
+  },
+  {
+    id: 7,
+    key: "appointments",
+    value: "يوميا, 08:00 صباحا حتي 04:00 مساء",
+  },
+  {
+    id: 8,
+    key: "desc",
+    value: "Learn About Our Vision, Mission, and Core Values...",
   },
 ];

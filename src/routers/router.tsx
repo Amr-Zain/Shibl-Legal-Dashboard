@@ -1,10 +1,11 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
 import App from "../App";
 import Dashboard from "@/pages/Dashboard";
-import AddSection from "@/pages/AddSections";
 import Login from '@/pages/Login'
 import Sections from "@/pages/Sections";
-import Questions from "@/pages/questions";
+import Questions from "@/pages/Questions";
+import Contact from "@/pages/Contact";
+import WhyUs from "@/pages/WhyUs";
 
 const routes: RouteObject[] = [
   {
@@ -16,16 +17,20 @@ const routes: RouteObject[] = [
         element: <Dashboard />,
       },
       {
-        path: "add-section",
-        element: <AddSection />,
-      },
-      {
-        path:'manage-sections',
+        path:'sections',
         element: <Sections />
       },
       {
-        path:'manage-questions',
+        path:'faq',
         element: <Questions />
+      },
+      {
+        path:'contact',
+        element: <Contact />
+      },
+      {
+        path:'why-us',
+        element: <WhyUs />
       }
     ],
   },

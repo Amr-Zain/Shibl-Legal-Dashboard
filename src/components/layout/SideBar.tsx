@@ -1,98 +1,93 @@
-import { NavLink, Link } from "react-router";
-import img from "../../assets/logo.png";
-import { HiOutlineUserAdd, HiViewGridAdd } from "react-icons/hi";
-import { IoBookOutline } from "react-icons/io5";
-import { HiOutlineLogout } from "react-icons/hi";
+import { Link, NavLink } from "react-router";
+import {
+  LayoutDashboard,
+  BookMarked,
+  HelpCircle,
+  Contact,
+  UserCog,
+  LogOut,
+  Award
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const Sidebar = () => {
-  const handleLogout = async () => {
-    //navigate("/");
-  };
+export default function Sidebar() {
   return (
-    <aside className="hidden sm:flex sm:flex-col w-20 sticky left-0 top-0 h-[100vh]">
-      <Link
-        to="/"
-        className="inline-flex items-center justify-center h-[71px] w-20 bg-primary hover:bg-primary/100"
-      >
-        <img src={img} alt="logo" className="p-4" />
-      </Link>
-      <div className="flex-grow flex flex-col justify-between text-gray-500 bg-secondary">
-        <nav className="flex flex-col mx-4 my-6 space-y-4">
-          {navigationItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.end}
-              onClick={() => window.scrollTo(0, 0)}
-              className={({ isActive }) =>
-                `inline-flex items-center justify-center py-3 rounded-lg transition-colors ${
-                  isActive
-                    ? "text-primary bg-white shadow-md"
-                    : "hover:text-gray-400 hover:bg-gray-700 focus:bg-gray-700"
-                }`
-              }
-            >
-              <span className="sr-only">{item.label}</span>
-              {item.icon}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="inline-flex items-center justify-center h-20 w-20 border-t border-gray-700">
+    <div className={cn(
+      "hidden border-r bg-muted/40 md:block",
+      "fixed top-0 left-0 h-screen w-48"
+    )}>
+      <div className="flex h-full flex-col gap-2">
+        <div className="flex h-18 items-center border-b px-4">
+          <Link to="/" className="text-center font-semibold">
+            <span className="text-lg">Dashboard</span>
+          </Link>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto">
+          <nav className="grid items-start px-4 py-2 text-sm font-medium">
+            {navigationItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.end}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
+                    isActive ? "bg-muted text-primary" : "text-muted-foreground"
+                  )
+                }
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-4">
           <button
-            onClick={handleLogout}
-            className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg transition-colors"
-            aria-label="Logout"
+            onClick={() => console.log("Logout")}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary"
           >
-            <HiOutlineLogout className="h-6 w-6" />
+            <LogOut className="h-4 w-4" />
+            Logout
           </button>
         </div>
       </div>
-    </aside>
+    </div>
   );
-};
-
-export default Sidebar;
+}
 
 const navigationItems = [
   {
     path: "/",
-    icon: (
-      <svg
-        aria-hidden="true"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        className="h-6 w-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-      </svg>
-    ),
+    icon: LayoutDashboard,
     label: "Dashboard",
     end: true,
   },
   {
-    path: "/add-section",
-    icon: <HiViewGridAdd className="h-6 w-6" />,
-    label: "Add Section",
+    path: "/sections",
+    icon: BookMarked,
+    label: "Sections",
   },
   {
-    path: "/manage-sections",
-    icon: <IoBookOutline className="h-6 w-6" />,
-    label: "Manage Website",
+    path: "/faq",
+    icon: HelpCircle,
+    label: "FAQ",
   },
   {
-    path: "/manage-questions",
-    icon: <IoBookOutline className="h-6 w-6" />,
-    label: "Manage Website",
+    path: "/contact",
+    icon: Contact,
+    label: "Contact",
   },
   {
-    path: "/add-admin",
-    icon: <HiOutlineUserAdd className="h-6 w-6" />,
-    label: "Add Admin",
+    path: "/why-us",
+    icon: Award,
+    label: "Why Us",
+  },
+  {
+    path: "/admin-users",
+    icon: UserCog,
+    label: "Admin Users",
   },
 ];

@@ -42,7 +42,8 @@ interface HomeType {
 
 
 interface Question {
-    id: string;
+    id: number;
+    is_active: boolean| number
     question: string;
     answer: string;
 }
@@ -73,17 +74,6 @@ interface Feature {
     icon: File;
     is_active?: boolean;
 }
-interface Section {
-    id?: number
-    type: BannerTypes;
-    titleAr: string;
-    titleEn: string;
-    descriptionEn: string;
-    descriptionAr: string;
-    image: File;
-    icon?: File;
-    features: Feature[];
-}
 
 interface Banner {
     id: number;
@@ -94,17 +84,6 @@ interface Banner {
     icon: string;
     is_active: boolean;
     features: Feature[];
-}
-
-
-interface APIFeature {
-    id: number;
-    key: string | null;
-    value: string;
-    icon: string;
-    is_active: boolean;
-    title?: string;
-    description?: string
 }
 
 /* 
@@ -121,7 +100,7 @@ interface SectionFeatureKeyVal {
     icon: string;
     key: string | null;
     value: string;
-    is_active?: boolean; // Made optional to accommodate variations
+    is_active?: boolean; 
 }
 
 interface SectionFeatureDetailed {
@@ -132,7 +111,7 @@ interface SectionFeatureDetailed {
     description: string;
 }
 
-type APISection = {
+interface Section  {
     id: number;
     type: SectionType;
     title: string;

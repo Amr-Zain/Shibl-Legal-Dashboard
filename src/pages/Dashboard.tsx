@@ -41,7 +41,7 @@ function Dashboard() {
   }, []);
   console.log('dashboard')
   return (
-    <div className="space-y-8 p-6 mt-6">
+    <>
       <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
         {statItems.map((item, index) => (
           <StatCard key={index} {...item} />
@@ -85,7 +85,7 @@ function Dashboard() {
           </div>
         </ChartContainer>
       </section>
-    </div>
+    </>
   );
 }
 

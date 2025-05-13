@@ -1,7 +1,17 @@
-import { createPortal } from "react-dom";
-import { Link } from "react-router";
-import { IoBookOutline, IoCloseOutline } from "react-icons/io5";
-import { HiOutlineUserAdd, HiViewGridAdd } from "react-icons/hi";
+import { Link, useLocation } from "react-router";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
+import {
+  LayoutDashboard,
+  BookMarked,
+  HelpCircle,
+  Contact,
+  UserCog,
+  Award,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,95 +19,73 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose }: ModalProps) => {
-  return createPortal(
-    <div
-      className={`fixed inset-0 z-150 origin-left transition-all duration-300 ${
-        isOpen ? "translate-0" : "translate-[-100%]"
-      }`}
-    >
-      <div
-        className={`fixed inset-0 backdrop-blur-[1.25px]`}
-        onClick={onClose}
-      />
+  const location = useLocation();
 
-      <div
-        className={`fixed left-0 top-0 h-screen w-96 bg-white shadow-2xl transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        className="sm:max-w-md h-screen w-full max-w-none rounded-none sm:rounded-l-lg sm:max-h-none p-0"
       >
-        <div className="h-full flex flex-col">
-          <div className="bg-white border-b border-b-gray-200 shadow-sm">
-            <div className="flex justify-between items-center px-6 py-2">
-              <h3 className="text-xl text-gray-900 font-semibold">Menu</h3>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <IoCloseOutline className="w-6 h-6 text-secondary" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-6">
-            <ul>
-              {navigationItems.map((item) => (
-                <li key={item.path}>
-                  <Link
-                    className="flex gap-2 mb-4 text-gray-700"
-                    to={item.path}
-                    onClick={onClose}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+        <div className="border-b p-4 h-fit">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Menu</h2>
           </div>
         </div>
-      </div>
-    </div>,
-    document.getElementById("root2")!
+
+        <div className="flex-1 overflow-y-auto p-4">
+          <nav className="grid gap-1">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={onClose}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground hover:text-primary",
+                  location.pathname === item.path ? "bg-muted text-primary" : ""
+                )}
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
 export default Modal;
 
- const navigationItems = [
+const navigationItems = [
   {
     path: "/",
-    icon: (
-      <svg
-        aria-hidden="true"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        className="h-6 w-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-      </svg>
-    ),
+    icon: LayoutDashboard,
     label: "Dashboard",
-    end: true,
   },
   {
-    path: "/add-section",
-    icon: <HiViewGridAdd className="h-6 w-6" />,
-    label: "Add Section",
+    path: "/sections",
+    icon: BookMarked,
+    label: "Sections",
   },
   {
-    path: "/manage-sections",
-    icon: <IoBookOutline className="h-6 w-6" />,
-    label: "Manage Website",
+    path: "/faq",
+    icon: HelpCircle,
+    label: "FAQ",
   },
   {
-    path: "/add-admin",
-    icon: <HiOutlineUserAdd className="h-6 w-6" />,
-    label: "Add Admin",
+    path: "/contact",
+    icon: Contact,
+    label: "Contact",
+  },
+  {
+    path: "/why-us",
+    icon: Award,
+    label: "Why Us",
+  },
+  {
+    path: "/admin-users",
+    icon: UserCog,
+    label: "Admin Users",
   },
 ];
