@@ -4,35 +4,35 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Field from "../util/FormField";
-import { questionFormSchema, type QuestionFormValues } from "@/schemas";
+import { TitleFeatureFormSchema, type TitleFeatureFormValues } from "@/schemas";
 
-interface QuestionsFormProps {
-  defaultValues?: QuestionFormValues;
-  onSubmit: (values: QuestionFormValues) => Promise<void> | void;
+interface Props {
+  defaultValues?: TitleFeatureFormValues;
+  onSubmit: (values: TitleFeatureFormValues) => Promise<void> ;
   onCancel?: () => void;
   isUpdate?: boolean;
 }
 
-export function QuestionsForm({
+export function TitleFeatureForm({
   defaultValues,
   onSubmit,
   onCancel,
-}: QuestionsFormProps) {
+}: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<QuestionFormValues>({
-    resolver: zodResolver(questionFormSchema),
+  const form = useForm<TitleFeatureFormValues>({
+    resolver: zodResolver(TitleFeatureFormSchema),
     defaultValues: defaultValues || {
-      questionEn: "",
-      questionAr: "",
-      answerEn: "",
-      answerAr: "",
+      titleEn: "",
+      titleAr: "",
+      descriptionEn: "",
+      descriptionAr: "",
       is_active: true,
     },
     mode: "onBlur",
   });
 
-  const handleSubmit = async (values: QuestionFormValues) => {
+  const handleSubmit = async (values: TitleFeatureFormValues) => {
     setIsLoading(true);
     try {
       await onSubmit(values);
@@ -47,31 +47,31 @@ export function QuestionsForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid gap-4">
-          <Field<QuestionFormValues>
+          <Field<TitleFeatureFormValues>
             control={form.control}
-            name="questionEn"
-            label="Question (English)"
-            placeholder="Enter question in English"
+            name="titleEn"
+            label="title (English)"
+            placeholder="Enter title in English"
           />
-          <Field<QuestionFormValues>
+          <Field<TitleFeatureFormValues>
             control={form.control}
-            name="answerEn"
-            label="Answer (English)"
-            placeholder="Enter answer in English"
+            name="descriptionEn"
+            label="description (English)"
+            placeholder="Enter description in English"
           />
-          <Field<QuestionFormValues>
+          <Field<TitleFeatureFormValues>
             control={form.control}
-            name="questionAr"
-            label="Question (Arabic)"
+            name="titleAr"
+            label="title (Arabic)"
             dir="rtl"
-            placeholder="أدخل السؤال بالعربية"
+            placeholder="أدخل العنوان بالعربية"
           />
-          <Field<QuestionFormValues>
+          <Field<TitleFeatureFormValues>
             control={form.control}
-            name="answerAr"
-            label="Answer (Arabic)"
+            name="descriptionAr"
+            label="description (Arabic)"
             dir="rtl"
-            placeholder="أدخل الإجابة بالعربية"
+            placeholder="أدخل الوصف بالعربية"
           />
           <Field
             control={form.control}

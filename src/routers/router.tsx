@@ -1,45 +1,54 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
 import App from "../App";
 import Dashboard from "@/pages/Dashboard";
-import Login from '@/pages/Login'
+import Login from "@/pages/Login";
 import Sections from "@/pages/Sections";
 import Questions from "@/pages/Questions";
 import Contact from "@/pages/Contact";
 import WhyUs from "@/pages/WhyUs";
+import Services from "@/pages/Services";
+import NotFound from "./NotFound";
+import PrivateRoute from "./protectedRoute";
 
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <App />,//wrappe with outh
+    element: (
+      <PrivateRoute>
+        <App />
+      </PrivateRoute>
+    ), 
     children: [
       {
         index: true,
         element: <Dashboard />,
       },
       {
-        path:'sections',
-        element: <Sections />
+        path: "sections",
+        element: <Sections />,
       },
       {
-        path:'faq',
-        element: <Questions />
+        path: "faq",
+        element: <Questions />,
       },
       {
-        path:'contact',
-        element: <Contact />
+        path: "contact",
+        element: <Contact />,
       },
       {
-        path:'why-us',
-        element: <WhyUs />
-      }
+        path: "why-us",
+        element: <WhyUs />,
+      },
+      {
+        path: "services",
+        element: <Services />,
+      },
     ],
   },
-  { path: '/login',
-    element: <Login />
-  },
+  { path: "/login", element: <Login /> },
   {
     path: "*",
-    element: <div>Not Found</div>,
+    element: <NotFound />,
   },
 ];
 

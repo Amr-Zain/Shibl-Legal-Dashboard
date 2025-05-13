@@ -10,8 +10,8 @@ function App() {
       </aside>
       <div className="flex-1">
         <Header />
-        <main className="overflow-y-auto p-6">
-          <div className="mx-auto space-y-6">
+        <main className="overflow-y-auto px-6">
+          <div className="mx-auto">
             <Outlet />
           </div>
         </main>

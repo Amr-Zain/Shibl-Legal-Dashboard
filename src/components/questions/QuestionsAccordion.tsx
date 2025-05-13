@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Accordion,
   AccordionContent,
@@ -7,18 +5,23 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import { Button } from "../ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import UpdateDeleteModals from "../util/UpdateDeleteModals";
+import { QuestionsForm } from "./questionForm";
+import type { QuestionFormValues } from "@/schemas";
 
-function QuestionsAccordion({
-  questions,
-  openDeleteModal,
-  openEditModal,
-}: {
-  questions: Question[];
-  openDeleteModal: (question: Question) => void;
-  openEditModal: (question: Question) => void;
-}) {
+function QuestionsAccordion({ questions }: { questions: Question[] }) {
+  const handleUpdateQuestion = async (data: QuestionFormValues) => {
+    console.log(data);
+  };
+  const handleDeleteQuestion = (id: number) => async () => {
+    console.log(id);
+  };
+  const FormateQuestion = (question: Question) => ({
+    questionEn: question.question,
+    questionAr: question.question,
+    answerAr: question.answer,
+    answerEn: question.answer,
+  });
   return (
     <Card className="p-4">
       <Accordion type="multiple" className="w-full">
@@ -28,28 +31,14 @@ function QuestionsAccordion({
               <AccordionTrigger className="flex-1 text-left">
                 <span className="font-medium">{question.question}</span>
               </AccordionTrigger>
-              <div className="ml-4 flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditModal(question);
-                  }}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteModal(question);
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+
+              <UpdateDeleteModals onDelete={handleDeleteQuestion(question.id)}>
+                <QuestionsForm
+                  defaultValues={FormateQuestion(question)}
+                  onSubmit={handleUpdateQuestion}
+                  isUpdate
+                />
+              </UpdateDeleteModals>
             </div>
             <AccordionContent className="pb-4 pt-2">
               <div className="text-muted-foreground">

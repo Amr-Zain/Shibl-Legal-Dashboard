@@ -11,7 +11,7 @@ const Header = () => {
       <div className="flex items-center h-18">
         <button
         onClick={()=>setIsModalOpen(true)}
-          className="block sm:hidden relative flex-shrink-0 p-2 mr-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 rounded-full"
+          className="block md:hidden relative flex-shrink-0 p-2 mr-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 rounded-full"
         >
           <RiMenu2Fill className="h-6 w-6" />
           <span className="sr-only">Menu</span>

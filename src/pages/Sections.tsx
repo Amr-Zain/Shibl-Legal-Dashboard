@@ -1,5 +1,3 @@
-"use client";
-
 import SectionCard from "@/components/sections/SectionCard";
 import SectionForm from "@/components/sections/SectionForm";
 

@@ -106,7 +106,7 @@ interface SectionFeatureKeyVal {
 interface SectionFeatureDetailed {
     id: number;
     icon: string;
-    background: string;
+    background?: string;
     title: string;
     description: string;
 }

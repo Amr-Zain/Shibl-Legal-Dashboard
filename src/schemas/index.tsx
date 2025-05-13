@@ -88,3 +88,22 @@ export const whyUsFeatureFormSchema = z.object({
 
 export type WhyUsFormValues = z.infer<typeof whyUsFeatureFormSchema>;
 
+
+export const TitleFeatureFormSchema = z.object({
+  id: z.number().optional(),
+  titleEn: z.string().min(8, {
+    message: "English Title must be at least 8 characters.",
+  }),
+  titleAr: z.string().min(8, {
+    message: "Arabic Title must be at least 8 characters.",
+  }),
+  descriptionEn: z.string().min(8, {
+    message: "English description must be at least 8 characters.",
+  }),
+  descriptionAr: z.string().min(8, {
+    message: "Arabic description must be at least 8 characters.",
+  }),
+  is_active: z.boolean().optional()
+});
+export type TitleFeatureFormValues = z.infer<typeof TitleFeatureFormSchema>;
+

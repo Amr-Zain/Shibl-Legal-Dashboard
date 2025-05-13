@@ -9,8 +9,11 @@ import {
   Award
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useContext } from "react";
+import { AuthContext } from "@/Auth/AuthProvider";
 
 export default function Sidebar() {
+  const { logout } = useContext(AuthContext)!;
   return (
     <div className={cn(
       "hidden border-r bg-muted/40 md:block",
@@ -46,7 +49,7 @@ export default function Sidebar() {
 
         <div className="p-4">
           <button
-            onClick={() => console.log("Logout")}
+            onClick={() => logout()}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary"
           >
             <LogOut className="h-4 w-4" />
@@ -84,6 +87,11 @@ const navigationItems = [
     path: "/why-us",
     icon: Award,
     label: "Why Us",
+  },
+  {
+    path: "/services",
+    icon: Award,
+    label: "Our Services",
   },
   {
     path: "/admin-users",

@@ -1,18 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { PencilIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
+import TitleFeature from "./TitleFeature";
+import UpdateDeleteModals from "../util/UpdateDeleteModals";
+import KeyValueFeature from "./KeyValueFeature";
 
 interface SectionProps {
   section: Section;
@@ -32,7 +23,7 @@ function SectionCard({ section, children, onDelete }: SectionProps) {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (onDelete) {
       onDelete(section.id);
     }
@@ -54,44 +45,9 @@ function SectionCard({ section, children, onDelete }: SectionProps) {
             {isActive ? "Active" : "Inactive"}
           </span>
         </div>
-
-        <div className="flex gap-2">
-          {/* Edit Dialog */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                <PencilIcon className="w-4 h-4 mr-2" />
-                Edit
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl">{children}</DialogContent>
-          </Dialog>
-
-          {/* Delete Confirmation */}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to delete this section?
-              </AlertDialogDescription>
-              <div className="flex justify-end gap-4 mt-4">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Delete Section
-                </AlertDialogAction>
-              </div>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+        <UpdateDeleteModals onDelete={handleDelete}>
+          {children}
+        </UpdateDeleteModals>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -128,39 +84,9 @@ function SectionCard({ section, children, onDelete }: SectionProps) {
             {section.features.map((feature) => (
               <div key={feature.id} className="p-3 border rounded-lg">
                 {"title" in feature ? (
-                  // Detailed Feature
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <img
-                        src={feature.icon}
-                        alt="Feature icon"
-                        className="w-8 h-8 object-contain"
-                      />
-                      <h5 className="font-medium">{feature.title}</h5>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </div>
+                  <TitleFeature feature={feature} />
                 ) : (
-                  // Key-Value Feature
-                  <div className="flex items-center gap-3">
-                    {feature.icon && (
-                      <img
-                        src={feature.icon}
-                        alt="Feature icon"
-                        className="w-8 h-8 object-contain"
-                      />
-                    )}
-                    <div>
-                      {feature.key && (
-                        <span className="text-sm font-medium">
-                          {feature.key}:{" "}
-                        </span>
-                      )}
-                      <span>{feature.value}</span>
-                    </div>
-                  </div>
+                  <KeyValueFeature feature={feature} />
                 )}
               </div>
             ))}

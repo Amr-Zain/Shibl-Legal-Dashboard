@@ -288,7 +288,7 @@ export const sectionsData: Section[] = [
     icon: "https://shebl9.azmy.aait-d.com/dashboardAssets/images/cover/cover_sm.png",
     is_active: true,
     features: []
-  },
+  }/* ,
    {
     id: 14,
     type: "privacy_policy",
@@ -308,7 +308,7 @@ export const sectionsData: Section[] = [
     icon: "https://shebl9.azmy.aait-d.com/dashboardAssets/images/cover/cover_sm.png",
     is_active: true,
     features: []
-  },
+  }, */
 ];
  export const questionsData: Question[] = [
             {
@@ -381,3 +381,4 @@ const contactData = [
     value: "Learn About Our Vision, Mission, and Core Values...",
   },
 ];
+
