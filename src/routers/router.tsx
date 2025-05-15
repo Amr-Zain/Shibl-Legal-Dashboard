@@ -14,9 +14,7 @@ const routes: RouteObject[] = [
   {
     path: "/",
     element: (
-      <PrivateRoute>
         <App />
-      </PrivateRoute>
     ), 
     children: [
       {

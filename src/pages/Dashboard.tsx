@@ -7,6 +7,7 @@ import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6";
 import { IoBookOutline } from "react-icons/io5";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 const statItems = [
   {
     value: 100,
@@ -36,12 +37,17 @@ const statItems = [
 ];
 
 function Dashboard() {
+  const { t } = useTranslation();
   useEffect(() => {
     document.title = "Dashboard";
   }, []);
   console.log('dashboard')
   return (
     <div className="space-y-8 p-6 mt-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-lg md:text-2xl font-bold">{t('sidebar.dashboard')}</h1>
+        
+      </div>
       <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
         {statItems.map((item, index) => (
           <StatCard key={index} {...item} />

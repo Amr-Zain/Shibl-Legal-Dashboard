@@ -6,12 +6,14 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import TitleFeature from "@/components/sections/TitleFeature";
 import { TitleFeatureForm } from "@/components/sections/TitleFeatueForm";
+import { useTranslation } from "react-i18next";
+import { Plus } from "lucide-react";
 
 function Services() {
   const services = sectionsData.filter((sec) => sec.type === "our_services")[0]
     .features;
   const [createModal, setCreatModal] = useState(false);
-
+  const { t } = useTranslation();
   const createWhyUsFeature = async (data: TitleFeatureFormValues) => {
     console.log("Creating section:", data);
   };
@@ -19,8 +21,11 @@ function Services() {
   return (
     <div className="space-y-8 p-6 mt-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg md:text-2xl font-bold">Services Feacture</h1>
-        <Button onClick={() => setCreatModal(true)}>Add New Feature</Button>
+        <h1 className="text-lg md:text-2xl font-bold">{t('sidebar.services')}</h1>
+        <Button onClick={() => setCreatModal(true)}>
+          <Plus />
+          {t('buttons.add')}
+        </Button>
       </div>
       {services.map((feature) => (
         <TitleFeature feature={feature as SectionFeatureDetailed} />

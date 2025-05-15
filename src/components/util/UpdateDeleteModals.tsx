@@ -13,6 +13,7 @@ import {
 } from "../ui/alert-dialog";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { useTranslation } from "react-i18next";
 
 function UpdateDeleteModals({
   onDelete,
@@ -22,7 +23,7 @@ function UpdateDeleteModals({
   children: React.ReactNode;
 }) {
   const [updateModal, setUpdateModal] = useState(false);
-
+  const{ t } = useTranslation();
   return (
     <div className="flex gap-2">
       {/* Edit Dialog */}
@@ -30,7 +31,7 @@ function UpdateDeleteModals({
         <DialogTrigger asChild>
           <Button variant="outline" size="sm">
             <PencilIcon className="w-4 h-4 mr-2" />
-            <p className="hidden sm:block">Edit</p>
+            <p className="hidden sm:block">{t('buttons.edit')}</p>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-4xl">{children}</DialogContent>
@@ -41,22 +42,20 @@ function UpdateDeleteModals({
         <AlertDialogTrigger asChild>
           <Button variant="destructive" size="sm">
             <Trash2 className="w-4 h-4 mr-2" />
-
-            <span className="hidden sm:block">Delete</span>
+            <span className="hidden sm:block">{t('buttons.delete')}</span>
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogTitle>{t('confirmDeletion')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this feature? This action cannot
-              be undone.
+              {t('comfirmText')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('buttons.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={onDelete}>
-              Confirm Delete
+              {t('buttons.confirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

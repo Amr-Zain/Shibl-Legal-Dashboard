@@ -18,6 +18,7 @@ interface AuthContextType {
   logout: () => void;
   user: (userData: User) => void;
   loading: boolean;
+  error?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,6 +30,7 @@ interface AuthProviderProps {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -37,10 +39,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         setCurrentUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Error parsing user data from localStorage:", error);
-        localStorage.removeItem("user"); 
+        localStorage.removeItem("user");
       }
     }
-    setLoading(false); 
+    setLoading(false);
   }, []);
 
   const login = async ({
@@ -67,7 +69,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       Cookies.set("token", token);
       setCurrentUser(data);
     } catch (error) {
-      if (error instanceof Error) console.error("Login error:", error.message);
+      if (error instanceof Error) {
+        setError(error.message)
+        console.error("Login error:", error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -79,14 +84,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    Cookies.remove("token");
-    setCurrentUser(null);
+    //localStorage.removeItem("token");
+    //localStorage.removeItem("user");
+    //Cookies.remove("token");
+    //setCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout, user, loading }}>
+    <AuthContext.Provider
+      value={{ currentUser, login, logout, user, loading, error }}
+    >
       {children}
     </AuthContext.Provider>
   );

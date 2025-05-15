@@ -4,28 +4,66 @@ import {
   BookMarked,
   HelpCircle,
   Contact,
-  UserCog,
   LogOut,
-  Award
+  Award,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useContext } from "react";
-import { AuthContext } from "@/Auth/AuthProvider";
+import { AuthContext } from "@/context/AuthProvider";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
   const { logout } = useContext(AuthContext)!;
+  const { t } = useTranslation()
+
+  
+const navigationItems = [
+  {
+    path: "/",
+    icon: LayoutDashboard,
+    label: t("sidebar.home"),
+    end: true,
+  },
+  {
+    path: "/sections",
+    icon: BookMarked,
+    label: t("sidebar.sections"),
+  },
+  {
+    path: "/faq",
+    icon: HelpCircle,
+    label: t("sidebar.faqs"),
+  },
+  {
+    path: "/contact",
+    icon: Contact,
+    label: t("sidebar.contact"),
+  },
+  {
+    path: "/why-us",
+    icon: Award,
+    label: t("sidebar.whyUs"),
+  },
+  {
+    path: "/services",
+    icon: Award,
+    label: t("sidebar.ourServices"),
+  }
+];
   return (
-    <div className={cn(
-      "hidden border-r bg-muted/40 md:block",
-      "fixed top-0 left-0 h-screen w-48"
-    )}>
+    <div
+      className={cn(
+        "hidden border-r bg-muted/40 md:block",
+        "fixed top-0 start-0 h-screen w-48 border-e"
+      )}
+    >
       <div className="flex h-full flex-col gap-2">
         <div className="flex h-18 items-center border-b px-4">
           <Link to="/" className="text-center font-semibold">
-            <span className="text-lg">Dashboard</span>
+            <span className="text-lg text-center">{t("sidebar.dashboard")}</span>
           </Link>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto">
           <nav className="grid items-start px-4 py-2 text-sm font-medium">
             {navigationItems.map((item) => (
@@ -53,7 +91,7 @@ export default function Sidebar() {
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary"
           >
             <LogOut className="h-4 w-4" />
-            Logout
+            {t("sidebar.logout")}
           </button>
         </div>
       </div>
@@ -61,41 +99,3 @@ export default function Sidebar() {
   );
 }
 
-const navigationItems = [
-  {
-    path: "/",
-    icon: LayoutDashboard,
-    label: "Dashboard",
-    end: true,
-  },
-  {
-    path: "/sections",
-    icon: BookMarked,
-    label: "Sections",
-  },
-  {
-    path: "/faq",
-    icon: HelpCircle,
-    label: "FAQ",
-  },
-  {
-    path: "/contact",
-    icon: Contact,
-    label: "Contact",
-  },
-  {
-    path: "/why-us",
-    icon: Award,
-    label: "Why Us",
-  },
-  {
-    path: "/services",
-    icon: Award,
-    label: "Our Services",
-  },
-  {
-    path: "/admin-users",
-    icon: UserCog,
-    label: "Admin Users",
-  },
-];

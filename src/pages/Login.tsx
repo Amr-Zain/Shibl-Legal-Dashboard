@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { AuthContext } from "@/Auth/AuthProvider";
+import { AuthContext } from "@/context/AuthProvider";
 import { useNavigate } from "react-router";
 
 const formSchema = z.object({
@@ -33,7 +33,7 @@ const Login = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await login(values);
-    navigate('/')
+    navigate("/");
   };
 
   return (

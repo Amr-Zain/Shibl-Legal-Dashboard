@@ -16,46 +16,50 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useFieldArray } from "react-hook-form";
 import { sections } from "@/util/data";
 import { useEffect } from "react";
 import Field from "../util/FormField";
 import { sectionSchema, type FormSection } from "@/schemas";
+import { useTranslation } from "react-i18next";
+import { useMutate } from "@/hooks/UseMutate";
+import ImageInput from "../util/ImageInput";
+import type { SectionResponse } from "@/util/responsesTypes";
 
 const SectionForm = ({
   section,
   submit,
   isUpdate,
 }: {
-  section?: FormSection;
+  section?: SectionResponse;
   submit: (data: FormSection) => Promise<void>;
   isUpdate?: boolean;
 }) => {
+  const { t } = useTranslation();
   const form = useForm<FormSection>({
     resolver: zodResolver(sectionSchema),
     defaultValues: {
-      ...section, //this is not contain the ar and eg
-      features: section?.features ?? [],
+      type: section?.type,
+      titleAr: section?.ar.title,
+      titleEn: section?.en.title,
+      descriptionAr: section?.ar.description,
+      descriptionEn: section?.en.title,
+      image: section?.image?.url,
+      icon: section?.icon?.url,
     },
     mode: "onBlur",
   });
-  console.log(section)
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "features",
+  const { isPending, mutate: formMutate } = useMutate({
+    endpoint: "/admin/sections",
+    method: "post",
+    mutationKey: ["sections"],
   });
-
-  const onSubmit = (data: FormSection) => {
-    console.log(data);
-    submit(data);
-  };
   useEffect(() => {
     //fetch the section ar and eg for default input data for update
   }, []);
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data) => formMutate(data))}
         className={`space-y-8 p-4 h-[80vh] overflow-y-scroll`}
       >
         {/* Type Select */}
@@ -64,7 +68,7 @@ const SectionForm = ({
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Choose Section</FormLabel>
+              <FormLabel>{t("fields.selectSection")}</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
@@ -72,12 +76,14 @@ const SectionForm = ({
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select banner or section" />
+                    <SelectValue placeholder={t("fields.selectSection")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {sections.map((item) => (
-                    <SelectItem value={item.type}>{item.text}</SelectItem>
+                    <SelectItem key={item.type} value={item.type}>
+                      {item.text}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -90,14 +96,14 @@ const SectionForm = ({
           <Field<FormSection>
             name="titleAr"
             control={form.control}
-            placeholder="العنوان بالعربية"
-            label="Arabic Title"
+            placeholder={t("fields.ar.title")}
+            label={t("fields.ar.title")}
           />
           <Field<FormSection>
             name="titleEn"
             control={form.control}
-            placeholder="English Title "
-            label="Title in English"
+            placeholder={t("fields.en.title")}
+            label={t("fields.en.title")}
           />
         </div>
         {/* Descriptions */}
@@ -105,90 +111,42 @@ const SectionForm = ({
           <Field<FormSection>
             name="descriptionAr"
             control={form.control}
-            placeholder="الوصف بالعربية"
-            label="Arabic Description"
+            placeholder={t("fields.ar.description")}
+            label={t("fields.ar.description")}
           />
           <Field<FormSection>
             name="descriptionEn"
             control={form.control}
-            placeholder="Description in English"
-            label="Description in English"
+            label={t("fields.en.description")}
+            placeholder={t("fields.en.description")}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field control={form.control} image name="image" label="Main Image" />
-          <Field
-            control={form.control}
-            image
+          <ImageInput
+            name="image"
+            label={t("fields.sectionImage")}
+            path={section?.image?.path}
+            image={section?.image?.url}
+            onChange={(path) => form.setValue('image', path)}
+            />
+          <ImageInput
             name="icon"
-            label="Icon (optional)"
+            label={t("fields.sectionIcon")}
+            path={section?.icon?.path}
+            image={section?.icon?.url}
+            onChange={(path) => form.setValue('icon', path)}
           />
         </div>
-        {/* Features Section */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Features</h3>
-          {fields.map((field, index) => (
-            <div key={field.id} className="space-y-4 border p-4 rounded">
-              <Field
-                control={form.control}
-                name={`features.${index}.key`}
-                label="key (optional)"
-                placeholder="title"
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <Field
-                  control={form.control}
-                  name={`features.${index}.valueAr`}
-                  label="Arabic Value"
-                  placeholder="الوصف بالعربية "
-                />
-                <Field
-                  control={form.control}
-                  name={`features.${index}.valueEn`}
-                  label="English Value"
-                  placeholder="text in English"
-                />
-              </div>
-              <Field
-                control={form.control}
-                name={`features.${index}.icon`}
-                image
-                label="Icon"
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={() => remove(index)}
-              >
-                Remove Feature
-              </Button>
-            </div>
-          ))}
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() =>
-              append({
-                id: 0,
-                key: null,
-                valueAr: "",
-                valueEn: "",
-                icon: new File([], "placeholder"),
-              })
-            }
-          >
-            Add Feature
-          </Button>
-        </div>
         <Field
           control={form.control}
           name={`is_active`}
           label="Active Status"
           checkbox
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? t("buttons.saving") : t("buttons.save")}
+        </Button>
       </form>
     </Form>
   );

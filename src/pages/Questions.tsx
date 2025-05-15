@@ -8,37 +8,49 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { type QuestionFormValues } from "@/schemas";
 import QuestionsList from "@/components/questions/QuestionsAccordion";
-import { questionsData } from "@/util/data";
 import { QuestionsForm } from "@/components/questions/questionForm";
+import { useTranslation } from "react-i18next";
+import { Plus } from "lucide-react";
+import useFetch from "@/hooks/UseFetch";
+import type { QuestionResponse } from "@/util/responsesTypes";
 
 export default function QuestionsPage() {
-  const [questions, setQuestions] = useState<Question[]>(questionsData);
-
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { data, isPending } = useFetch<QuestionResponse>({
+    endpoint: "admin/faq",
+    queryKey: ["admin/faq"],
+  });
 
-  const handleCreateQuestion = (newQuestion: QuestionFormValues) => {
-    const question: Question = {
-      question: newQuestion.questionEn,
-      answer: newQuestion.answerEn,
-      is_active: newQuestion.is_active!,
-      id: Math.ceil(Math.random() * 20), //refetch
-    };
-    setQuestions([...questions, question]);
 
-    setIsCreateModalOpen(false);
-  };
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const questions = data?.data as QuestionResponse[];
+
+  const { t } = useTranslation();
+  console.log(isPending)
 
   return (
     <div className="space-y-8 p-6 mt-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg md:text-2xl font-bold">Questions Management</h1>
+        <h1 className="text-lg md:text-2xl font-bold">{t("sidebar.faqs")}</h1>
         <Button onClick={() => setIsCreateModalOpen(true)}>
-          Add New Question
+          <Plus />
+          {t("buttons.add")}
         </Button>
       </div>
-      <QuestionsList questions={questions} />
+      {isPending ? (
+        <div className="container mx-auto p-6">
+          <div className="animate-pulse space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-12 bg-gray-200 rounded-lg p-4"></div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <QuestionsList questions={questions} />
+      )}
       {/* Create Question Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent>
@@ -50,7 +62,7 @@ export default function QuestionsPage() {
             </DialogDescription>
           </DialogHeader>
           <QuestionsForm
-            onSubmit={handleCreateQuestion}
+            onSubmit={()=>{}}
             onCancel={() => setIsCreateModalOpen(false)}
           />
         </DialogContent>

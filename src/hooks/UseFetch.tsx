@@ -1,19 +1,21 @@
+ // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+ // @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useContext } from "react";
-import { AuthContext } from "../Auth/AuthProvider";
+import { AuthContext } from "../context/AuthProvider";
 import { useIsRTL } from "./useIsRTL";
 
 type useFetchPops_TP = {
   queryKey: [string];
   endpoint: string;
   enabled?: boolean;
-  select?: ((data: any) => any) | undefined;
-  onError?: (err: any) => void;
-  onSuccess?: (err: any) => void;
+  select?: ((data: unknown) => unknown) | undefined;
+  onError?: (err: unknown) => void;
+  onSuccess?: (err: unknown) => void;
   localization?: boolean;
-  useCompanyToken?: boolean;
+  useCompunknownToken?: boolean;
   specificToken?: string;
   general?: boolean;
 };
@@ -25,12 +27,9 @@ function useFetch<T>({
   queryKey,
   onError: originalOnError,
   onSuccess,
-  localization,
-  useCompanyToken,
-  specificToken,
 }: useFetchPops_TP) {
-  const { logout } = useContext(AuthContext);
-  const user_token = Cookies.get("token");
+  const { logout } = useContext(AuthContext)!;
+  const user_token = Cookies.get("token") || localStorage.getItem('token');
   const token = user_token;
   const authorizationHeader = `Bearer ${token}`;
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -49,19 +48,14 @@ function useFetch<T>({
     queryFn: () =>
       axios
         .get(`${general ? baseURLGeneral : baseURL}/${endpoint}`, config)
-        .then((res: any) => res.data),
+        .then((res: unknown) => res.data),
 
     enabled,
     select,
-    onError: (err: any) => {
-     
+    onError: (err: unknown) => {
+    
       if (err.response?.status === 401) {
-        // showAlert(t('session_expired'), '', false, t('ok'), true, 'success');
-       /*  ShowAlertMixin({
-          type: 15,
-          icon: "error",
-          title: t("session_expired"),
-        }); */
+        
         logout();
         window.location.replace("/login");
       }

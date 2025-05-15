@@ -8,52 +8,42 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import useFetch from "@/hooks/UseFetch";
 import type { ContactFormValues, ContactKeys } from "@/schemas";
 
-import { Plus } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const contactData: {
-  id: number;
-  key: ContactKeys;
-  value: string;
-}[] = [
-  { id: 1, key: "phone", value: "+966 18637 1873" },
-  { id: 2, key: "facebook", value: "https://www.facebook.com/example" },
-  { id: 3, key: "x", value: "https://www.twitter.com/example" },
-  { id: 4, key: "instagram", value: "https://www.instagram.com/example" },
-  { id: 5, key: "address", value: "الرياض, المملكة العربية السعودية" },
-  { id: 6, key: "email", value: "example@gmail.com" },
-  { id: 7, key: "appointments", value: "يوميا, 08:00 صباحا حتي 04:00 مساء" },
-];
-
-const getLabel = (key: string) => {
-  const labels: Record<string, string> = {
-    email: "Email",
-    address: "Address",
-    appointments: "Appointments",
-    phone: "Phone",
-    facebook: "Facebook",
-    x: "Twitter",
-    instagram: "Instagram",
-  };
-  return labels[key] || key;
-};
-const contactObj = contactData.reduce((acc, item) => {
-  return { ...acc, [item.key]: item.value };
-}, {} as ContactFormValues);
 function Contact() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { t } = useTranslation();
+  const { data, isPending } = useFetch({
+    endpoint: "admin/contact-info",
+    queryKey: ["admin/contact-info"],
+  });
+  
+  
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const contactData = data?.data as  {
+    id: number;
+    key: ContactKeys;
+    value: string;
+  }[] ;
+  
+  const contactObj = contactData?.reduce((acc, item ) => {
+    return { ...acc, [item.key]: item.value };
+  }, {} as ContactFormValues);
   return (
     <div className="space-y-8 p-6 mt-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">Contact Information</h1>
+        <h1 className="text-xl font-bold">{t("sidebar.contact")}</h1>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger >
+          <DialogTrigger>
             <Button size="sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Edit
+              <PencilIcon className="mr-2 h-4 w-4" />
+              {t("buttons.edit")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[80vh]">
@@ -67,25 +57,32 @@ function Contact() {
           </DialogContent>
         </Dialog>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {contactData.map(({ id, key, value }) => {
-          return (
-            <Card key={id} className="hover:shadow-sm !gap-3">
-              <CardHeader className="p-3 pb-1">
-                <CardTitle className="text-sm font-medium">
-                  {getLabel(key)}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 pt-0">
-                <div className="text-sm text-muted-foreground">
-                  <p>{value}</p>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      {isPending ? (
+          <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="h-40 bg-gray-200 rounded-lg p-4"></div>
+            ))}
+          </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {contactData?.map(({ id, key, value }) => {
+            return (
+              <Card key={id} className="hover:shadow-sm !gap-3">
+                <CardHeader className="p-3 pb-1">
+                  <CardTitle className="text-sm font-medium">
+                    {t(`contact.${key}`)}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 pt-0">
+                  <div className="text-sm text-muted-foreground">
+                    <p>{value}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

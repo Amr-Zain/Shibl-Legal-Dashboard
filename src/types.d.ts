@@ -43,7 +43,7 @@ interface HomeType {
 
 interface Question {
     id: number;
-    is_active: boolean| number
+    is_active: boolean | number
     question: string;
     answer: string;
 }
@@ -100,7 +100,7 @@ interface SectionFeatureKeyVal {
     icon: string;
     key: string | null;
     value: string;
-    is_active?: boolean; 
+    is_active?: boolean;
 }
 
 interface SectionFeatureDetailed {
@@ -111,14 +111,16 @@ interface SectionFeatureDetailed {
     description: string;
 }
 
-interface Section  {
+
+interface Section {
     id: number;
     type: SectionType;
     title: string;
     description: string;
-    image: string;
-    icon: string;
+    image?: string;
+    icon?: string;
     is_active: boolean;
-    features: (SectionFeatureKeyVal | SectionFeatureDetailed)[];
+    features?: (SectionFeatureKeyVal | SectionFeatureDetailed)[];
 };
 
+/** */

@@ -1,4 +1,4 @@
-import { AuthContext } from "@/Auth/AuthProvider";
+import { AuthContext } from "@/context/AuthProvider";
 import { useContext } from "react";
 
 const UserInfo = () => {
@@ -10,7 +10,7 @@ const UserInfo = () => {
       </div>
       <div className="relative h-12 w-12 rounded-full overflow-hidden">
         <img
-          src={currentUser?.image?.url}
+          src={currentUser?.image?.url || 'https://randomuser.me/api/portraits/men/7.jpg'}
           onError={(e) =>
             (e.currentTarget.src =
               "https://randomuser.me/api/portraits/men/7.jpg")

@@ -22,8 +22,8 @@ export const sectionSchema = z.object({
   descriptionEn: z
     .string()
     .min(30, "English description is required, min width 10 charcter "),
-  image: z.instanceof(File, { message: "Main image is required" }),
-  icon: z.instanceof(File).optional(),
+  image: z.string().optional(),
+  icon: z.string().optional(),
   features: z.array(featureSchema),
   is_active: z.boolean().default(true).optional(),
 });
