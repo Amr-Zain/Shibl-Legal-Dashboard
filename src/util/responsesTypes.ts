@@ -1,15 +1,14 @@
 interface QuestionTranslation {
     question: string;
-    answer: string
+    answer: string;
 }
+
 export interface QuestionResponse {
     en: QuestionTranslation;
     ar: QuestionTranslation;
     id: number;
     is_active: boolean;
-
 }
-
 
 /***************************** */
 interface Header {
@@ -17,20 +16,37 @@ interface Header {
     description: string;
 }
 
-interface Image{
+interface Image {
     path: string;
-    url: string
+    url: string;
 }
-export interface SectionResponse{
-    id: number
-    ar:Header;
+
+export interface SectionResponse {
+    id: number;
+    ar: Header;
     en: Header;
     type: BannerTypes;
     image?: Image;
     icon?: Image;
     is_active?: boolean;
-
 }
 
-
-
+/***************************** */
+export interface WhyUsResponse {
+    id: number;
+    icon?: Image
+    ar: {
+        key: string;
+    };
+    en: {
+        key: string;
+    };
+    value: string;
+    is_active: boolean;
+}
+export interface ServiceReaspose {
+    en: Header;
+    ar: Header;
+    icon: Image;
+    background: Image;
+}

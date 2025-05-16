@@ -17,11 +17,11 @@ import type { QuestionResponse } from "@/util/responsesTypes";
 
 export default function QuestionsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { data, isPending } = useFetch<QuestionResponse>({
+  const { data, isPending } = useFetch<{data:QuestionResponse[]}>({
     endpoint: "admin/faq",
     queryKey: ["admin/faq"],
   });
-
+  
 
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -55,14 +55,10 @@ export default function QuestionsPage() {
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Question</DialogTitle>
-            <DialogDescription>
-              Fill in the details for the new question in both English and
-              Arabic.
-            </DialogDescription>
+            <DialogTitle>{t('formsTitle.questionCreateTitle')}</DialogTitle>
+            <DialogDescription>{t('formsTitle.questionCreateTitleDes')}</DialogDescription>
           </DialogHeader>
           <QuestionsForm
-            onSubmit={()=>{}}
             onCancel={() => setIsCreateModalOpen(false)}
           />
         </DialogContent>

@@ -18,6 +18,9 @@ import {
 import { contactFormSchema, type ContactFormValues } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useMutate } from "@/hooks/UseMutate";
+import { Loader2 } from "lucide-react";
 
 function ContactForm({
   setIsModalOpen,
@@ -26,34 +29,35 @@ function ContactForm({
   setIsModalOpen: (show: boolean) => void;
   contactInfo?: ContactFormValues;
 }) {
+  const { t } = useTranslation();
+  console.log(contactInfo)
   const countryCodes = [
     { value: "+966", label: "Saudi Arabia (+966)" },
     { value: "+971", label: "UAE (+971)" },
     { value: "+20", label: "Egypt (+20)" },
   ];
 
+  const { isPending, mutate } = useMutate({
+    endpoint: "admin/contact-info",
+    method: "post",
+    mutationKey: ["admin/contact"],
+  });
+
   const onSubmit = (data: ContactFormValues) => {
-    console.log("Form submitted:", data);
-    const formattedPhone = `${data.phone_code} ${data.phone}`;
-    console.log("Formatted phone:", formattedPhone);
+    mutate(data);
     setIsModalOpen(false);
   };
-
-  const phoneMatch = contactInfo?.phone?.match(/^(\+\d+)\s(.+)$/);
-  const defaultPhoneCode = phoneMatch ? phoneMatch[1] : "+966";
-  const defaultPhoneNumber = phoneMatch ? phoneMatch[2] : "";
-
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
       email: contactInfo?.email || "",
       address: contactInfo?.address || "",
-      appointments: contactInfo?.appointments || "",
+      appoitnments: contactInfo?.appoitnments || "",
       facebook: contactInfo?.facebook || "",
       x: contactInfo?.x || "",
       instagram: contactInfo?.instagram || "",
-      phone_code: defaultPhoneCode,
-      phone: defaultPhoneNumber,
+      phone_code: '',
+      phone: contactInfo?.phone,
     },
     mode: "onBlur",
   });
@@ -72,15 +76,15 @@ function ContactForm({
           <Field
             control={form.control}
             name="address"
-            label="Address"
-            placeholder="Enter address"
+            label={t(`contact.address`)}
+            placeholder={t("fields.address")}
           />
 
           <Field
             control={form.control}
-            name="appointments"
-            label="Appointments"
-            placeholder="Working hours"
+            name="appoitnments"
+            label={t(`contact.appointments`)}
+            placeholder={t("fields.workingHours")}
           />
 
           <FormField
@@ -88,7 +92,7 @@ function ContactForm({
             name="phone_code"
             render={({ field }) => (
               <FormItem className="w-[120px]">
-                <FormLabel>Phone Code</FormLabel>
+                <FormLabel>{t(`contact.phone_code`)}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -113,7 +117,7 @@ function ContactForm({
           <Field
             control={form.control}
             name="phone"
-            label="Phone"
+            label={t(`contact.phone`)}
             placeholder="1234567890"
             className="flex-1"
           />
@@ -121,9 +125,8 @@ function ContactForm({
           <Field
             control={form.control}
             name="facebook"
-            label="Facebook"
+            label={t(`contact.facebook`)}
             placeholder="https://facebook.com/..."
-            type="url"
           />
 
           <Field
@@ -131,28 +134,35 @@ function ContactForm({
             name="x"
             label="Twitter (X)"
             placeholder="https://x.com/..."
-            type="url"
           />
 
           <Field
             control={form.control}
             name="instagram"
-            label="Instagram"
+            label={t(`contact.instagram`)}
             placeholder="https://instagram.com/..."
-            type="url"
           />
-        <div className="flex justify-end gap-4 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setIsModalOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button type="submit">Save Changes</Button>
+          <div className="md:col-span-2 flex justify-end gap-4 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsModalOpen(false)}
+              disabled={isPending}
+            >
+              {t("buttons.cancel")}
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("buttons.saving")}
+                </>
+              ) : (
+                t("buttons.save")
+              )}
+            </Button>
+          </div>
         </div>
-        </div>
-
       </form>
     </Form>
   );

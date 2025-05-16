@@ -20,7 +20,7 @@ function Contact() {
   const { t } = useTranslation();
   const { data, isPending } = useFetch({
     endpoint: "admin/contact-info",
-    queryKey: ["admin/contact-info"],
+    queryKey: ["admin/contact"],
   });
   
   
@@ -48,7 +48,7 @@ function Contact() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[80vh]">
             <DialogHeader>
-              <DialogTitle>Edit Contact Information</DialogTitle>
+              <DialogTitle>{t('formsTitle.contactTitle')}</DialogTitle>
             </DialogHeader>
             <ContactForm
               contactInfo={contactObj}

@@ -97,7 +97,8 @@ interface OverVeiw {
 
 interface SectionFeatureKeyVal {
     id: number;
-    icon: string;
+    icon?: string;
+    url?: string;
     key: string | null;
     value: string;
     is_active?: boolean;
@@ -106,9 +107,11 @@ interface SectionFeatureKeyVal {
 interface SectionFeatureDetailed {
     id: number;
     icon: string;
+    path?: string;
     background?: string;
     title: string;
     description: string;
+    is_active?: boolean
 }
 
 

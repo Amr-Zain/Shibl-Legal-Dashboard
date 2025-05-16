@@ -1,5 +1,5 @@
- // eslint-disable-next-line @typescript-eslint/ban-ts-comment
- // @ts-nocheck
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -16,8 +16,8 @@ type useMutateProps_TP<response_T> = {
   onError?: (err: unknown) => void;
   formData?: boolean;
   onMutate?: (err?: unknown) => void;
-  method?: "post" | "delete"| "put";
-  headers?: Record<string, string>; 
+  method?: "post" | "delete" | "put";
+  headers?: Record<string, string>;
   general?: boolean;
 };
 
@@ -35,7 +35,7 @@ export function useMutate<response_T>({
   const { logout } = useContext(AuthContext)!;
   const { t } = useTranslation();
 
-  const user_token = localStorage.getItem('token') ||Cookies.get("token");
+  const user_token = localStorage.getItem("token") || Cookies.get("token");
   const token = user_token;
   const authorizationHeader = `Bearer ${token}`;
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -50,40 +50,53 @@ export function useMutate<response_T>({
       window.location.replace("/login");
     }
     if (originalOnError) return originalOnError(err);
-   
   };
   const isRTL = useIsRTL();
 
-  const { data, isPending, isSuccess, mutate, mutateAsync, failureReason, isError } =
-    useMutation({
-      mutationKey,
-      mutationFn: async(values) => {
-        console.log(values);
-        const requestConfig = {
-          method: method.toUpperCase(), // Use the specified method
-          url: `${general ? baseURLGeneral : baseURL}/${endpoint}`,
-          data: values,
-          headers: formData
-            ? {
-                ...headers,
-                "Content-Type": "multipart/form-data",
-                Accept: "application/json",
-                Authorization: authorizationHeader,
-                "Accept-Language": isRTL ? "ar" : "en",
-              }
-            : {
-                "Content-Type": "application/json; charset=utf-8",
-                Accept: "application/json",
-                Authorization: authorizationHeader,
-                "Accept-Language": isRTL ? "ar" : "en",
-              },
-        };
+  const {
+    data,
+    isPending,
+    isSuccess,
+    mutate,
+    mutateAsync,
+    failureReason,
+    isError,
+  } = useMutation({
+    mutationKey,
+    mutationFn: async (values) => {
+      const requestConfig = {
+        method: method.toUpperCase(), // Use the specified method
+        url: `${general ? baseURLGeneral : baseURL}/${endpoint}`,
+        data: values,
+        headers: formData
+          ? {
+              ...headers,
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              Authorization: authorizationHeader,
+              "Accept-Language": isRTL ? "ar" : "en",
+            }
+          : {
+              "Content-Type": "application/json; charset=utf-8",
+              Accept: "application/json",
+              Authorization: authorizationHeader,
+              "Accept-Language": isRTL ? "ar" : "en",
+            },
+      };
 
-        return await axios(requestConfig);
-      },
-      onSuccess,
-      onError: enhancedOnError,
-      onMutate,
-    });
-  return { data, isPending, isSuccess, mutate, mutateAsync,failureReason, isError };
+      return await axios(requestConfig);
+    },
+    onSuccess,
+    onError: enhancedOnError,
+    onMutate,
+  });
+  return {
+    data,
+    isPending,
+    isSuccess,
+    mutate,
+    mutateAsync,
+    failureReason,
+    isError,
+  };
 }

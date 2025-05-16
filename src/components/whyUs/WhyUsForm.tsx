@@ -2,24 +2,35 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Field from "../util/FormField";
 import { whyUsFeatureFormSchema, type WhyUsFormValues } from "@/schemas";
+import { useMutate } from "@/hooks/UseMutate";
+import ImageInput from "../util/ImageInput";
+import { useTranslation } from "react-i18next";
 
 interface WhyUsFormProps {
-    defaultValues?: Partial<WhyUsFormValues>;
-    onSubmit: (values: WhyUsFormValues) => Promise<void>;
-    onCancel?: () => void;
+  defaultValues?: WhyUsFormValues;
+  onCancel?: () => void;
+  isUpdate?: boolean;
 }
-
 
 export function WhyUsForm({
   defaultValues,
-  onSubmit,
   onCancel,
-}: WhyUsFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  isUpdate,
 
+}: WhyUsFormProps) {
+  const { isPending: isCreating, mutate: createMutation } = useMutate({
+    endpoint: `admin/why-us`,
+    method: "post",
+    mutationKey: ["admin/contact"],
+  });
+  const { isPending: isUpdating, mutate: updateMutation } = useMutate({
+    endpoint: `admin/why-us/${defaultValues?.id}`,
+    method: "post",
+    mutationKey: ["admin/contact"],
+  });
   const form = useForm<WhyUsFormValues>({
     resolver: zodResolver(whyUsFeatureFormSchema),
     defaultValues: defaultValues || {
@@ -30,18 +41,29 @@ export function WhyUsForm({
     },
     mode: "onBlur",
   });
+  const { t } = useTranslation();
 
   const handleSubmit = async (values: WhyUsFormValues) => {
-    setIsLoading(true);
-    try {
-      await onSubmit(values);
-    } finally {
-      setIsLoading(false);
+    const feature = {
+      ar: {
+        key: values.keyAr,
+      },
+      en: {
+        key: values.keyEn,
+      },
+      id: values?.id,
+      icon: values.icon,
+      value: values.value,
+      is_active: values.is_active,
+    };
+    if (isUpdate) {
+      updateMutation(feature);
+      return;
     }
+    createMutation(feature);
   };
 
-  useEffect(() => {
-  }, [defaultValues]);
+  useEffect(() => {}, [defaultValues]);
 
   return (
     <Form {...form}>
@@ -53,7 +75,6 @@ export function WhyUsForm({
             label="Key (English)"
             placeholder="Enter key in English"
           />
-
           <Field<WhyUsFormValues>
             control={form.control}
             name="keyAr"
@@ -76,6 +97,12 @@ export function WhyUsForm({
             label="Active Status"
             checkbox
           />
+          <ImageInput
+            label={t("fields.sectionIcon")}
+            path={form.watch("icon")}
+            image={defaultValues?.url as string}
+            onChange={(path) => form.setValue("icon", path as string)}
+          />
         </div>
 
         <div className="flex justify-end gap-4">
@@ -84,13 +111,13 @@ export function WhyUsForm({
               type="button"
               variant="outline"
               onClick={onCancel}
-              disabled={isLoading}
+              disabled={isUpdating || isCreating}
             >
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save"}
+          <Button type="submit" disabled={isUpdating || isCreating}>
+            {isUpdating || isCreating ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>

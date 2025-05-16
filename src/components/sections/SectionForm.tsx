@@ -24,14 +24,13 @@ import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "../util/ImageInput";
 import type { SectionResponse } from "@/util/responsesTypes";
+import { Loader2 } from "lucide-react";
 
 const SectionForm = ({
   section,
-  submit,
   isUpdate,
 }: {
   section?: SectionResponse;
-  submit: (data: FormSection) => Promise<void>;
   isUpdate?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -43,23 +42,35 @@ const SectionForm = ({
       titleEn: section?.en.title,
       descriptionAr: section?.ar.description,
       descriptionEn: section?.en.title,
-      image: section?.image?.url,
-      icon: section?.icon?.url,
+      image: section?.image?.path,
+      icon: section?.icon?.path,
     },
     mode: "onBlur",
   });
-  const { isPending, mutate: formMutate } = useMutate({
+  const { isPending: isCreating, mutate: createSection } = useMutate({
     endpoint: "/admin/sections",
     method: "post",
     mutationKey: ["sections"],
   });
-  useEffect(() => {
-    //fetch the section ar and eg for default input data for update
-  }, []);
+  const { isPending: isUpdating, mutate: updateSection } = useMutate({
+    endpoint: `/admin/sections/${section?.id.toString()}`,
+    method: "post",
+    mutationKey: ["sections"],
+  });
+  const onSubmit = (data: FormSection) => {
+    console.log(data);
+    if (isUpdate && section?.id) {
+      updateSection({ ...data, id: section.id });
+    } else {
+      createSection(data);
+    }
+  };
+
+  useEffect(() => {}, []);
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => formMutate(data))}
+        onSubmit={form.handleSubmit(onSubmit)}
         className={`space-y-8 p-4 h-[80vh] overflow-y-scroll`}
       >
         {/* Type Select */}
@@ -123,18 +134,16 @@ const SectionForm = ({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ImageInput
-            name="image"
             label={t("fields.sectionImage")}
-            path={section?.image?.path}
+            path={form.watch('image')}
             image={section?.image?.url}
-            onChange={(path) => form.setValue('image', path)}
-            />
+            onChange={(path) => {console.log(path);form.setValue("image", path)}}
+          />
           <ImageInput
-            name="icon"
             label={t("fields.sectionIcon")}
-            path={section?.icon?.path}
+            path={form.watch('icon')}
             image={section?.icon?.url}
-            onChange={(path) => form.setValue('icon', path)}
+            onChange={(path) => form.setValue("icon", path)}
           />
         </div>
 
@@ -144,8 +153,19 @@ const SectionForm = ({
           label="Active Status"
           checkbox
         />
-        <Button type="submit" disabled={isPending}>
-          {isPending ? t("buttons.saving") : t("buttons.save")}
+        <Button type="submit" disabled={isCreating || isUpdating}>
+          {isCreating || isUpdating ? (
+            <>
+              {
+                <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t("buttons.saving")}
+                </div>
+              }
+            </>
+          ) : (
+            t("buttons.save")
+          )}
         </Button>
       </form>
     </Form>

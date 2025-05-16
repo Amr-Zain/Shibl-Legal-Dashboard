@@ -8,7 +8,7 @@ export const sections: { type: BannerTypes, text: string }[] = [
   { type: 'terms', text: 'Terms' },
   { type: 'privacy_policy', text: 'Privacy policy' },
 ]
-
+export const fullbackImage = "https://shebl9.azmy.aait-d.com/storage/images/Section/onq0yVoIcuRfHEtNip3hOB9fCehq6CRKESSeKTki.png"
 export const sectionsData: Section[] = [
  
   {

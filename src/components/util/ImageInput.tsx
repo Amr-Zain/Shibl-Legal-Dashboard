@@ -7,30 +7,39 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 
 type ImageInputProps = {
-  name: string;
   label: string;
   image?: string;
   path?: string;
-  onChange: ( path: string) => void;
+  onChange: (path: string | undefined) => void;
+  error?: string;
 };
 
-function ImageInput({ name, label, image, path, onChange }: ImageInputProps) {
+function ImageInput({ label, image, path, error, onChange }: ImageInputProps) {
   const [preview, setPreview] = useState<string | undefined>(image);
+  const [disPlayError, setError] = useState(error)
   const {
     mutateAsync: uploadMutate,
     isPending: isUploading,
-    data,
-  } = useMutate<{ path: string }>({
+  } = useMutate<{ data: { path: string } }>({
     general: true,
     endpoint: `attachment`,
     method: "post",
     mutationKey: ["image-upload"],
     formData: true,
     onError: (error) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const message = error?.response?.message;
       toast("someting went wrong", {
         description:
-          error instanceof Error ? error.message : "please try again",
+          message || "Please try again With png, jpg, jpeg extintions",
       });
+      setError(message || "Please try again With png, jpg, jpeg extintions");
+    },
+     onSuccess: (data) => {
+      const newPath = data?.data.path || "";
+      console.log(data)
+      onChange(newPath);
     },
   });
 
@@ -40,42 +49,42 @@ function ImageInput({ name, label, image, path, onChange }: ImageInputProps) {
     method: "post",
     mutationKey: ["image-delete"],
     onError: (error) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
       if (error?.response?.status < 500) {
         setPreview(undefined);
-        onChange("");
+        onChange(undefined);
       }
       toast("someting went wrong", {
         description:
           error instanceof Error ? error.message : "please try again",
       });
     },
+   
   });
 
   const handleFileChange = async (file: File | undefined) => {
     if (!file) return;
-
+    setError("");
     handleRemove();
 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("attachment_type", "image");
     formData.append("model", "Section");
-    console.log("fromData", formData);
     await uploadMutate(formData);
-    console.log(data);
-    const newUrl = data?.path || "";
-    setPreview(newUrl);
-    onChange(newUrl);
+    const pre = URL.createObjectURL(file);
+    setPreview(pre);
   };
 
   const handleRemove = async () => {
     if (path) {
       await deleteMutate({ path });
       setPreview(undefined);
-      onChange( "");
+      onChange("");
     }
   };
-  
+
   return (
     <FormItem>
       <FormLabel>{label}</FormLabel>
@@ -115,6 +124,7 @@ function ImageInput({ name, label, image, path, onChange }: ImageInputProps) {
                 <Loader2 className="h-4 w-4 animate-spin" />
               </div>
             )}
+            <p className="text-sm text-red-500">{disPlayError}</p>
           </div>
         </div>
       </FormControl>

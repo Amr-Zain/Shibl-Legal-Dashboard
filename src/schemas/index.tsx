@@ -43,51 +43,53 @@ export const questionFormSchema = z.object({
   answerAr: z.string().min(8, {
     message: "Arabic answer must be at least 8 characters.",
   }),
-  is_active: z.boolean().optional()
+  is_active: z.boolean().optional(),
 });
 export type QuestionFormValues = z.infer<typeof questionFormSchema>;
-
-
 
 export const contactFormSchema = z.object({
   email: z.string().email("Invalid email address"),
   address: z.string().min(5, "Address must be at least 5 characters"),
-  appointments: z.string().min(5, "Appointments info required"),
+  appoitnments: z.string().min(5, "Appointments info required"),
   facebook: z.string().url("Invalid URL").or(z.literal("")).optional(),
   x: z.string().url("Invalid URL").or(z.literal("")).optional(),
   instagram: z.string().url("Invalid URL").or(z.literal("")).optional(),
   phone_code: z.string().min(1, "Required").optional(),
-  phone: z.string()
+  phone: z
+    .string()
     .min(10, "Phone must be 10 digits")
     .max(10, "Phone must be 10 digits")
-    .regex(/^\d+$/, "Phone must contain only numbers").optional(),
+    .regex(/^\d+$/, "Phone must contain only numbers")
+    .optional(),
 });
 
 export type ContactFormValues = z.infer<typeof contactFormSchema>;
-export type ContactKeys = | "phone"
-    | "facebook"
-    | "x"
-    | "instagram"
-    | "address"
-    | "email"
-    | "appointments"
+export type ContactKeys =
+  | "phone"
+  | "facebook"
+  | "x"
+  | "instagram"
+  | "address"
+  | "email"
+  | "appoitnments";
 
-
-    
 export const whyUsFeatureFormSchema = z.object({
+  id: z.number().optional(),
   keyEn: z.string().min(1, { message: "English Key is required." }),
   keyAr: z.string().min(1, { message: "Arabic Key is required." }),
-  value: z.coerce.number({
+  value: z.coerce
+    .number({
       required_error: "Value is required.",
-      invalid_type_error: "Value must be a number."
+      invalid_type_error: "Value must be a number.",
     })
     .min(0, { message: "Value cannot be negative." })
-    .refine(val => !isNaN(val), { message: "Value must be a valid number." }),
+    .refine((val) => !isNaN(val), { message: "Value must be a valid number." }),
+  icon: z.string(),
   is_active: z.boolean().optional(),
+  url: z.string().optional(),
 });
 
 export type WhyUsFormValues = z.infer<typeof whyUsFeatureFormSchema>;
-
 
 export const TitleFeatureFormSchema = z.object({
   id: z.number().optional(),
@@ -103,7 +105,8 @@ export const TitleFeatureFormSchema = z.object({
   descriptionAr: z.string().min(8, {
     message: "Arabic description must be at least 8 characters.",
   }),
-  is_active: z.boolean().optional()
+  path: z.string(),
+  icon: z.string().optional(),//url
+  is_active: z.boolean().optional(),
 });
 export type TitleFeatureFormValues = z.infer<typeof TitleFeatureFormSchema>;
-

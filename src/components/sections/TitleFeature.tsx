@@ -1,21 +1,16 @@
-import type { TitleFeatureFormValues } from "@/schemas";
 import { TitleFeatureForm } from "./TitleFeatueForm";
 import UpdateDeleteModals from "../util/UpdateDeleteModals";
 
 function TitleFeature({ feature }: { feature: SectionFeatureDetailed}) {
-  const updateFeature = async (data: TitleFeatureFormValues) => {
-    console.log("Updated data:", data);
-  };
 
-  const deleteFeatureHandler = async () => {
-    console.log("Deleting feature:", feature);
-  };
-
-  const formate = (question: SectionFeatureDetailed) => ({
-    titleEn: question.title,
-    titleAr: question.title,
-    descriptionAr: question.description,
-    descriptionEn: question.description,
+  const formate = (featuer: SectionFeatureDetailed) => ({
+    titleEn: featuer.title,
+    titleAr: featuer.title,
+    descriptionAr: featuer.description,
+    descriptionEn: featuer.description,
+    icon: featuer.icon,
+    path: featuer.path!,
+    is_active: featuer.is_active
   });
 
   return (
@@ -34,10 +29,10 @@ function TitleFeature({ feature }: { feature: SectionFeatureDetailed}) {
         {feature.description}
       </p>
       <div className="flex justify-end gap-2">
-        <UpdateDeleteModals onDelete={deleteFeatureHandler}>
+        <UpdateDeleteModals endpoint={`admin/our-features/${feature.id}`} mutationKey={`admin/our-features/${feature.id}`}>
           <TitleFeatureForm
             defaultValues={formate(feature)}
-            onSubmit={updateFeature}
+            isUpdate
           />
         </UpdateDeleteModals>
       </div>

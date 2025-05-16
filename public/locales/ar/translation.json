@@ -8,6 +8,13 @@
   },
   "session_expired": "انتهت صلاحية جلستك",
   "pleaseLogin": "يرجى تسجيل الدخول مرة أخرى",
+  "formsTitle": {
+    "createSection": "نموذج إضافة قسم جديد",
+    "updateSection": "نموذج تحديث القسم",
+    "questionCreateTitle": "إضافة سؤال جديد",
+    "questionCreateTitleDes": "املأ تفاصيل السؤال الجديد باللغتين الإنجليزية والعربية.",
+    "contactTitle": "تعديل معلومات الاتصال"
+  },
   "sidebar": {
     "home": "الرئيسية",
     "dashboard": "لوحة التحكم",
@@ -527,8 +534,8 @@
     "facebook": "فيسبوك",
     "x": "تويتر",
     "instagram": "انستجرام",
-    "appoitnments":"المواعيد",
-    "phone_code":"كود الدولة"
+    "appoitnments": "المواعيد",
+    "phone_code": "كود الدولة"
   },
   "fields": {
     "selectSection": "اختر القسم",
@@ -540,7 +547,9 @@
     "sectionIcon": "أيقونة القسم",
     "ar.overview": "نظرة عامة عربية",
     "ar.address": "عنوان عربي",
-    "en.overview": "نظرة عامة إنجليزية"
+    "en.overview": "نظرة عامة إنجليزية",
+    "address": "العنوان",
+    "workingHours": "ساعات العمل"
   },
 
   "inArabic": " (AR) ",

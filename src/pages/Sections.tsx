@@ -29,9 +29,6 @@ function Sections() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const secionsList = data?.data as SectionResponse[];
-  const handleUpdate = async (section: FormSection) => {
-    console.log("Updating section:", section);
-  };
 
   const createSection = async (data: FormSection) => {
     console.log("Creating section:", data);
@@ -58,7 +55,6 @@ function Sections() {
     >
       <SectionForm
         section={sec}
-        submit={handleUpdate}
         isUpdate
       />
     </SectionCard>
@@ -93,7 +89,7 @@ function Sections() {
           <DialogHeader>
             <DialogTitle>{t("sections.addSection")}</DialogTitle>
           </DialogHeader>
-          <SectionForm submit={createSection} />
+          <SectionForm />
         </DialogContent>
       </Dialog>
     </div>

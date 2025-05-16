@@ -5,6 +5,7 @@ import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import { toast } from "sonner";
+import { fullbackImage } from "@/util/data";
 
 interface SectionProps {
   section: Section;
@@ -28,8 +29,8 @@ function SectionCard({ section, children, onDelete }: SectionProps) {
     },
   });
   const handleStatusToggle = async (checked: boolean) => {
-      await taggleActive({ is_active: checked });
-      setIsActive(checked);
+    await taggleActive({ is_active: checked });
+    setIsActive(checked);
   };
 
   const handleDelete = async () => {
@@ -66,10 +67,7 @@ function SectionCard({ section, children, onDelete }: SectionProps) {
           {section.icon && (
             <img
               src={section.icon}
-              onError={(e) =>
-                (e.currentTarget.src =
-                  "https://shebl9.azmy.aait-d.com/storage/images/Section/onq0yVoIcuRfHEtNip3hOB9fCehq6CRKESSeKTki.png")
-              }
+              onError={(e) => (e.currentTarget.src = fullbackImage)}
               alt="Section icon"
               className="w-12 h-12 object-contain"
             />

@@ -7,19 +7,16 @@ import {
 import { Card } from "@/components/ui/card";
 import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { QuestionsForm } from "./questionForm";
-import type { QuestionFormValues } from "@/schemas";
 import type { QuestionResponse } from "@/util/responsesTypes";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 
 function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
   const { locale } = useThemeConfig();
-  const handleUpdateQuestion = async (data: QuestionFormValues) => {
-    console.log(data);
-  };
-  const handleDeleteQuestion = (id: number) => async () => {
-    console.log(id);
-  };
+   
+
+ 
   const FormateQuestion = (question: QuestionResponse) => ({
+    id: question.id,
     questionEn: question.en.question,
     questionAr: question.ar.question,
     answerAr: question.en.answer,
@@ -36,10 +33,9 @@ function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
                 <span className="font-medium">{question[locale].question}</span>
               </AccordionTrigger>
 
-              <UpdateDeleteModals onDelete={handleDeleteQuestion(question.id)}>
+              <UpdateDeleteModals  endpoint={`admin/faq/${question.id}`} mutationKey="admin/faq" >
                 <QuestionsForm
                   defaultValues={FormateQuestion(question)}
-                  onSubmit={handleUpdateQuestion}
                   isUpdate
                 />
               </UpdateDeleteModals>

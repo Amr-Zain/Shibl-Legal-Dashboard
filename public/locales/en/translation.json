@@ -8,7 +8,14 @@
   },
   "session_expired": "Your session has expired",
   "pleaseLogin": "Please Login, Again",
+  "formsTitle": {
+    "createSection": "Add New Section From",
+    "updateSection": "Update Section From",
+    "questionCreateTitle":"Add New Question",
+    "questionCreateTitleDes":"Fill in the details for the new question in both English and Arabic.",
+    "contactTitle":"Edit Contact Information"
 
+  },
   "sidebar": {
     "home": "Home",
     "dashboard": "Dashboard",
@@ -31,8 +38,8 @@
     "edit": "Edit",
     "show": "Show"
   },
-  "confirmDeletion":"Confirm Deletion",
-  "comfirmText":"Are you sure you want to delete this feature?",
+  "confirmDeletion": "Confirm Deletion",
+  "comfirmText": "Are you sure you want to delete this feature?",
   "buttons": {
     "add": "Add",
     "delete": "Delete",
@@ -361,7 +368,7 @@
     "provider": "Provider",
     "orders": "Orders"
   },
-  "contact":{
+  "contact": {
     "email": "Email",
     "address": "Address",
     "appointments": "Appointments",
@@ -369,12 +376,12 @@
     "facebook": "Facebook",
     "x": "Twitter",
     "instagram": "Instagram",
-    "appoitnments":"Schedule",
-    "phone_code":"Phone Code"
+    "appoitnments": "Schedule",
+    "phone_code": "Phone Code"
   },
 
   "fields": {
-    "selectSection":"Choose Section",
+    "selectSection": "Choose Section",
     "ar.title": "Arabic Title",
     "en.title": "English Title",
     "ar.description": "Arabic Description",
@@ -383,8 +390,9 @@
     "sectionIcon": "Section Icon",
     "ar.overview": "Arabic Overview",
     "ar.address": "Arabic Address",
-    "en.overview": "English Overview"
-    
+    "en.overview": "English Overview",
+    "address": "Address",
+    "workingHours": "Working Hours"
   },
 
   "status": {

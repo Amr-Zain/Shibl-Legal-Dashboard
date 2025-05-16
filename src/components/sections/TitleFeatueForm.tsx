@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Field from "../util/FormField";
 import { TitleFeatureFormSchema, type TitleFeatureFormValues } from "@/schemas";
+import ImageInput from "../util/ImageInput";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   defaultValues?: TitleFeatureFormValues;
-  onSubmit: (values: TitleFeatureFormValues) => Promise<void> ;
   onCancel?: () => void;
   isUpdate?: boolean;
 }
 
 export function TitleFeatureForm({
   defaultValues,
-  onSubmit,
   onCancel,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,18 +27,15 @@ export function TitleFeatureForm({
       titleAr: "",
       descriptionEn: "",
       descriptionAr: "",
+      path: '',
       is_active: true,
     },
     mode: "onBlur",
   });
-
+  const { t }  = useTranslation();
   const handleSubmit = async (values: TitleFeatureFormValues) => {
     setIsLoading(true);
-    try {
-      await onSubmit(values);
-    } finally {
-      setIsLoading(false);
-    }
+  
   };
   useEffect(() => {
     //if update set get the question data if the props is comming with one language
@@ -78,6 +75,13 @@ export function TitleFeatureForm({
             name={`is_active`}
             label="Active Status"
             checkbox
+          />
+           <ImageInput
+            label={t("fields.sectionIcon")}
+            path={form.watch("path")}
+            image={defaultValues?.icon }
+            error={form.formState.errors?.path?.message}
+            onChange={(path) => form.setValue("path", path as string)}
           />
         </div>
 

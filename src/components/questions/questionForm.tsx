@@ -2,24 +2,53 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import Field from "../util/FormField";
 import { questionFormSchema, type QuestionFormValues } from "@/schemas";
+import { useMutate } from "@/hooks/UseMutate";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface QuestionsFormProps {
   defaultValues?: QuestionFormValues;
-  onSubmit: (values: QuestionFormValues) => Promise<void> | void;
   onCancel?: () => void;
   isUpdate?: boolean;
 }
 
 export function QuestionsForm({
   defaultValues,
-  onSubmit,
   onCancel,
+  isUpdate,
 }: QuestionsFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+   const onError = (error: unknown) => {
+      form.setError("root", {
+        type: "manual",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to submit form. Please try again.",
+      });
+    }
+    const onSuccess = ()=>{
+      queryClient.refetchQueries({ queryKey: ['admin/faq'] });
+      //toaster
+      if(onCancel)onCancel();
+    }
 
+  const { isPending: isCreating, mutate: createQuestion } = useMutate({
+    endpoint: "admin/faq",
+    method: "post",
+    mutationKey: ["admin/faq"],
+    onError,
+    onSuccess
+    
+  });
+  const { isPending: isUpdating, mutate: updateQuestion } = useMutate({
+    endpoint: `admin/faq/${defaultValues?.id?.toString()}`,
+    method: "post",
+    mutationKey: [`admin/faq`],
+    onError,
+    onSuccess
+  });
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(questionFormSchema),
     defaultValues: defaultValues || {
@@ -33,16 +62,23 @@ export function QuestionsForm({
   });
 
   const handleSubmit = async (values: QuestionFormValues) => {
-    setIsLoading(true);
-    try {
-      await onSubmit(values);
-    } finally {
-      setIsLoading(false);
+    const question = {
+      ar: {
+        question: values.questionAr,
+        answer: values.answerAr,
+      },
+      en: {
+        question: values.questionEn,
+        answer: values.answerEn,
+      },
+      is_active: values.is_active,
+    };
+    if (isUpdate) {
+      updateQuestion(question);
+      return;
     }
+    createQuestion(question);
   };
-  useEffect(() => {
-    //if update set get the question data if the props is comming with one language
-  }, []);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -87,15 +123,18 @@ export function QuestionsForm({
               type="button"
               variant="outline"
               onClick={onCancel}
-              disabled={isLoading}
+              disabled={isCreating || isUpdating}
             >
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save"}
+          <Button type="submit" disabled={isCreating || isUpdating}>
+            {isCreating || isUpdating ? "Saving..." : "Save"}
           </Button>
         </div>
+           {form.formState.errors.root && (
+          <p className="text-red-500 text-sm mb-4">{form.formState.errors.root.message}</p>
+        )}
       </form>
     </Form>
   );
