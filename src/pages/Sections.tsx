@@ -1,14 +1,6 @@
 import SectionCard from "@/components/sections/SectionCard";
-import SectionForm from "@/components/sections/SectionForm";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/UseFetch";
 import type { SectionResponse } from "@/util/responsesTypes";
@@ -26,7 +18,6 @@ function Sections() {
   // @ts-expect-error
   const secionsList = data?.data as SectionResponse[];
 
-  const [createModal, setCreatModal] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard | Sections";
@@ -40,7 +31,7 @@ function Sections() {
     <div className="space-y-8 md:p-6 mt-6">
       <PageHeader
         header={t("sidebar.sections")}
-        onClick={() => setCreatModal(true)}
+        url="/sections/create"
       />
       {isPending ? (
         <div className="container mx-auto p-6">
@@ -49,15 +40,6 @@ function Sections() {
       ) : (
         <div className="grid grid-cols-1">{SecionsList}</div>
       )}
-
-      <Dialog open={createModal} onOpenChange={setCreatModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("sections.addSection")}</DialogTitle>
-          </DialogHeader>
-          <SectionForm closeModel={() => setCreatModal(false)} />
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

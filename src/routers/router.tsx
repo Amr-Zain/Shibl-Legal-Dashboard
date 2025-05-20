@@ -12,7 +12,12 @@ import PrivateRoute from "./protectedRoute";
 import { lazy } from "react";
 import Banners from "@/pages/Banners";
 import Policy from "@/pages/PrivacyPolicy";
-import Settings from "@/pages/settings";
+import SectionForm from "@/components/sections/SectionForm";
+import { QuestionsForm } from "@/components/questions/questionForm";
+import { TitleFeatureForm } from "@/components/sections/TitleFeatueForm";
+import { WhyUsForm } from "@/components/whyUs/WhyUsForm";
+import ProfileFrom from "@/components/settings/ProfileForm";
+import UpdatePasswordForm from "@/components/settings/UpdatePasswordForm";
 // import Terms from "@/pages/terms";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
@@ -39,27 +44,47 @@ const routes: RouteObject[] = [
       },
       {
         path: "sections",
-        element: <Sections />,
+        children: [
+          { index: true, element: <Sections /> },
+          { path: "create", element: <SectionForm /> },
+          { path: "edit/:id", element: <SectionForm isUpdate /> },
+        ],
       },
       {
         path: "banners",
-        element: <Banners />,
+        children: [
+          { index: true, element: <Banners /> },
+          { path: "create", element: <SectionForm isBanner /> },
+          { path: "edit/:id", element: <SectionForm isBanner isUpdate /> },
+        ],
       },
       {
         path: "faq",
-        element: <Questions />,
+        children: [
+          { index: true, element: <Questions /> },
+          { path: "create", element: <QuestionsForm /> },
+          { path: "edit/:id", element: <QuestionsForm isUpdate /> },
+        ],
       },
       {
-        path: "contact",
+        path: "settings",
         element: <Contact />,
       },
       {
         path: "why-us",
-        element: <WhyUs />,
+         children: [
+          { index: true, element: <WhyUs /> },
+          { path: "create", element: <WhyUsForm /> },
+          { path: "edit/:id", element: <WhyUsForm isUpdate /> },
+        ],
       },
       {
         path: "services",
-        element: <Services />,
+        children: [
+          { index: true, element: <Services /> },
+          { path: "create", element: <TitleFeatureForm  /> },
+          { path: "edit/:id", element: <TitleFeatureForm isUpdate /> },
+        ],
       },
       {
         path: "terms-conditions",
@@ -74,9 +99,14 @@ const routes: RouteObject[] = [
         element: <Policy />,
       },
       {
-        path: "settings",
-        element: <Settings />,
+        path: "profile-data",
+        element: <ProfileFrom />,
       },
+      {
+        path: "reset-password",
+        element: <UpdatePasswordForm />,
+      },
+     
     ],
   },
   { path: "/login", element: <Login /> },

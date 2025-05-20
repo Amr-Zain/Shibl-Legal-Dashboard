@@ -13,7 +13,7 @@ export default function Sidebar() {
   return (
     <div
       className={cn(
-        "hidden border-r bg-muted/40 md:block",
+        "hidden border-r bg-white md:block",
         "fixed top-0 start-0 h-screen w-48 border-e"
       )}
     >

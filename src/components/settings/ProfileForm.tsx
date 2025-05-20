@@ -10,6 +10,7 @@ import { useMutate } from "@/hooks/UseMutate";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import SubmitButton from "../util/SubmitButton";
+import PageHeader from "../util/PageHeader";
 
 function ProfileFrom() {
   const { currentUser } = useContext(AuthContext)!;
@@ -46,42 +47,45 @@ function ProfileFrom() {
   };
   useEffect(() => {});
   return (
-    <Form {...adminForm}>
-      <form
-        onSubmit={adminForm.handleSubmit(handleAdminSubmit)}
-        className="space-y-4"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field<AdminFrom>
-            control={adminForm.control}
-            name="full_name"
-            label={t('fields.fullName')}
-            placeholder={t('fields.fullName')}
+    <div className="space-y-8 p-6 mt-6">
+      <PageHeader header={t('fields.updateProfile')} />
+      <Form {...adminForm}>
+        <form
+          onSubmit={adminForm.handleSubmit(handleAdminSubmit)}
+          className="space-y-4"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Field<AdminFrom>
+              control={adminForm.control}
+              name="full_name"
+              label={t("fields.fullName")}
+              placeholder={t("fields.fullName")}
+            />
+            <Field<AdminFrom>
+              control={adminForm.control}
+              name="email"
+              label={t("fields.email")}
+              placeholder={t("fields.email")}
+            />
+          </div>
+          <ImageInput
+            label={t("fields.profileImage")}
+            path={adminForm.watch("image")}
+            image={currentUser?.image?.url}
+            error={adminForm.formState.errors?.image?.message}
+            onChange={(path) => {
+              adminForm.setValue("image", path as string);
+            }}
           />
-          <Field<AdminFrom>
-            control={adminForm.control}
-            name="email"
-            label={t('fields.email')}
-            placeholder={t('fields.email')}
-          />
-        </div>
-        <ImageInput
-          label={t('fields.profileImage')}
-          path={adminForm.watch("image")}
-          image={currentUser?.image?.url}
-          error={adminForm.formState.errors?.image?.message}
-          onChange={(path) => {
-            adminForm.setValue("image", path as string);
-          }}
-        />
-        {adminForm.formState.errors.root && (
-          <p className="text-red-500 text-sm mb-4">
-            {adminForm.formState.errors.root.message}
-          </p>
-        )}
-        <SubmitButton isPending={isPending} />
-      </form>
-    </Form>
+          {adminForm.formState.errors.root && (
+            <p className="text-red-500 text-sm mb-4">
+              {adminForm.formState.errors.root.message}
+            </p>
+          )}
+          <SubmitButton isPending={isPending} />
+        </form>
+      </Form>
+    </div>
   );
 }
 

@@ -5,16 +5,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import UpdateDeleteModals from "../util/UpdateDeleteModals";
-import { QuestionsForm } from "./questionForm";
 import type { QuestionResponse } from "@/util/responsesTypes";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
-import { useState } from "react";
 import { FormateQuestionForm } from "@/lib/utils";
+import UpdateDeleteModals from "../util/NewUpade";
 
 function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
   const { locale } = useThemeConfig();
-  const [updateModal, setUpdateModal] = useState(false);
 
   return (
     <Card className="p-4">
@@ -29,15 +26,9 @@ function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
               <UpdateDeleteModals
                 endpoint={`admin/faq/${question.id}`}
                 mutationKey="faq"
-                setUpdateModal={setUpdateModal}
-                updateModal={updateModal}
-              >
-                <QuestionsForm
-                  defaultValues={FormateQuestionForm(question)}
-                  closeModal={() => setUpdateModal(false)}
-                  isUpdate
-                />
-              </UpdateDeleteModals>
+                updatUrl={"/faq/edit/"+question.id}
+                state={FormateQuestionForm(question)}
+             />
             </div>
             <AccordionContent className="pb-4 pt-2">
               <div className="text-muted-foreground">

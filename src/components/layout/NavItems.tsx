@@ -3,7 +3,6 @@ import {
   Bookmark,
   List,        
   HelpCircle,      
-  Phone,
   Award,
   Settings,
   FileText,
@@ -35,11 +34,6 @@ const NavigationItems = () => {
       path: "/faq",
       icon: HelpCircle, 
       label: t("sidebar.faqs"),
-    },
-    {
-      path: "/contact",
-      icon: Phone,
-      label: t("sidebar.contact"),
     },
     {
       path: "/why-us",

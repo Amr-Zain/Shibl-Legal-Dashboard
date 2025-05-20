@@ -14,7 +14,6 @@ function Field<TFieldValues extends FieldValues>({
   label,
   placeholder,
   name,
-  image,
   checkbox,
   ...rest
 }: {
@@ -22,7 +21,6 @@ function Field<TFieldValues extends FieldValues>({
   label: string;
   placeholder?: string;
   name: FieldPath<TFieldValues>;
-  image?: boolean;
   checkbox?: boolean;
   [key: string]: unknown;
 }) {
@@ -31,25 +29,17 @@ function Field<TFieldValues extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-      <FormItem className={checkbox?"!flex !gap-2":''}>
+      <FormItem className={checkbox?"!flex mb-2":''}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            {image ? (
-              <Input
-                placeholder={placeholder}
-                type="file"
-                accept="image/*"
-                onChange={(e) => field.onChange(e.target.files?.[0])}
-                {...rest}
-              />
-            ) : checkbox ? (
+            { checkbox ? (
               <Checkbox
               className="-order-1"
                 checked={field.value}
                 onCheckedChange={field.onChange}
               />
             ) : (
-              <Input placeholder={placeholder} {...field} {...rest} />
+              <Input  placeholder={placeholder} {...field} {...rest} />
             )}
           </FormControl>
           <FormMessage />

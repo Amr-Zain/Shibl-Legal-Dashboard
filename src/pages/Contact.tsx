@@ -1,23 +1,11 @@
 import ContactForm from "@/components/contact/contactForm";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import Skeleton from "@/components/util/Skeleton";
 import useFetch from "@/hooks/UseFetch";
 import type { ContactFormValues, ContactKeys } from "@/schemas";
 
-import { PencilIcon } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function Contact() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
   const { data, isPending } = useFetch({
     endpoint: "admin/contact-info",
@@ -38,50 +26,12 @@ function Contact() {
   return (
     <div className="space-y-8 md:p-6 mt-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">{t("sidebar.contact")}</h1>
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger>
-            <Button size="sm" dir="ltr">
-              <PencilIcon className="mr-2 h-4 w-4" />
-              {t("buttons.edit")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[80vh]">
-            <DialogHeader>
-              <DialogTitle>{t("formsTitle.contactTitle")}</DialogTitle>
-            </DialogHeader>
-            <ContactForm
-              contactInfo={contactObj}
-              closeMadal={() => setIsModalOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+        <h1 className="text-xl font-bold">{t("sidebar.settings")}</h1>
       </div>
       {isPending ? (
-        <Skeleton
-          count={8}
-          h={40}
-          className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"}
-        />
+        <Skeleton count={8} h={12} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {contactData?.map(({ id, key, value }) => {
-            return (
-              <Card key={id} className="hover:shadow-sm !gap-3">
-                <CardHeader className="p-3 pb-1">
-                  <CardTitle className="text-sm font-medium">
-                    {t(`contact.${key}`)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 pt-0">
-                  <div className="text-sm text-muted-foreground">
-                    <p>{value}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        <ContactForm contactInfo={contactObj} />
       )}
     </div>
   );

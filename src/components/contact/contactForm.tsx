@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Field from "../util/FormField";
 import {
   Form,
@@ -24,21 +23,15 @@ import Swal from "sweetalert2";
 import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
 
-function ContactForm({
-  contactInfo,
-  closeMadal,
-}: {
-  contactInfo?: ContactFormValues;
-  closeMadal: () => void;
-}) {
+function ContactForm({ contactInfo }: { contactInfo?: ContactFormValues }) {
   const { t } = useTranslation();
   const countryCodes = [
     { value: "+966", label: "Saudi Arabia (+966)" },
     { value: "+971", label: "UAE (+971)" },
     { value: "+20", label: "Egypt (+20)" },
   ];
-    const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient();
+
   const { isPending, mutate } = useMutate({
     endpoint: "admin/contact-info",
     method: "post",
@@ -50,7 +43,6 @@ function ContactForm({
       });
     },
     onSuccess: (data: { message?: string }) => {
-      closeMadal();
       const title = data?.message || t("successMessages.contactUpdated");
       Swal.fire({
         title,
@@ -75,7 +67,7 @@ function ContactForm({
       facebook: contactInfo?.facebook || "",
       x: contactInfo?.x || "",
       instagram: contactInfo?.instagram || "",
-      phone_code: "",
+      phone_code: contactInfo?.phone_code,
       phone: contactInfo?.phone,
     },
     mode: "onBlur",
@@ -83,12 +75,12 @@ function ContactForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[65vh] overflow-y-scroll">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field
             control={form.control}
             name="email"
-            label={t('contact.email')}
+            label={t("contact.email")}
             placeholder="contact@example.com"
           />
 
@@ -151,7 +143,7 @@ function ContactForm({
           <Field
             control={form.control}
             name="x"
-            label={t('contact.x')}
+            label={t("contact.x")}
             placeholder="https://x.com/..."
           />
 
@@ -167,15 +159,7 @@ function ContactForm({
             </p>
           )}
           <div className="md:col-span-2 flex justify-end gap-4 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={closeMadal}
-              disabled={isPending}
-            >
-              {t("buttons.cancel")}
-            </Button>
-            <SubmitButton isPending={isPending}/>
+            <SubmitButton isPending={isPending} />
           </div>
         </div>
       </form>

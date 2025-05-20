@@ -5,6 +5,7 @@ import { useMutate } from "@/hooks/UseMutate";
 import { Loader2, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 type ImageInputProps = {
   label: string;
@@ -15,6 +16,7 @@ type ImageInputProps = {
 };
 
 function ImageInput({ label, image, path, error, onChange }: ImageInputProps) {
+  const imageRef = useRef(null);
   const [preview, setPreview] = useState<string | undefined>(image);
   const [disPlayError, setError] = useState(error);
   const { mutateAsync: uploadMutate, isPending: isUploading } = useMutate<{
@@ -29,10 +31,6 @@ function ImageInput({ label, image, path, error, onChange }: ImageInputProps) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const message = error?.response?.message;
-      toast("someting went wrong", {
-        description:
-          message || "Please try again With png, jpg, jpeg extintions",
-      });
       setError(message || "Please try again With png, jpg, jpeg extintions");
     },
     onSuccess: (data) => {
@@ -52,6 +50,7 @@ function ImageInput({ label, image, path, error, onChange }: ImageInputProps) {
       if (error?.response?.status < 500) {
         setPreview(undefined);
         onChange(undefined);
+        if (imageRef?.current) imageRef.current.value = "";
       }
       toast("someting went wrong", {
         description:
@@ -75,61 +74,64 @@ function ImageInput({ label, image, path, error, onChange }: ImageInputProps) {
   };
 
   const handleRemove = async () => {
-      await deleteMutate({ path });
-      setPreview(undefined);
-      onChange("");
+    await deleteMutate({ path });
+    setPreview(undefined);
+    onChange("");
+    if (imageRef?.current) imageRef.current.value = "";
   };
 
   return (
     <FormItem>
-  <FormLabel className={disPlayError || error ? "border-red-500" : ""}>
-    {label}
-  </FormLabel>
-  <FormControl>
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row items-start gap-4">
-        {preview && (
-          <div className="relative group shrink-0">
-            <img
-              src={preview}
-              alt="Preview"
-              className="h-32 w-32 object-cover rounded-lg border"
-            />
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={handleRemove}
-              disabled={isDeleting}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-          </div>
-        )}
-        <div className="relative flex-1">
-          <Input
-            type="file"
-            accept="image/*"
-            disabled={isUploading || isDeleting || !!preview}
-            className={disPlayError || error ? "border-red-500 max-w-60" : "max-w-60"}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              handleFileChange(file);
-            }}
-          />
-          {isUploading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-              <Loader2 className="h-4 w-4 animate-spin" />
+      <FormLabel className={disPlayError || error ? "border-red-500" : ""}>
+        {label}
+      </FormLabel>
+      <FormControl>
+        <div className="space-y-2">
+          <div className="flex flex-col items-start gap-2">
+            {preview && (
+              <div className="relative group shrink-0">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-38 w-32 object-cover rounded-lg border"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={handleRemove}
+                  disabled={isDeleting}
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </div>
+            )}
+            <div className="relative flex-1">
+              <Input
+                type="file"
+                accept="image/*"
+                disabled={isUploading || isDeleting || !!preview}
+                className={disPlayError || error ? "border-red-500" : ""}
+                ref={imageRef}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  handleFileChange(file);
+                }}
+              />
+              {isUploading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </div>
+              )}
             </div>
-          )}
+          </div>
+          <p className="text-sm text-red-500">{disPlayError || error}</p>
         </div>
-      </div>
-      <p className="text-sm text-red-500">{disPlayError || error}</p>
-    </div>
-  </FormControl>
-  <FormMessage />
-</FormItem>  );
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
 }
 
 export default ImageInput;

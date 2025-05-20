@@ -114,8 +114,8 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <Field<TermsType>
             name="titleAr"
             control={form.control}

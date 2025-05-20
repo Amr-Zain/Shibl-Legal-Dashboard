@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import Field from "../util/FormField";
 import { questionFormSchema, type QuestionFormValues } from "@/schemas";
 import { useMutate } from "@/hooks/UseMutate";
@@ -10,21 +9,18 @@ import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 import { formateQuestion } from "@/lib/utils";
 import SubmitButton from "../util/SubmitButton";
+import { useLocation } from "react-router";
+import PageHeader from "../util/PageHeader";
 
 interface QuestionsFormProps {
   defaultValues?: QuestionFormValues;
   isUpdate?: boolean;
-  closeModal: () => void;
 }
 
-export function QuestionsForm({
-  defaultValues,
-  closeModal,
-  isUpdate,
-}: QuestionsFormProps) {
+export function QuestionsForm({ isUpdate }: QuestionsFormProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
+  const defaultValues = useLocation().state as QuestionFormValues;
   const { isPending, mutate } = useMutate({
     endpoint: `admin/faq${isUpdate ? "/" + defaultValues?.id?.toString() : ""}`,
     method: "post",
@@ -36,7 +32,6 @@ export function QuestionsForm({
       });
     },
     onSuccess: (data: { message?: string }) => {
-      closeModal();
       const title =
         data?.message ||
         t(
@@ -68,62 +63,59 @@ export function QuestionsForm({
     mutate(formateQuestion(values));
   };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="grid gap-4">
-          <Field<QuestionFormValues>
-            control={form.control}
-            name="questionEn"
-            label={t("fields.en.question")}
-            placeholder={t("fields.en.question")}
-          />
-          <Field<QuestionFormValues>
-            control={form.control}
-            name="answerEn"
-            label={t("fields.en.answer")}
-            placeholder={t("fields.en.answer")}
-          />
-          <Field<QuestionFormValues>
-            control={form.control}
-            name="questionAr"
-            dir="rtl"
-            label={t("fields.ar.question")}
-            placeholder={t("fields.ar.question")}
-          />
-          <Field<QuestionFormValues>
-            control={form.control}
-            name="answerAr"
-            dir="rtl"
-            label={t("fields.ar.answer")}
-            placeholder={t("fields.ar.answer")}
-          />
-          <Field
-            control={form.control}
-            name={`is_active`}
-            label={t("fields.active")}
-            checkbox
-          />
-        </div>
+    <div className="space-y-8 p-6 mt-6">
+      <PageHeader header={t("sidebar.whyUs")} />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">
+          <div className="grid gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field<QuestionFormValues>
+                control={form.control}
+                name="questionEn"
+                label={t("fields.en.question")}
+                placeholder={t("fields.en.question")}
+              />
+              <Field<QuestionFormValues>
+                control={form.control}
+                name="answerEn"
+                label={t("fields.en.answer")}
+                placeholder={t("fields.en.answer")}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field<QuestionFormValues>
+                control={form.control}
+                name="questionAr"
+                dir="rtl"
+                label={t("fields.ar.question")}
+                placeholder={t("fields.ar.question")}
+              />
+              <Field<QuestionFormValues>
+                control={form.control}
+                name="answerAr"
+                dir="rtl"
+                label={t("fields.ar.answer")}
+                placeholder={t("fields.ar.answer")}
+              />
+            </div>
+            <Field
+              control={form.control}
+              name={`is_active`}
+              label={t("fields.active")}
+              checkbox
+            />
+          </div>
           {form.formState.errors.root && (
             <p className="text-red-500 text-sm mb-4">
               {form.formState.errors.root.message}
             </p>
           )}
 
-        <div className="flex justify-end gap-4">
-          {
-            <Button
-              type="button"
-              variant="outline"
-              onClick={closeModal}
-              disabled={isPending}
-            >
-              Cancel
-            </Button>
-          }
-          <SubmitButton isPending={isPending} />
-        </div>
-      </form>
-    </Form>
+          <div className="flex justify-end gap-4">
+            <SubmitButton isPending={isPending} />
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

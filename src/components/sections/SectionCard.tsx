@@ -1,14 +1,13 @@
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import { toast } from "sonner";
 import { fullbackImage } from "@/util/data";
-import SectionForm from "./SectionForm";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { SectionResponse } from "@/util/responsesTypes";
+import UpdateDeleteModals from "../util/NewUpade";
 
 interface SectionProps {
   section: SectionResponse;
@@ -17,7 +16,6 @@ interface SectionProps {
 
 function SectionCard({ section, isBanner }: SectionProps) {
   const [isActive, setIsActive] = useState(section.is_active);
-  const [updateModal, setUpdateModal] = useState(false);
   const { t } = useTranslation();
   const { locale } = useThemeConfig();
 
@@ -60,16 +58,9 @@ function SectionCard({ section, isBanner }: SectionProps) {
         <UpdateDeleteModals
           endpoint={`admin/sections/${section.id}`}
           mutationKey={isBanner ? "banners" : "sections"}
-          updateModal={updateModal}
-          setUpdateModal={setUpdateModal}
-        >
-          <SectionForm
-            closeModel={() => setUpdateModal(false)}
-            section={section}
-            isUpdate
-            isBanner={isBanner}
-          />
-        </UpdateDeleteModals>
+          updatUrl={`/${isBanner ? "banners" : "sections"}/edit/${section.id}`}
+          state={section}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">

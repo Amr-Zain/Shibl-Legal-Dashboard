@@ -55,8 +55,10 @@ export interface WhyUsResponse {
     is_active: boolean;
 }
 export interface ServiceReaspose {
+    id: string
     en: Header;
     ar: Header;
     icon: Image;
     background: Image;
+    is_active: boolean;
 }

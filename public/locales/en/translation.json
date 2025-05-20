@@ -18,6 +18,20 @@
     "addFeature": "Add New Feature",
     "addService": "Add New Service"
   },
+  "service": {
+    "icon": "Icon",
+    "title": "Title",
+    "description": "Description",
+    "actions": "Actions",
+    "noResults": "No services found."
+  },
+  "whyUs": {
+    "icon": "Icon",
+    "key": "Title",
+    "value": "Description",
+    "actions": "Actions",
+    "noResults": "No services found."
+  },
   "sidebar": {
     "home": "Home",
     "dashboard": "Dashboard",
@@ -423,18 +437,17 @@
     "active": "Active Status",
     "addFeature": "Add Feature",
     "removeFeature": "Remove Feature",
-    "en.key":"key in English",
-    "ar.key":"key in Arabic",
+    "en.key": "key in English",
+    "ar.key": "key in Arabic",
     "value": "Number Value",
-    "updateProfile":"Update Admin Data",
-    "updatePassword":"Update Password",
-    "fullName":"Full Name",
+    "updateProfile": "Update Admin Data",
+    "updatePassword": "Update Password",
+    "fullName": "Full Name",
     "email": "Email",
-    "profileImage":"Profile Image",
-    "currentPassword":"Current Password",
-    "newPassword":"New Password",
-    "confirmNewPassword":"Confirm New Password"
-
+    "profileImage": "Profile Image",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password"
   },
 
   "status": {

@@ -1,16 +1,15 @@
 import { fullbackImage } from "@/util/data";
-import UpdateDeleteModals from "../util/UpdateDeleteModals";
-import { WhyUsForm } from "../whyUs/WhyUsForm";
+import UpdateDeleteModals from "../util/NewUpade";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { WhyUsResponse } from "@/util/responsesTypes";
-import { useState } from "react";
+import { TableCell, TableRow } from "../ui/table";
 
-function KeyValueFeature({ feature }: { feature: WhyUsResponse }) {
+function KeyValueFeatureRow({ feature }: { feature: WhyUsResponse }) {
   const { locale } = useThemeConfig();
-  const [updateModal, setUpdateModal] = useState(false);
+  
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-      <div className="flex items-center gap-3">
+    <TableRow>
+      <TableCell>
         {feature.icon && (
           <img
             src={feature.icon.url}
@@ -19,21 +18,21 @@ function KeyValueFeature({ feature }: { feature: WhyUsResponse }) {
             onError={(e) => (e.currentTarget.src = fullbackImage)}
           />
         )}
-        <div>
-          {feature[locale]?.key && (
-            <span className="text-lg font-medium">{feature[locale].key}: </span>
-          )}
-          <span>{feature.value}</span>
-        </div>
-      </div>
-      <UpdateDeleteModals
-        endpoint={`admin/why-us/${feature.id}`}
-        mutationKey="why-us"
-        updateModal={updateModal}
-        setUpdateModal={setUpdateModal}
-      >
-        <WhyUsForm
-          defaultValues={{
+      </TableCell>
+      <TableCell>
+        {feature[locale]?.key && (
+          <span className="font-medium">{feature[locale].key}</span>
+        )}
+      </TableCell>
+      <TableCell>
+        <span>{feature.value}</span>
+      </TableCell>
+      <TableCell className="text-right">
+        <UpdateDeleteModals
+          endpoint={`admin/why-us/${feature.id}`}
+          mutationKey="why-us"
+          updatUrl={`/why-us/edit/${feature.id}`}
+          state={{
             id: feature.id,
             keyEn: feature.en?.key,
             keyAr: feature.ar?.key,
@@ -42,12 +41,10 @@ function KeyValueFeature({ feature }: { feature: WhyUsResponse }) {
             is_active: feature?.is_active,
             url: feature?.icon?.url,
           }}
-          onCancel={()=>setUpdateModal(false)}
-          isUpdate
         />
-      </UpdateDeleteModals>
-    </div>
+      </TableCell>
+    </TableRow>
   );
 }
 
-export default KeyValueFeature;
+export default KeyValueFeatureRow;
