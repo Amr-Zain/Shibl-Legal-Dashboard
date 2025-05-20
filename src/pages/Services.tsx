@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/UseFetch";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import PageHeader from "@/components/util/PageHeader";
+import Skeleton from "@/components/util/Skeleton";
 
 function Services() {
   const [createModal, setCreatModal] = useState(false);
@@ -31,11 +32,7 @@ function Services() {
       />
       {isPending ? (
         <div className="container mx-auto p-6">
-          <div className="animate-pulse space-y-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-30 bg-gray-200 rounded-lg p-4"></div>
-            ))}
-          </div>
+          <Skeleton count={4} h={30} />
         </div>
       ) : (
         services?.map((feature) => (

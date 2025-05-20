@@ -55,18 +55,18 @@ function ProfileFrom() {
           <Field<AdminFrom>
             control={adminForm.control}
             name="full_name"
-            label="Full Name"
-            placeholder="Full Name..."
+            label={t('fields.fullName')}
+            placeholder={t('fields.fullName')}
           />
           <Field<AdminFrom>
             control={adminForm.control}
             name="email"
-            label="email"
-            placeholder="email"
+            label={t('fields.email')}
+            placeholder={t('fields.email')}
           />
         </div>
         <ImageInput
-          label={"Profile Image"}
+          label={t('fields.profileImage')}
           path={adminForm.watch("image")}
           image={currentUser?.image?.url}
           error={adminForm.formState.errors?.image?.message}

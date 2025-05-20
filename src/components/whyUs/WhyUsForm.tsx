@@ -77,31 +77,24 @@ export function WhyUsForm({
           <Field<WhyUsFormValues>
             control={form.control}
             name="keyEn"
-            label="Key (English)"
-            placeholder="Enter key in English"
+            label={t("fields.en.key")}
+            placeholder={t("fields.en.key")}
           />
           <Field<WhyUsFormValues>
             control={form.control}
             name="keyAr"
-            label="Key (Arabic)"
-            placeholder="أدخل الكلمة بالعربية"
+            label={t("fields.ar.key")}
+            placeholder={t("fields.ar.key")}
             dir="rtl"
           />
 
           <Field<WhyUsFormValues>
             control={form.control}
             name="value"
-            label="Value"
-            placeholder="Enter number value"
-            type="number"
+            label={t("fields.value")}
+            placeholder={t("fields.value")}
           />
 
-          <Field<WhyUsFormValues>
-            control={form.control}
-            name="is_active"
-            label="Active Status"
-            checkbox
-          />
           <ImageInput
             label={t("fields.sectionIcon")}
             path={form.watch("icon")}
@@ -110,6 +103,12 @@ export function WhyUsForm({
             onChange={(path) => form.setValue("icon", path as string)}
           />
         </div>
+        <Field<WhyUsFormValues>
+          control={form.control}
+          name="is_active"
+          label={t("fields.active")}
+          checkbox
+        />
         {form.formState.errors.root && (
           <p className="text-red-500 text-sm mb-4">
             {form.formState.errors.root.message}

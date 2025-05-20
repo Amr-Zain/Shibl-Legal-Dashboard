@@ -23,20 +23,18 @@ function Settings() {
       />
       <Card className="p-4">
         <Accordion type="single" collapsible className="w-full px-4">
-          {/* Update Admin Data Section */}
           <AccordionItem value="profile">
             <AccordionTrigger className="flex-1 text-left">
-              <span className="font-medium">Update Admin Data</span>
+              <span className="font-medium">{t('fields.updateProfile')}</span>
             </AccordionTrigger>
             <AccordionContent className="pb-4 pt-2">
               <ProfileFrom />
             </AccordionContent>
           </AccordionItem>
 
-          {/* Update Password Section */}
           <AccordionItem value="password">
             <AccordionTrigger className="flex-1 text-left">
-              <span className="font-medium">Update Password</span>
+              <span className="font-medium">{t('fields.updatePassword')}</span>
             </AccordionTrigger>
             <AccordionContent className="pb-4 pt-2">
                 <UpdatePasswordForm />

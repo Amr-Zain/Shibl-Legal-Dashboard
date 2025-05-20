@@ -74,33 +74,33 @@ export function QuestionsForm({
           <Field<QuestionFormValues>
             control={form.control}
             name="questionEn"
-            label="Question (English)"
+            label={t("fields.en.question")}
             placeholder={t("fields.en.question")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="answerEn"
-            label="Answer (English)"
+            label={t("fields.en.answer")}
             placeholder={t("fields.en.answer")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="questionAr"
-            label="Question (Arabic)"
             dir="rtl"
+            label={t("fields.ar.question")}
             placeholder={t("fields.ar.question")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="answerAr"
-            label="Answer (Arabic)"
             dir="rtl"
+            label={t("fields.ar.answer")}
             placeholder={t("fields.ar.answer")}
           />
           <Field
             control={form.control}
             name={`is_active`}
-            label="Active Status"
+            label={t("fields.active")}
             checkbox
           />
         </div>

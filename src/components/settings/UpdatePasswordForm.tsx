@@ -47,25 +47,25 @@ function UpdatePasswordForm() {
           <Field<UpdatePasswordType>
             control={passwordForm.control}
             name="current_password"
-            label="Current Password"
+            label={t('fields.currentPassword')}
             type="password"
-            placeholder="email"
+            placeholder={t('fields.currentPassword')}
           />
           <Field<UpdatePasswordType>
             control={passwordForm.control}
             name="new_password"
-            label="New Password"
-            type="New Password"
-            placeholder="New Password"
+            label={t('fields.newPassword')}
+            type="Password"
+            placeholder={t('fields.newPassword')}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field<UpdatePasswordType>
             control={passwordForm.control}
             name="new_password_confirmation"
-            label="Confirm New Password"
+            label={t('fields.confirmNewPassword')}
             type="password"
-            placeholder="Confirm New Password"
+            placeholder={t('fields.confirmNewPassword')}
           />
         </div>
         {passwordForm.formState.errors.root && (

@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Skeleton from "@/components/util/Skeleton";
 import useFetch from "@/hooks/UseFetch";
 import type { ContactFormValues, ContactKeys } from "@/schemas";
 
@@ -22,17 +23,16 @@ function Contact() {
     endpoint: "admin/contact-info",
     queryKey: ["contact"],
   });
-  
-  
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const contactData = data?.data as  {
+  const contactData = data?.data as {
     id: number;
     key: ContactKeys;
     value: string;
-  }[] ;
-  
-  const contactObj = contactData?.reduce((acc, item ) => {
+  }[];
+
+  const contactObj = contactData?.reduce((acc, item) => {
     return { ...acc, [item.key]: item.value };
   }, {} as ContactFormValues);
   return (
@@ -48,21 +48,21 @@ function Contact() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[80vh]">
             <DialogHeader>
-              <DialogTitle>{t('formsTitle.contactTitle')}</DialogTitle>
+              <DialogTitle>{t("formsTitle.contactTitle")}</DialogTitle>
             </DialogHeader>
             <ContactForm
               contactInfo={contactObj}
-              closeMadal={()=>setIsModalOpen(false)}
+              closeMadal={() => setIsModalOpen(false)}
             />
           </DialogContent>
         </Dialog>
       </div>
       {isPending ? (
-          <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-40 bg-gray-200 rounded-lg p-4"></div>
-            ))}
-          </div>
+        <Skeleton
+          count={8}
+          h={40}
+          className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"}
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {contactData?.map(({ id, key, value }) => {

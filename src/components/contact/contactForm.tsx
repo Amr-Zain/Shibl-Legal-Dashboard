@@ -88,7 +88,7 @@ function ContactForm({
           <Field
             control={form.control}
             name="email"
-            label="Email"
+            label={t('contact.email')}
             placeholder="contact@example.com"
           />
 
@@ -151,7 +151,7 @@ function ContactForm({
           <Field
             control={form.control}
             name="x"
-            label="Twitter (X)"
+            label={t('contact.x')}
             placeholder="https://x.com/..."
           />
 

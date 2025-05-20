@@ -229,13 +229,13 @@ const SectionForm = ({
         <Field
           control={form.control}
           name={`is_active`}
-          label="Active Status"
+          label={t("fields.active")}
           checkbox
         />
         {/* Features Section */}
         {!isBanner && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Features</h3>
+            <h3 className="text-lg font-semibold">{t("sections.features")}</h3>
             {fields.map((field, index) => (
               <div key={field.id} className="space-y-4 border p-4 rounded">
                 <Field
@@ -248,14 +248,14 @@ const SectionForm = ({
                   <Field
                     control={form.control}
                     name={`features.${index}.valueAr`}
-                    label="Arabic Value"
-                    placeholder="الوصف بالعربية "
+                    placeholder={t("fields.ar.description")}
+                    label={t("fields.ar.description")}
                   />
                   <Field
                     control={form.control}
                     name={`features.${index}.valueEn`}
-                    label="English Value"
-                    placeholder="text in English"
+                    placeholder={t("fields.en.description")}
+                    label={t("fields.en.description")}
                   />
                 </div>
                 <ImageInput
@@ -273,7 +273,7 @@ const SectionForm = ({
                   size="sm"
                   onClick={() => remove(index)}
                 >
-                  Remove Feature
+                  {t('fields.removeFeature')}
                 </Button>
               </div>
             ))}
@@ -291,7 +291,7 @@ const SectionForm = ({
                 })
               }
             >
-              Add Feature
+               {t('fields.addFeature')}
             </Button>
           </div>
         )}

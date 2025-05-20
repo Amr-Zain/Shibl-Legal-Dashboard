@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/UseFetch";
 import type { SectionResponse } from "@/util/responsesTypes";
 import PageHeader from "@/components/util/PageHeader";
+import Skeleton from "@/components/util/Skeleton";
 
 function Sections() {
   const { t } = useTranslation();
@@ -43,11 +44,7 @@ function Sections() {
       />
       {isPending ? (
         <div className="container mx-auto p-6">
-          <div className="animate-pulse space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg p-4"></div>
-            ))}
-          </div>
+          <Skeleton count={3} h={32} />
         </div>
       ) : (
         <div className="grid grid-cols-1">{SecionsList}</div>

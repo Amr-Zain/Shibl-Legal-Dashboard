@@ -11,7 +11,7 @@ function App() {
       <div className="flex-1">
         <Header />
         <main className="overflow-y-auto px-6">
-          <div className="mx-auto">
+          <div className="mx-auto min-h-[100]">
             <Outlet />
           </div>
         </main>

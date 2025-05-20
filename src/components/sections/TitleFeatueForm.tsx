@@ -111,7 +111,7 @@ export function TitleFeatureForm({ defaultValues, onCancel, isUpdate }: Props) {
           <Field
             control={form.control}
             name={`is_active`}
-            label="Active Status"
+            label={t('fields.active')}
             checkbox
           />
         </div>

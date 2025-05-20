@@ -7,6 +7,7 @@ import KeyValueFeature from "@/components/sections/KeyValueFeature";
 import useFetch from "@/hooks/UseFetch";
 import type { WhyUsResponse } from "@/util/responsesTypes";
 import PageHeader from "@/components/util/PageHeader";
+import Skeleton from "@/components/util/Skeleton";
 
 function WhyUs() {
   const [createModal, setCreatModal] = useState(false);
@@ -27,11 +28,7 @@ function WhyUs() {
       />
       {isPending ? (
         <div className="container mx-auto md:p-6">
-          <div className="animate-pulse space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded-lg p-4"></div>
-            ))}
-          </div>
+          <Skeleton count={5} h={12} />
         </div>
       ) : (
         features?.map((feature) => (
