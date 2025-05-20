@@ -1,18 +1,7 @@
 import { Link, useLocation } from "react-router";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-} from "@/components/ui/dialog";
-import {
-  LayoutDashboard,
-  BookMarked,
-  HelpCircle,
-  Contact,
-  Award,
-} from "lucide-react";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import NavigationItems from "./NavItems";
 
 interface ModalProps {
   isOpen: boolean;
@@ -21,42 +10,6 @@ interface ModalProps {
 
 const Modal = ({ isOpen, onClose }: ModalProps) => {
   const location = useLocation();
-   const { t } = useTranslation()
-  
-    
-  const navigationItems = [
-    {
-      path: "/",
-      icon: LayoutDashboard,
-      label: t("sidebar.home"),
-      end: true,
-    },
-    {
-      path: "/sections",
-      icon: BookMarked,
-      label: t("sidebar.sections"),
-    },
-    {
-      path: "/faq",
-      icon: HelpCircle,
-      label: t("sidebar.faqs"),
-    },
-    {
-      path: "/contact",
-      icon: Contact,
-      label: t("sidebar.contact"),
-    },
-    {
-      path: "/why-us",
-      icon: Award,
-      label: t("sidebar.whyUs"),
-    },
-    {
-      path: "/services",
-      icon: Award,
-      label: t("sidebar.ourServices"),
-    }
-  ];
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -75,7 +28,7 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
 
         <div className="flex-1 overflow-y-auto p-4">
           <nav className="grid gap-1">
-            {navigationItems.map((item) => (
+            {NavigationItems().map((item) => (
               <Link
                 key={item.path}
                 to={item.path}

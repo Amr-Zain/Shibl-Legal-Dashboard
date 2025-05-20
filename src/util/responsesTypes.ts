@@ -21,6 +21,15 @@ interface Image {
     url: string;
 }
 
+interface Feature {
+    id: number;
+    key: string | null;
+    ar: { value: string; }
+    en: { value: string; }
+    icon: Image;
+    is_active?: boolean;
+}
+
 export interface SectionResponse {
     id: number;
     ar: Header;
@@ -29,6 +38,7 @@ export interface SectionResponse {
     image?: Image;
     icon?: Image;
     is_active?: boolean;
+    features?: Feature[]
 }
 
 /***************************** */

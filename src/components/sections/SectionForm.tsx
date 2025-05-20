@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -16,24 +16,33 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { sections } from "@/util/data";
-import { useEffect } from "react";
+import { bannsers, sections } from "@/util/data";
 import Field from "../util/FormField";
-import { sectionSchema, type FormSection } from "@/schemas";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "../util/ImageInput";
 import type { SectionResponse } from "@/util/responsesTypes";
-import { Loader2 } from "lucide-react";
+import Swal from "sweetalert2";
+import { sectionSchema, type FormSection } from "@/schemas";
+import { formateSection } from "@/lib/utils";
+import { useThemeConfig } from "@/context/ThemeConfigContext";
+import { useQueryClient } from "@tanstack/react-query";
+import SubmitButton from "../util/SubmitButton";
 
 const SectionForm = ({
   section,
   isUpdate,
+  closeModel,
+  isBanner,
 }: {
   section?: SectionResponse;
   isUpdate?: boolean;
+  closeModel: () => void;
+  isBanner?: boolean;
 }) => {
   const { t } = useTranslation();
+  const { locale } = useThemeConfig();
+  const queryClient = useQueryClient();
   const form = useForm<FormSection>({
     resolver: zodResolver(sectionSchema),
     defaultValues: {
@@ -44,34 +53,97 @@ const SectionForm = ({
       descriptionEn: section?.en.title,
       image: section?.image?.path,
       icon: section?.icon?.path,
+      features: section?.features?.map((feature) => ({
+        valueAr: feature.ar.value,
+        valueEn: feature.en.value,
+        id: feature.id,
+        key: feature.key,
+        is_active: feature.is_active,
+      })),
     },
     mode: "onBlur",
   });
-  const { isPending: isCreating, mutate: createSection } = useMutate({
-    endpoint: "/admin/sections",
+  /* const {
+    data: response,
+    isPending: fetchSection,
+    refetch
+    
+  } = useFetch<{ data: SectionResponse }>({
+    endpoint: `admin/sections?type=${form.watch("type")}`,
+    queryKey: [form.watch("type")],
+    
+    onSuccess: () => {
+      if (section) {
+        console.log(section)
+        
+      }
+    },
+  }); */
+  const { isPending, mutate } = useMutate({
+    endpoint: `admin/sections${isUpdate ? "/" + section?.id.toString() : ""}`,
     method: "post",
     mutationKey: ["sections"],
-  });
-  const { isPending: isUpdating, mutate: updateSection } = useMutate({
-    endpoint: `/admin/sections/${section?.id.toString()}`,
-    method: "post",
-    mutationKey: ["sections"],
+    onSuccess: (data: { message?: string }) => {
+      closeModel();
+      const title =
+        data?.message ||
+        t(
+          isUpdate
+            ? "successMessages.SectionUpdated"
+            : "successMessages.SectionCreated"
+        );
+      Swal.fire({
+        title,
+        icon: "success",
+        timer: 2000,
+      });
+      queryClient.invalidateQueries({
+        queryKey: [isBanner ? "banners" : "sections"],
+      });
+    },
+    onError: (error: unknown) => {
+      form.setError("root", {
+        type: "manual",
+        message: error instanceof Error ? error.message : t("error"),
+      });
+    },
   });
   const onSubmit = (data: FormSection) => {
-    console.log(data);
-    if (isUpdate && section?.id) {
-      updateSection({ ...data, id: section.id });
-    } else {
-      createSection(data);
-    }
+    mutate(formateSection(data));
   };
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "features",
+  });
 
-  useEffect(() => {}, []);
+  /* useEffect(()=>{
+    if(isUpdate) return;
+    const section = response?.data[0] as SectionResponse;
+    console.log(section)
+    if(!section)return;
+    form.reset({
+          type: section?.type,
+          titleAr: section?.ar.title,
+          titleEn: section?.en.title,
+          descriptionAr: section?.ar.description,
+          descriptionEn: section?.en.title,
+          image: section?.image?.path,
+          icon: section?.icon?.path,
+          features: section?.features?.map((feature) => ({
+            valueAr: feature.ar.value,
+            valueEn: feature.en.value,
+            id: feature.id,
+            key: feature.key,
+            is_active: feature.is_active,
+          })),
+        });
+  },[response, isUpdate]) */
+  const typeList = isBanner ? bannsers : sections;
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={`space-y-8 p-4 h-[80vh] overflow-y-scroll`}
+        className={`space-y-8 p-4 h-[75vh] overflow-y-scroll`}
       >
         {/* Type Select */}
         <FormField
@@ -81,7 +153,10 @@ const SectionForm = ({
             <FormItem>
               <FormLabel>{t("fields.selectSection")}</FormLabel>
               <Select
-                onValueChange={field.onChange}
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  /*  refetch(); */
+                }}
                 defaultValue={field.value}
                 disabled={isUpdate}
               >
@@ -91,9 +166,9 @@ const SectionForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {sections.map((item) => (
+                  {typeList.map((item) => (
                     <SelectItem key={item.type} value={item.type}>
-                      {item.text}
+                      {item.text[locale]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -135,38 +210,103 @@ const SectionForm = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ImageInput
             label={t("fields.sectionImage")}
-            path={form.watch('image')}
+            path={form.watch("image")}
             image={section?.image?.url}
-            onChange={(path) => {console.log(path);form.setValue("image", path)}}
+            error={form.formState.errors?.image?.message}
+            onChange={(path) => {
+              console.log(path);
+              form.setValue("image", path);
+            }}
           />
           <ImageInput
             label={t("fields.sectionIcon")}
-            path={form.watch('icon')}
+            path={form.watch("icon")}
             image={section?.icon?.url}
+            error={form.formState.errors?.icon?.message}
             onChange={(path) => form.setValue("icon", path)}
           />
         </div>
-
         <Field
           control={form.control}
           name={`is_active`}
           label="Active Status"
           checkbox
         />
-        <Button type="submit" disabled={isCreating || isUpdating}>
-          {isCreating || isUpdating ? (
-            <>
-              {
-                <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t("buttons.saving")}
+        {/* Features Section */}
+        {!isBanner && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Features</h3>
+            {fields.map((field, index) => (
+              <div key={field.id} className="space-y-4 border p-4 rounded">
+                <Field
+                  control={form.control}
+                  name={`features.${index}.key`}
+                  label="key (optional)"
+                  placeholder="title"
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <Field
+                    control={form.control}
+                    name={`features.${index}.valueAr`}
+                    label="Arabic Value"
+                    placeholder="الوصف بالعربية "
+                  />
+                  <Field
+                    control={form.control}
+                    name={`features.${index}.valueEn`}
+                    label="English Value"
+                    placeholder="text in English"
+                  />
                 </div>
+                <ImageInput
+                  label={t("fields.sectionIcon")}
+                  path={form.watch(`features.${index}.path`)}
+                  image={section?.features?.[index]?.icon?.url}
+                  error={form.formState.errors.features?.[index]?.path?.message}
+                  onChange={(path) =>
+                    form.setValue(`features.${index}.path`, path as string)
+                  }
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => remove(index)}
+                >
+                  Remove Feature
+                </Button>
+              </div>
+            ))}
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() =>
+                append({
+                  id: 0,
+                  key: null,
+                  valueAr: "",
+                  valueEn: "",
+                  path: "",
+                })
               }
-            </>
-          ) : (
-            t("buttons.save")
-          )}
-        </Button>
+            >
+              Add Feature
+            </Button>
+          </div>
+        )}
+
+        {form.formState.errors.root && (
+          <p className="text-red-500 text-sm mb-4">
+            {form.formState.errors.root.message}
+          </p>
+        )}
+        <div className="flex gap-2 justify-end">
+          <Button variant={"outline"} onClick={closeModel} disabled={isPending}>
+            {t("buttons.cancel")}
+          </Button>
+          <SubmitButton isPending={isPending} />
+        </div>
       </form>
     </Form>
   );

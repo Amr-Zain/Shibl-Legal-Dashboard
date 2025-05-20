@@ -7,7 +7,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Checkbox } from "@radix-ui/react-checkbox";
+import { Checkbox } from "../ui/checkbox";
 
 function Field<TFieldValues extends FieldValues>({
   control,
@@ -31,7 +31,7 @@ function Field<TFieldValues extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+      <FormItem className={checkbox?"!flex !gap-2":''}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
             {image ? (
@@ -44,6 +44,7 @@ function Field<TFieldValues extends FieldValues>({
               />
             ) : checkbox ? (
               <Checkbox
+              className="-order-1"
                 checked={field.value}
                 onCheckedChange={field.onChange}
               />

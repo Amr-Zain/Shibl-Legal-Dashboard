@@ -5,7 +5,8 @@ export const featureSchema = z.object({
   key: z.string().nullable().optional(),
   valueAr: z.string().min(1, "Arabic value is required"),
   valueEn: z.string().min(1, "English value is required"),
-  icon: z.instanceof(File, { message: "Icon is required" }),
+  path: z.string().min(1,"Icon is required" ),
+  is_active: z.boolean().default(true).optional(),
 });
 
 export const sectionSchema = z.object({
@@ -24,7 +25,7 @@ export const sectionSchema = z.object({
     .min(30, "English description is required, min width 10 charcter "),
   image: z.string().optional(),
   icon: z.string().optional(),
-  features: z.array(featureSchema),
+  features: z.array(featureSchema).optional(),
   is_active: z.boolean().default(true).optional(),
 });
 export type FormSection = z.infer<typeof sectionSchema>;
@@ -105,8 +106,27 @@ export const TitleFeatureFormSchema = z.object({
   descriptionAr: z.string().min(8, {
     message: "Arabic description must be at least 8 characters.",
   }),
-  path: z.string(),
+  path: z.string().min(15,'icon is required'),
   icon: z.string().optional(),//url
   is_active: z.boolean().optional(),
 });
 export type TitleFeatureFormValues = z.infer<typeof TitleFeatureFormSchema>;
+
+export const adminFormSchema = z.object({
+  full_name: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  image: z.string().min(1, "image is required"),
+});
+export type AdminFrom = z.infer<typeof adminFormSchema>;
+
+export const passwordFormSchema = z
+.object({
+  current_password: z.string().min(1, "Current password is required"),
+  new_password: z.string().min(6, "Password must be at least 6 characters"),
+  new_password_confirmation: z.string(),
+})
+.refine((data) => data.new_password === data.new_password_confirmation, {
+  message: "Passwords do not match",
+  path: ["new_password_confirmation"],
+});
+export type UpdatePasswordType = z.infer<typeof passwordFormSchema>;

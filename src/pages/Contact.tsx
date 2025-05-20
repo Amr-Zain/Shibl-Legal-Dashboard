@@ -20,7 +20,7 @@ function Contact() {
   const { t } = useTranslation();
   const { data, isPending } = useFetch({
     endpoint: "admin/contact-info",
-    queryKey: ["admin/contact"],
+    queryKey: ["contact"],
   });
   
   
@@ -36,12 +36,12 @@ function Contact() {
     return { ...acc, [item.key]: item.value };
   }, {} as ContactFormValues);
   return (
-    <div className="space-y-8 p-6 mt-6">
+    <div className="space-y-8 md:p-6 mt-6">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{t("sidebar.contact")}</h1>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger>
-            <Button size="sm">
+            <Button size="sm" dir="ltr">
               <PencilIcon className="mr-2 h-4 w-4" />
               {t("buttons.edit")}
             </Button>
@@ -52,7 +52,7 @@ function Contact() {
             </DialogHeader>
             <ContactForm
               contactInfo={contactObj}
-              setIsModalOpen={setIsModalOpen}
+              closeMadal={()=>setIsModalOpen(false)}
             />
           </DialogContent>
         </Dialog>

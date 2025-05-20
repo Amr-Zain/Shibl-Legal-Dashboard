@@ -14,11 +14,11 @@ import useFetch from "@/hooks/UseFetch";
 import type { SectionResponse } from "@/util/responsesTypes";
 import PageHeader from "@/components/util/PageHeader";
 
-function Sections() {
+function Banners() {
   const { t } = useTranslation();
   const { data, isPending } = useFetch<{ data: SectionResponse }>({
-    endpoint: "admin/sections",
-    queryKey: ["sections"],
+    endpoint: "admin/listing/banners",
+    queryKey: ["banners"],
   });
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -28,11 +28,10 @@ function Sections() {
   const [createModal, setCreatModal] = useState(false);
 
   useEffect(() => {
-    document.title = "Dashboard | Sections";
+    document.title = "Dashboard | Baners";
   }, []);
-
   const SecionsList = secionsList?.map((sec) => (
-    <SectionCard key={sec.id} section={sec} isBanner={false} />
+    <SectionCard key={sec.id} section={sec} isBanner />
   ));
 
   return (
@@ -58,11 +57,11 @@ function Sections() {
           <DialogHeader>
             <DialogTitle>{t("sections.addSection")}</DialogTitle>
           </DialogHeader>
-          <SectionForm closeModel={() => setCreatModal(false)} />
+          <SectionForm closeModel={() => setCreatModal(false)} isBanner />
         </DialogContent>
       </Dialog>
     </div>
   );
 }
 
-export default Sections;
+export default Banners;

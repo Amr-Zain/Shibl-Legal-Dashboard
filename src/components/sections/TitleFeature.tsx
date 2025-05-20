@@ -1,17 +1,19 @@
 import { TitleFeatureForm } from "./TitleFeatueForm";
 import UpdateDeleteModals from "../util/UpdateDeleteModals";
+import { useState } from "react";
 
-function TitleFeature({ feature }: { feature: SectionFeatureDetailed}) {
-
+function TitleFeature({ feature }: { feature: SectionFeatureDetailed }) {
   const formate = (featuer: SectionFeatureDetailed) => ({
+    id: featuer.id,
     titleEn: featuer.title,
     titleAr: featuer.title,
     descriptionAr: featuer.description,
     descriptionEn: featuer.description,
     icon: featuer.icon,
     path: featuer.path!,
-    is_active: featuer.is_active
+    is_active: featuer.is_active,
   });
+  const [updateModal, setUpdateModal] = useState(false);
 
   return (
     <div className="space-y-2 flex flex-col rounded-md border border-muted bg-white p-4 shadow-sm">
@@ -29,8 +31,14 @@ function TitleFeature({ feature }: { feature: SectionFeatureDetailed}) {
         {feature.description}
       </p>
       <div className="flex justify-end gap-2">
-        <UpdateDeleteModals endpoint={`admin/our-features/${feature.id}`} mutationKey={`admin/our-features/${feature.id}`}>
+        <UpdateDeleteModals
+          updateModal={updateModal}
+          setUpdateModal={setUpdateModal}
+          endpoint={`admin/our-features/${feature.id}`}
+          mutationKey={`our-features`}
+        >
           <TitleFeatureForm
+            onCancel={() => setUpdateModal(false)}
             defaultValues={formate(feature)}
             isUpdate
           />

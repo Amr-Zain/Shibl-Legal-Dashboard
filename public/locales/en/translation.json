@@ -8,18 +8,20 @@
   },
   "session_expired": "Your session has expired",
   "pleaseLogin": "Please Login, Again",
+  "success": "Success",
   "formsTitle": {
     "createSection": "Add New Section From",
     "updateSection": "Update Section From",
-    "questionCreateTitle":"Add New Question",
-    "questionCreateTitleDes":"Fill in the details for the new question in both English and Arabic.",
-    "contactTitle":"Edit Contact Information"
-
+    "questionCreateTitle": "Add New Question",
+    "questionCreateTitleDes": "Fill in the details for the new question in both English and Arabic.",
+    "contactTitle": "Edit Contact Information",
+    "addFeature":"Add New Feature",
+    "addService":"Add New Service"
   },
   "sidebar": {
     "home": "Home",
     "dashboard": "Dashboard",
-    "terms": "Terms and Conditions",
+    "terms": "Terms",
     "about": "About Us",
     "faqs": "FAQs",
     "services": "Services",
@@ -27,10 +29,30 @@
     "sections": "Sections",
     "contact": "Contact",
     "whyUs": "Why Us",
+    "banners":"Banners",
     "ourServices": "Our Services",
+    "policy": "Privacy Policy",
+    "settings":"Settings",
     "logout": "Log Out"
   },
-
+  "terms":{
+    "title": "Terms And Condtions",
+    "updateSuccess": "Terms Updated Successfully"
+  },
+  "policy":{
+    "title": "Privacy Policy",
+    "updateSuccess": "Privacy Policy Updated Successfully"
+  },
+  "successMessages":{
+    "SectionCreated": "Section Created Successfully",
+    "SectionUpdated": "Section Updated Successfully",
+    "dataDeleted": "Data Successfully Deleted",
+    "questionCreated": "Question Created Successfully",
+    "questionUpdated": "Question Updated Successfully",
+    "contactUpdated": "Contacts Updated Successfully",
+    "WayUsCreated": "Way Us Created Successfully",
+    "WayUsUpdated": "Way Us Updated Successfully"
+  },
   "services": {
     "title": "Services",
     "all": "Show All",
@@ -45,6 +67,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "save": "Save",
+    "ok": "Ok",
     "saving": "Saving...",
     "search": "Search",
     "cancel": "Cancel",
@@ -392,7 +415,11 @@
     "ar.address": "Arabic Address",
     "en.overview": "English Overview",
     "address": "Address",
-    "workingHours": "Working Hours"
+    "workingHours": "Working Hours",
+    "ar.question": "Arabic Question",
+    "en.question": "English Question",
+    "ar.answer": "Arabic Answer",
+    "en.answer": "English Answer"
   },
 
   "status": {

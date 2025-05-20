@@ -8,17 +8,30 @@
   },
   "session_expired": "انتهت صلاحية جلستك",
   "pleaseLogin": "يرجى تسجيل الدخول مرة أخرى",
+  "success": "نجاح",
   "formsTitle": {
     "createSection": "نموذج إضافة قسم جديد",
     "updateSection": "نموذج تحديث القسم",
     "questionCreateTitle": "إضافة سؤال جديد",
     "questionCreateTitleDes": "املأ تفاصيل السؤال الجديد باللغتين الإنجليزية والعربية.",
-    "contactTitle": "تعديل معلومات الاتصال"
+    "contactTitle": "تعديل معلومات الاتصال",
+    "addFeature": "إضافة ميزة جديدة",
+    "addService": "إضافة خدمة جديدة"
+  },
+  "successMessages": {
+    "SectionCreated": "تم إنشاء القسم بنجاح",
+    "SectionUpdated": "تم تحديث القسم بنجاح",
+    "dataDeleted": "تم حذف البيانات بنجاح",
+    "questionCreated": "تم إنشاء السؤال بنجاح",
+    "questionUpdated": "تم تحديث السؤال بنجاح",
+    "contactUpdated": "تم تحديث جهات الاتصال بنجاح",
+    "WayUsCreated": "تم إنشاء صفحة \"لماذا نحن\" بنجاح",
+    "WayUsUpdated": "تم تحديث صفحة \"لماذا نحن\" بنجاح"
   },
   "sidebar": {
     "home": "الرئيسية",
     "dashboard": "لوحة التحكم",
-    "terms": "الشروط والأحكام",
+    "terms": "الشروط",
     "about": "من نحن",
     "faqs": "الأسئلة الشائعة",
     "services": "الخدمات",
@@ -26,7 +39,11 @@
     "sections": "الأقسام",
     "contact": "اتصل بنا",
     "whyUs": "لماذا نحن",
+    "banners": "اللافتات",
     "ourServices": "خدماتنا",
+    "policy": "سياسة الخصوصية",
+    "settings": "الإعدادات",
+
     "logout": "تسجيل الخروج"
   },
 
@@ -45,7 +62,14 @@
     "edit": "تعديل",
     "show": "عرض"
   },
-
+  "terms": {
+    "title": "الشروط والأحكام",
+    "updateSuccess": "تم تحديث الشروط بنجاح"
+  },
+  "policy": {
+    "title": "سياسة الخصوصية",
+    "updateSuccess": "تم تحديث سياسة الخصوصية بنجاح"
+  },
   "faqs": {
     "title": "الأسئلة الشائعة",
     "all": "عرض الكل",
@@ -65,6 +89,7 @@
   "buttons": {
     "add": "إضافة",
     "save": "حفظ",
+    "ok": "موافقة",
     "saving": "جاري الحفظ...",
     "delete_all": "حذف الكل",
     "edit": "تعديل",
@@ -549,7 +574,11 @@
     "ar.address": "عنوان عربي",
     "en.overview": "نظرة عامة إنجليزية",
     "address": "العنوان",
-    "workingHours": "ساعات العمل"
+    "workingHours": "ساعات العمل",
+    "ar.question": "السؤال بالعربية",
+    "en.question": "السؤال بالإنجليزية",
+    "ar.answer": "الإجابة بالعربية",
+    "en.answer": "الإجابة بالإنجليزية"
   },
 
   "inArabic": " (AR) ",

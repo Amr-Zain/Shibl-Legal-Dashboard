@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { createContext, useState, type ReactNode, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 interface User {
   id: number;
@@ -8,6 +9,7 @@ interface User {
   full_name: string;
   image: {
     url: string;
+    path:string;
   };
   token: string;
 }
@@ -61,7 +63,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           password,
         }
       );
-
+      Swal.fire({
+        title: response.data.message,
+        icon: "success",
+        timer: 2000,
+      });
       const data = response.data.data;
       const token = data.token;
       localStorage.setItem("token", token);
@@ -69,10 +75,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       Cookies.set("token", token);
       setCurrentUser(data);
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message)
-        console.error("Login error:", error.message);
-      }
+      const title = error instanceof Error ? error.message : "faild to login";
+      Swal.fire({
+        title,
+        icon: "error",
+        timer: 2000,
+      });
+      setError(title);
+      console.error("Login error:", title);
     } finally {
       setLoading(false);
     }
@@ -84,10 +94,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
-    //localStorage.removeItem("token");
-    //localStorage.removeItem("user");
-    //Cookies.remove("token");
-    //setCurrentUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    Cookies.remove("token");
+    setCurrentUser(null);
   };
 
   return (

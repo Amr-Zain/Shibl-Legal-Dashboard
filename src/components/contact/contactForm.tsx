@@ -20,32 +20,51 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
-import { Loader2 } from "lucide-react";
+import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
+import SubmitButton from "../util/SubmitButton";
 
 function ContactForm({
-  setIsModalOpen,
   contactInfo,
+  closeMadal,
 }: {
-  setIsModalOpen: (show: boolean) => void;
   contactInfo?: ContactFormValues;
+  closeMadal: () => void;
 }) {
   const { t } = useTranslation();
-  console.log(contactInfo)
   const countryCodes = [
     { value: "+966", label: "Saudi Arabia (+966)" },
     { value: "+971", label: "UAE (+971)" },
     { value: "+20", label: "Egypt (+20)" },
   ];
-
+    const queryClient = useQueryClient();
+  
   const { isPending, mutate } = useMutate({
     endpoint: "admin/contact-info",
     method: "post",
-    mutationKey: ["admin/contact"],
+    mutationKey: ["contact"],
+    onError: (error: unknown) => {
+      form.setError("root", {
+        type: "manual",
+        message: error instanceof Error ? error.message : t("error"),
+      });
+    },
+    onSuccess: (data: { message?: string }) => {
+      closeMadal();
+      const title = data?.message || t("successMessages.contactUpdated");
+      Swal.fire({
+        title,
+        icon: "success",
+        timer: 2000,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["contact"],
+      });
+    },
   });
 
   const onSubmit = (data: ContactFormValues) => {
     mutate(data);
-    setIsModalOpen(false);
   };
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -56,7 +75,7 @@ function ContactForm({
       facebook: contactInfo?.facebook || "",
       x: contactInfo?.x || "",
       instagram: contactInfo?.instagram || "",
-      phone_code: '',
+      phone_code: "",
       phone: contactInfo?.phone,
     },
     mode: "onBlur",
@@ -142,25 +161,21 @@ function ContactForm({
             label={t(`contact.instagram`)}
             placeholder="https://instagram.com/..."
           />
+          {form.formState.errors.root && (
+            <p className="text-red-500 text-sm mb-4">
+              {form.formState.errors.root.message}
+            </p>
+          )}
           <div className="md:col-span-2 flex justify-end gap-4 pt-4">
             <Button
               type="button"
               variant="outline"
-              onClick={() => setIsModalOpen(false)}
+              onClick={closeMadal}
               disabled={isPending}
             >
               {t("buttons.cancel")}
             </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("buttons.saving")}
-                </>
-              ) : (
-                t("buttons.save")
-              )}
-            </Button>
+            <SubmitButton isPending={isPending}/>
           </div>
         </div>
       </form>

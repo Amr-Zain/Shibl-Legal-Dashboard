@@ -2,16 +2,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 import Field from "../util/FormField";
 import { whyUsFeatureFormSchema, type WhyUsFormValues } from "@/schemas";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "../util/ImageInput";
 import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
+import { fromateKeyFeature } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import SubmitButton from "../util/SubmitButton";
 
 interface WhyUsFormProps {
   defaultValues?: WhyUsFormValues;
-  onCancel?: () => void;
+  onCancel: () => void;
   isUpdate?: boolean;
 }
 
@@ -19,17 +22,37 @@ export function WhyUsForm({
   defaultValues,
   onCancel,
   isUpdate,
-
 }: WhyUsFormProps) {
-  const { isPending: isCreating, mutate: createMutation } = useMutate({
-    endpoint: `admin/why-us`,
+  const queryClient = useQueryClient();
+
+  const { isPending, mutate } = useMutate({
+    endpoint: `admin/why-us${isUpdate ? "/" + defaultValues?.id : ""}`,
     method: "post",
-    mutationKey: ["admin/contact"],
-  });
-  const { isPending: isUpdating, mutate: updateMutation } = useMutate({
-    endpoint: `admin/why-us/${defaultValues?.id}`,
-    method: "post",
-    mutationKey: ["admin/contact"],
+    mutationKey: ["why-us"],
+    onSuccess: (data: { message?: string }) => {
+      onCancel();
+      const title =
+        data?.message ||
+        t(
+          isUpdate
+            ? "successMessages.WayUsUpdated"
+            : "successMessages.WayUsCreated"
+        );
+      Swal.fire({
+        title,
+        icon: "success",
+        timer: 2000,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["why-us"],
+      });
+    },
+    onError: (error: unknown) => {
+      form.setError("root", {
+        type: "manual",
+        message: error instanceof Error ? error.message : t("error"),
+      });
+    },
   });
   const form = useForm<WhyUsFormValues>({
     resolver: zodResolver(whyUsFeatureFormSchema),
@@ -44,26 +67,8 @@ export function WhyUsForm({
   const { t } = useTranslation();
 
   const handleSubmit = async (values: WhyUsFormValues) => {
-    const feature = {
-      ar: {
-        key: values.keyAr,
-      },
-      en: {
-        key: values.keyEn,
-      },
-      id: values?.id,
-      icon: values.icon,
-      value: values.value,
-      is_active: values.is_active,
-    };
-    if (isUpdate) {
-      updateMutation(feature);
-      return;
-    }
-    createMutation(feature);
+    mutate(fromateKeyFeature(values));
   };
-
-  useEffect(() => {}, [defaultValues]);
 
   return (
     <Form {...form}>
@@ -101,24 +106,20 @@ export function WhyUsForm({
             label={t("fields.sectionIcon")}
             path={form.watch("icon")}
             image={defaultValues?.url as string}
+            error={form.formState.errors?.icon?.message}
             onChange={(path) => form.setValue("icon", path as string)}
           />
         </div>
-
-        <div className="flex justify-end gap-4">
-          {onCancel && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isUpdating || isCreating}
-            >
-              Cancel
-            </Button>
-          )}
-          <Button type="submit" disabled={isUpdating || isCreating}>
-            {isUpdating || isCreating ? "Saving..." : "Save"}
+        {form.formState.errors.root && (
+          <p className="text-red-500 text-sm mb-4">
+            {form.formState.errors.root.message}
+          </p>
+        )}
+        <div className="flex gap-2 justify-end">
+          <Button variant={"outline"} onClick={onCancel} disabled={isPending}>
+            {t("buttons.cancel")}
           </Button>
+          <SubmitButton isPending={isPending} />
         </div>
       </form>
     </Form>

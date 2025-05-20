@@ -1,55 +1,15 @@
 import { Link, NavLink } from "react-router";
-import {
-  LayoutDashboard,
-  BookMarked,
-  HelpCircle,
-  Contact,
-  LogOut,
-  Award,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthProvider";
 import { useTranslation } from "react-i18next";
+import NavigationItems from "./NavItems";
 
 export default function Sidebar() {
   const { logout } = useContext(AuthContext)!;
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  
-const navigationItems = [
-  {
-    path: "/",
-    icon: LayoutDashboard,
-    label: t("sidebar.home"),
-    end: true,
-  },
-  {
-    path: "/sections",
-    icon: BookMarked,
-    label: t("sidebar.sections"),
-  },
-  {
-    path: "/faq",
-    icon: HelpCircle,
-    label: t("sidebar.faqs"),
-  },
-  {
-    path: "/contact",
-    icon: Contact,
-    label: t("sidebar.contact"),
-  },
-  {
-    path: "/why-us",
-    icon: Award,
-    label: t("sidebar.whyUs"),
-  },
-  {
-    path: "/services",
-    icon: Award,
-    label: t("sidebar.ourServices"),
-  }
-];
   return (
     <div
       className={cn(
@@ -60,13 +20,15 @@ const navigationItems = [
       <div className="flex h-full flex-col gap-2">
         <div className="flex h-18 items-center border-b px-4">
           <Link to="/" className="text-center font-semibold">
-            <span className="text-lg text-center">{t("sidebar.dashboard")}</span>
+            <span className="text-lg text-center">
+              {t("sidebar.dashboard")}
+            </span>
           </Link>
         </div>
 
         <div className="flex-1 overflow-y-auto">
           <nav className="grid items-start px-4 py-2 text-sm font-medium">
-            {navigationItems.map((item) => (
+            {NavigationItems().map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -98,4 +60,3 @@ const navigationItems = [
     </div>
   );
 }
-

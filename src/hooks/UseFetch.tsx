@@ -29,7 +29,7 @@ function useFetch<T>({
   onSuccess,
 }: useFetchPops_TP) {
   const { logout } = useContext(AuthContext)!;
-  const user_token = Cookies.get("token") || localStorage.getItem('token');
+  const user_token = Cookies.get("token");
   const token = user_token;
   const authorizationHeader = `Bearer ${token}`;
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -52,6 +52,7 @@ function useFetch<T>({
 
     enabled,
     select,
+    cacheTime: 1000*60*60,
     onError: (err: unknown) => {
     
       if (err.response?.status === 401) {

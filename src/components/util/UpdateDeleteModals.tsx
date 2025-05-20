@@ -15,46 +15,62 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
-import { toast } from "sonner";
+import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateDeleteModalsProps {
-  onDelete?: () => Promise<void>;
   children: React.ReactNode;
   endpoint: string;
   mutationKey: string;
+  updateModal: boolean;
+  setUpdateModal: (value: boolean) => void;
 }
-
 function UpdateDeleteModals({
-  onDelete,
   children,
   endpoint,
   mutationKey,
+  updateModal,
+  setUpdateModal,
 }: UpdateDeleteModalsProps) {
-  const [updateModal, setUpdateModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const { isPending, mutate: deleteItem } = useMutate({
+  const [error, setError] = useState("");
+  const {
+    isPending,
+    mutateAsync: deleteItem,
+    isError,
+  } = useMutate({
     endpoint,
     method: "delete",
     mutationKey: [mutationKey],
-    onSuccess: () => {
-      toast('t("success")', {
-        description: 't("deleteSuccessMessage")',
+    onSuccess: (data: { message?: string }) => {
+      const title = data?.message || t("successMessages.dataDeleted");
+      Swal.fire({
+        title,
+        icon: "success",
+        timer: 2000,
       });
-      setDeleteModal(false);
+      queryClient.invalidateQueries({
+        queryKey: [mutationKey],
+      });
     },
-    onError: (error) => {
-      toast('title: t("error")', {
-        description:
-          error instanceof Error ? error.message : t("deleteErrorMessage"),
-      });
+    onError: (error: unknown) => {
+      setError(error instanceof Error ? error.message : t("error"));
+      console.error(error);
     },
   });
 
   const handleDelete = async () => {
-    if (onDelete) await onDelete();
     await deleteItem({});
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open && (isPending || isError)) {
+      return; // Don't allow closing during pending state or when there's an error
+    }
+    setDeleteModal(open);
   };
 
   return (
@@ -62,7 +78,7 @@ function UpdateDeleteModals({
       {/* Edit Dialog */}
       <Dialog open={updateModal} onOpenChange={setUpdateModal}>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" dir="ltr">
             <PencilIcon className="w-4 h-4 mr-2" />
             <p className="hidden sm:block">{t("buttons.edit")}</p>
           </Button>
@@ -71,9 +87,9 @@ function UpdateDeleteModals({
       </Dialog>
 
       {/* Delete Confirmation */}
-      <AlertDialog open={deleteModal} onOpenChange={setDeleteModal}>
+      <AlertDialog open={deleteModal} onOpenChange={handleOpenChange}>
         <AlertDialogTrigger asChild>
-          <Button variant="destructive" size="sm">
+          <Button variant="destructive" size="sm" dir="ltr">
             <Trash2 className="w-4 h-4 mr-2" />
             <span className="hidden sm:block">{t("buttons.delete")}</span>
           </Button>
@@ -83,8 +99,12 @@ function UpdateDeleteModals({
             <AlertDialogTitle>{t("confirmDeletion")}</AlertDialogTitle>
             <AlertDialogDescription>{t("comfirmText")}</AlertDialogDescription>
           </AlertDialogHeader>
+          {isError && <p className="text-red-600">{error}</p>}
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>
+            <AlertDialogCancel
+              onClick={() => setDeleteModal(false)}
+              disabled={isPending}
+            >
               {t("buttons.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete} disabled={isPending}>
@@ -97,5 +117,4 @@ function UpdateDeleteModals({
     </div>
   );
 }
-
 export default UpdateDeleteModals;

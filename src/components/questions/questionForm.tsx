@@ -6,48 +6,51 @@ import Field from "../util/FormField";
 import { questionFormSchema, type QuestionFormValues } from "@/schemas";
 import { useMutate } from "@/hooks/UseMutate";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import Swal from "sweetalert2";
+import { formateQuestion } from "@/lib/utils";
+import SubmitButton from "../util/SubmitButton";
 
 interface QuestionsFormProps {
   defaultValues?: QuestionFormValues;
-  onCancel?: () => void;
   isUpdate?: boolean;
+  closeModal: () => void;
 }
 
 export function QuestionsForm({
   defaultValues,
-  onCancel,
+  closeModal,
   isUpdate,
 }: QuestionsFormProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
-   const onError = (error: unknown) => {
+
+  const { isPending, mutate } = useMutate({
+    endpoint: `admin/faq${isUpdate ? "/" + defaultValues?.id?.toString() : ""}`,
+    method: "post",
+    mutationKey: [`faq`],
+    onError: (error: unknown) => {
       form.setError("root", {
         type: "manual",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Failed to submit form. Please try again.",
+        message: error instanceof Error ? error.message : t("error"),
       });
-    }
-    const onSuccess = ()=>{
-      queryClient.refetchQueries({ queryKey: ['admin/faq'] });
-      //toaster
-      if(onCancel)onCancel();
-    }
-
-  const { isPending: isCreating, mutate: createQuestion } = useMutate({
-    endpoint: "admin/faq",
-    method: "post",
-    mutationKey: ["admin/faq"],
-    onError,
-    onSuccess
-    
-  });
-  const { isPending: isUpdating, mutate: updateQuestion } = useMutate({
-    endpoint: `admin/faq/${defaultValues?.id?.toString()}`,
-    method: "post",
-    mutationKey: [`admin/faq`],
-    onError,
-    onSuccess
+    },
+    onSuccess: (data: { message?: string }) => {
+      closeModal();
+      const title =
+        data?.message ||
+        t(
+          isUpdate
+            ? "successMessages.questionCreated"
+            : "successMessages.questionUpdated"
+        );
+      Swal.fire({
+        title,
+        icon: "success",
+        timer: 2000,
+      });
+      queryClient.refetchQueries({ queryKey: ["faq"] });
+    },
   });
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(questionFormSchema),
@@ -62,22 +65,7 @@ export function QuestionsForm({
   });
 
   const handleSubmit = async (values: QuestionFormValues) => {
-    const question = {
-      ar: {
-        question: values.questionAr,
-        answer: values.answerAr,
-      },
-      en: {
-        question: values.questionEn,
-        answer: values.answerEn,
-      },
-      is_active: values.is_active,
-    };
-    if (isUpdate) {
-      updateQuestion(question);
-      return;
-    }
-    createQuestion(question);
+    mutate(formateQuestion(values));
   };
   return (
     <Form {...form}>
@@ -87,27 +75,27 @@ export function QuestionsForm({
             control={form.control}
             name="questionEn"
             label="Question (English)"
-            placeholder="Enter question in English"
+            placeholder={t("fields.en.question")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="answerEn"
             label="Answer (English)"
-            placeholder="Enter answer in English"
+            placeholder={t("fields.en.answer")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="questionAr"
             label="Question (Arabic)"
             dir="rtl"
-            placeholder="أدخل السؤال بالعربية"
+            placeholder={t("fields.ar.question")}
           />
           <Field<QuestionFormValues>
             control={form.control}
             name="answerAr"
             label="Answer (Arabic)"
             dir="rtl"
-            placeholder="أدخل الإجابة بالعربية"
+            placeholder={t("fields.ar.answer")}
           />
           <Field
             control={form.control}
@@ -116,25 +104,25 @@ export function QuestionsForm({
             checkbox
           />
         </div>
+          {form.formState.errors.root && (
+            <p className="text-red-500 text-sm mb-4">
+              {form.formState.errors.root.message}
+            </p>
+          )}
 
         <div className="flex justify-end gap-4">
-          {onCancel && (
+          {
             <Button
               type="button"
               variant="outline"
-              onClick={onCancel}
-              disabled={isCreating || isUpdating}
+              onClick={closeModal}
+              disabled={isPending}
             >
               Cancel
             </Button>
-          )}
-          <Button type="submit" disabled={isCreating || isUpdating}>
-            {isCreating || isUpdating ? "Saving..." : "Save"}
-          </Button>
+          }
+          <SubmitButton isPending={isPending} />
         </div>
-           {form.formState.errors.root && (
-          <p className="text-red-500 text-sm mb-4">{form.formState.errors.root.message}</p>
-        )}
       </form>
     </Form>
   );

@@ -28,9 +28,8 @@ const Login = () => {
       password: "",
     },
   });
+  const { login, loading, error } = useContext(AuthContext)!;
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext)!;
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await login(values);
     navigate("/");
@@ -85,10 +84,11 @@ const Login = () => {
             <Button
               type="submit"
               className="w-full"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || loading}
             >
-              {form.formState.isSubmitting ? "Logging in..." : "Login"}
+              {loading ? "Logging in..." : "Login"}
             </Button>
+            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           </form>
         </Form>
       </div>

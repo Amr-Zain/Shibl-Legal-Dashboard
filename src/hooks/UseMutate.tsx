@@ -32,10 +32,10 @@ export function useMutate<response_T>({
   method = "post", // Set a default value for the method
   headers = {}, // Default headers to an empty object
 }: useMutateProps_TP<response_T>) {
-  const { logout } = useContext(AuthContext)!;
+  const  logout  = useContext(AuthContext)?.logout;
   const { t } = useTranslation();
 
-  const user_token = localStorage.getItem("token") || Cookies.get("token");
+  const user_token = Cookies.get("token");
   const token = user_token;
   const authorizationHeader = `Bearer ${token}`;
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -61,6 +61,7 @@ export function useMutate<response_T>({
     mutateAsync,
     failureReason,
     isError,
+    error
   } = useMutation({
     mutationKey,
     mutationFn: async (values) => {
@@ -98,5 +99,6 @@ export function useMutate<response_T>({
     mutateAsync,
     failureReason,
     isError,
+    error
   };
 }

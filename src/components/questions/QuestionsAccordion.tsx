@@ -9,20 +9,13 @@ import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { QuestionsForm } from "./questionForm";
 import type { QuestionResponse } from "@/util/responsesTypes";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
+import { useState } from "react";
+import { FormateQuestionForm } from "@/lib/utils";
 
 function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
   const { locale } = useThemeConfig();
-   
+  const [updateModal, setUpdateModal] = useState(false);
 
- 
-  const FormateQuestion = (question: QuestionResponse) => ({
-    id: question.id,
-    questionEn: question.en.question,
-    questionAr: question.ar.question,
-    answerAr: question.en.answer,
-    answerEn: question.ar.answer,
-    is_active: question.is_active
-  });
   return (
     <Card className="p-4">
       <Accordion type="multiple" className="w-full">
@@ -33,9 +26,15 @@ function QuestionsAccordion({ questions }: { questions: QuestionResponse[] }) {
                 <span className="font-medium">{question[locale].question}</span>
               </AccordionTrigger>
 
-              <UpdateDeleteModals  endpoint={`admin/faq/${question.id}`} mutationKey="admin/faq" >
+              <UpdateDeleteModals
+                endpoint={`admin/faq/${question.id}`}
+                mutationKey="faq"
+                setUpdateModal={setUpdateModal}
+                updateModal={updateModal}
+              >
                 <QuestionsForm
-                  defaultValues={FormateQuestion(question)}
+                  defaultValues={FormateQuestionForm(question)}
+                  closeModal={() => setUpdateModal(false)}
                   isUpdate
                 />
               </UpdateDeleteModals>

@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,35 +9,31 @@ import {
 import QuestionsList from "@/components/questions/QuestionsAccordion";
 import { QuestionsForm } from "@/components/questions/questionForm";
 import { useTranslation } from "react-i18next";
-import { Plus } from "lucide-react";
 import useFetch from "@/hooks/UseFetch";
 import type { QuestionResponse } from "@/util/responsesTypes";
+import PageHeader from "@/components/util/PageHeader";
 
 export default function QuestionsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const { data, isPending } = useFetch<{data:QuestionResponse[]}>({
+  const { data, isPending } = useFetch<{ data: QuestionResponse[] }>({
     endpoint: "admin/faq",
-    queryKey: ["admin/faq"],
+    queryKey: ["faq"],
   });
-  
-
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const questions = data?.data as QuestionResponse[];
 
   const { t } = useTranslation();
-  console.log(isPending)
-
+  useEffect(() => {
+      document.title = "Dashboard | FAQs";
+    }, []);
   return (
-    <div className="space-y-8 p-6 mt-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-lg md:text-2xl font-bold">{t("sidebar.faqs")}</h1>
-        <Button onClick={() => setIsCreateModalOpen(true)}>
-          <Plus />
-          {t("buttons.add")}
-        </Button>
-      </div>
+    <div className="space-y-8 md:p-6 mt-6">
+      <PageHeader
+        header={t("sidebar.faqs")}
+        onClick={() => setIsCreateModalOpen(true)}
+      />
       {isPending ? (
         <div className="container mx-auto p-6">
           <div className="animate-pulse space-y-4">
@@ -55,12 +49,12 @@ export default function QuestionsPage() {
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t('formsTitle.questionCreateTitle')}</DialogTitle>
-            <DialogDescription>{t('formsTitle.questionCreateTitleDes')}</DialogDescription>
+            <DialogTitle>{t("formsTitle.questionCreateTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("formsTitle.questionCreateTitleDes")}
+            </DialogDescription>
           </DialogHeader>
-          <QuestionsForm
-            onCancel={() => setIsCreateModalOpen(false)}
-          />
+          <QuestionsForm closeModal={() => setIsCreateModalOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>

@@ -43,7 +43,7 @@ function Dashboard() {
   }, []);
   console.log('dashboard')
   return (
-    <div className="space-y-8 p-6 mt-6">
+    <div className="space-y-8 md:p-6 mt-6">
       <div className="flex justify-between items-center">
         <h1 className="text-lg md:text-2xl font-bold">{t('sidebar.dashboard')}</h1>
         
