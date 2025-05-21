@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import QuestionsList from "@/components/questions/QuestionsAccordion";
+import QuestionsList from "@/components/questions/QuestionsTable";
 import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/UseFetch";
 import type { QuestionResponse } from "@/util/responsesTypes";

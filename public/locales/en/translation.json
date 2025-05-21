@@ -114,7 +114,18 @@
     "usageLimitLessThanMaxLimit": "User usage limit field must be less than the maximum usage limit.",
     "noSpacesAllowed": "Spaces are not allowed"
   },
-
+  "formTitles":{
+    "createSection":"Add New Section",
+    "createBanner":"Add New Banner",
+    "updateSection":"Update Section",
+    "updateBanner": "Update Banner",
+    "createService":"Create Service",
+    "updateService":"Update Service",
+    "createWayUs": "Create Why Us",
+    "updtaeWayUs": "Update Why Us",
+    "createQuestion": "Create New Question",
+    "updateQuestion": "Update Question"
+  },
   "labels": {
     "keyword": "Keyword",
     "return-policy": "Return Policy",

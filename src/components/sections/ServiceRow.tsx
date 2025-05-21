@@ -1,13 +1,13 @@
 import { TableCell, TableRow } from "../ui/table";
-import UpdateDeleteModals from "../util/NewUpade";
+import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import type { ServiceReaspose } from "@/util/responsesTypes";
 
-function ServicesTableRow({ 
-  service, 
-  locale 
-}: { 
+function ServicesTableRow({
+  service,
+  locale,
+}: {
   service: ServiceReaspose;
-  locale: 'en'|'ar';
+  locale: "en" | "ar";
 }) {
   const formatService = (service: ServiceReaspose) => ({
     id: service.id,
@@ -29,9 +29,7 @@ function ServicesTableRow({
           className="w-8 h-8 object-contain rounded-full border border-muted-foreground"
         />
       </TableCell>
-      <TableCell className="font-medium">
-        {service[locale]?.title}
-      </TableCell>
+      <TableCell className="font-medium">{service[locale]?.title}</TableCell>
       <TableCell>
         <p className="line-clamp-2 text-sm text-muted-foreground">
           {service[locale]?.description}

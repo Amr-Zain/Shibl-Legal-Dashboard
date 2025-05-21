@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { fullbackImage } from "@/util/data";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { SectionResponse } from "@/util/responsesTypes";
-import UpdateDeleteModals from "../util/NewUpade";
+import UpdateDeleteModals from "../util/UpdateDeleteModals";
 
 interface SectionProps {
   section: SectionResponse;
@@ -38,9 +38,9 @@ function SectionCard({ section, isBanner }: SectionProps) {
 
   return (
     <div className="border rounded-lg p-4 md:p-6 mb-4 bg-card shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+      <div className="flex flex-row justify-between items-start gap-4 mb-6">
         <div className="flex items-center gap-3 flex-wrap">
-          <Badge variant="outline" className="capitalize">
+          <Badge variant="outline" className="hidden sm:block">
             {section.type}
           </Badge>
           <div className="flex items-center gap-2">
@@ -50,7 +50,10 @@ function SectionCard({ section, isBanner }: SectionProps) {
               onCheckedChange={handleStatusToggle}
               className="data-[state=checked]:bg-green-500 scale-90 md:scale-100"
             />
-            <Badge variant={isActive ? "default" : "secondary"}>
+            <Badge
+              variant={isActive ? "default" : "secondary"}
+              className="hidden sm:block"
+            >
               {isActive ? t("sections.active") : t("sections.inactive")}
             </Badge>
           </div>

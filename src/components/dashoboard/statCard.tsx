@@ -13,9 +13,9 @@ const StatCard = ({
   subValue?: string;
   isPending?: boolean;
 }) => (
-  <div className="flex items-center p-8 bg-white shadow rounded-lg">
+  <div className="flex flex-col sm:flex-row gap-4 items-center p-8 bg-white shadow rounded-lg">
     <div
-      className={`inline-flex flex-shrink-0 items-center justify-center h-16 w-16 rounded-full mr-6 ${colorClass}`}
+      className={`inline-flex flex-shrink-0 items-center justify-center h-16 w-16 rounded-full ${colorClass}`}
     >
       {icon}
     </div>
@@ -23,9 +23,9 @@ const StatCard = ({
       {isPending ? <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse" />
       : (
         <>
-          <span className="block text-2xl font-bold">{value}</span>
+          <span className="block text-2xl font-bold text-center">{value}</span>
           {subValue && (
-            <span className="inline-block text-xl text-gray-500 font-semibold">
+            <span className="inline-block text-xl text-gray-500 font-semibold text-center">
               {subValue}
             </span>
           )}

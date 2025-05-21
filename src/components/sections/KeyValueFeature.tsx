@@ -1,12 +1,12 @@
 import { fullbackImage } from "@/util/data";
-import UpdateDeleteModals from "../util/NewUpade";
+import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { WhyUsResponse } from "@/util/responsesTypes";
 import { TableCell, TableRow } from "../ui/table";
 
 function KeyValueFeatureRow({ feature }: { feature: WhyUsResponse }) {
   const { locale } = useThemeConfig();
-  
+
   return (
     <TableRow>
       <TableCell>

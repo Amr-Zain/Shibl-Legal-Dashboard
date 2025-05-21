@@ -61,7 +61,7 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
   };
 
   return (
-    <div className="space-y-8 p-6 mt-6">
+    <div className="space-y-8 md:p-6 mt-6">
       <PageHeader header={t("sidebar.whyUs")} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">

@@ -59,7 +59,7 @@ const SectionForm = ({
         valueEn: feature.en.value,
         id: feature.id,
         key: feature.key,
-        is_active: feature.is_active?? true,
+        is_active: feature.is_active ?? true,
       })),
     },
     mode: "onBlur",
@@ -103,9 +103,21 @@ const SectionForm = ({
 
   const typeList = isBanner ? bannsers : sections;
   return (
-    <div className="space-y-8 p-6 mt-6">
-      <PageHeader header={t("sidebar.whyUs")} />
-      <Form {...form} >
+    <div className="space-y-8 md:p-6 mt-6">
+      <PageHeader
+        header={t(
+          `formTitles.${
+            !isUpdate && !isBanner
+              ? "createSection"
+              : !isUpdate
+              ? "createBanner"
+              : !isBanner
+              ? "updateSection"
+              : "updateBanner"
+          }`
+        )}
+      />
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className={`space-y-8 py-6 px-4 border rounded-md bg-white`}

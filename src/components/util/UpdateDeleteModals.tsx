@@ -12,25 +12,23 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import Swal from "sweetalert2";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 interface UpdateDeleteModalsProps {
-  children: React.ReactNode;
   endpoint: string;
   mutationKey: string;
-  updateModal: boolean;
-  setUpdateModal: (value: boolean) => void;
+  updatUrl: string;
+  state: unknown
 }
 function UpdateDeleteModals({
-  children,
   endpoint,
   mutationKey,
-  updateModal,
-  setUpdateModal,
+  updatUrl,
+  state
 }: UpdateDeleteModalsProps) {
   const [deleteModal, setDeleteModal] = useState(false);
   const { t } = useTranslation();
@@ -72,19 +70,14 @@ function UpdateDeleteModals({
     }
     setDeleteModal(open);
   };
-
+  const navigate = useNavigate()
   return (
-    <div className="flex gap-2">
+    <div className="flex justify-end gap-2">
       {/* Edit Dialog */}
-      <Dialog open={updateModal} onOpenChange={setUpdateModal}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="sm" dir="ltr">
-            <PencilIcon className="w-4 h-4 mr-2" />
-            <p className="hidden sm:block">{t("buttons.edit")}</p>
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-4xl">{children}</DialogContent>
-      </Dialog>
+      <Button onClick={()=>navigate(updatUrl,{state})} variant="outline" size="sm" dir="ltr">
+        <PencilIcon className="w-4 h-4 mr-2" />
+        <p className="hidden sm:block">{t("buttons.edit")}</p>
+      </Button>
 
       {/* Delete Confirmation */}
       <AlertDialog open={deleteModal} onOpenChange={handleOpenChange}>
