@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -14,44 +13,24 @@ import Field from "@/components/util/FormField";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "@/components/util/ImageInput";
-import useFetch from "@/hooks/UseFetch";
 import Swal from "sweetalert2";
-import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import type { SectionResponse } from "@/util/responsesTypes";
 import SubmitButton from "../util/SubmitButton";
-import { Button } from "../ui/button";
+import { sectionSchema, type FormSection } from "@/schemas";
 
-const formSchema = z.object({
-  titleAr: z.string().min(10, "Arabic title must be at least 10 characters"),
-  titleEn: z.string().min(10, "English title must be at least 10 characters"),
-  descAr: z
-    .string()
-    .min(20, "Arabic description must be at least 20 characters"),
-  descEn: z
-    .string()
-    .min(20, "English description must be at least 20 characters"),
-  image: z.string().min(10, "image is required"),
-});
-
-function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
+function TermsPolicyForm({
+  type,
+  data,
+}: {
+  type: "terms" | "privacy_policy";
+  data: SectionResponse;
+}) {
   const { t } = useTranslation();
-  type TermsType = z.infer<typeof formSchema>;
-  const {
-    isPending: getPending,
-    data: response,
-    error,
-    refetch
-  } = useFetch({
-    endpoint: `admin/sections?type=${type}`,
-    queryKey: [type],
-  });
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
-  const data = (response?.data[0] as SectionResponse) || null;
+
   const { isPending, mutate } = useMutate({
     endpoint: `admin/sections${data ? "/" + data.id : ""}`,
-    mutationKey: ["terms"],
+    mutationKey: [type],
     onError: (error) => {
       Swal.fire({
         title: t("error"),
@@ -72,18 +51,18 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
     },
   });
 
-  const form = useForm<TermsType>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormSection>({
+    resolver: zodResolver(sectionSchema),
   });
-  const onSubmit = async (values: TermsType) => {
+  const onSubmit = async (values: FormSection) => {
     mutate({
       ar: {
         title: values?.titleAr,
-        description: values.descAr,
+        description: values.descriptionAr,
       },
       en: {
         title: values?.titleEn,
-        description: values.descEn,
+        description: values.descriptionEn,
       },
       image: values.image,
       type,
@@ -94,34 +73,12 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
       form.reset({
         titleAr: data?.ar?.title || "",
         titleEn: data?.en?.title || "",
-        descAr: data?.ar?.description || "",
-        descEn: data?.en?.description || "",
+        descriptionAr: data?.ar?.description || "",
+        descriptionEn: data?.en?.description || "",
         image: data?.image?.path || "",
       });
     }
   }, [data, form, type]);
-
-  if (getPending) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      (
-        <div className="text-red-600">
-          {t("error_loading_data")}: <Button
-            variant={"destructive"}
-            onClick={() => refetch()}
-          >
-            {t('retry')}
-          </Button>
-        </div>
-      ) 
-    );
-  }
 
   return (
     <Form {...form}>
@@ -130,13 +87,13 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
         className="space-y-8 py-6 px-4 border rounded-md bg-white"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <Field<TermsType>
+          <Field<FormSection>
             name="titleAr"
             control={form.control}
             placeholder={t("fields.ar.title")}
             label={t("fields.ar.title")}
           />
-          <Field<TermsType>
+          <Field<FormSection>
             name="titleEn"
             control={form.control}
             placeholder={t("fields.en.title")}
@@ -147,14 +104,14 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="descAr"
+            name="descriptionAr"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("fields.ar.description")}</FormLabel>
                 <FormControl>
                   <Editor
                     value={field.value}
-                    error={form.formState.errors.descAr?.message}
+                    error={form.formState.errors.descriptionAr?.message}
                     placeholder={t("fields.ar.description")}
                     setValue={field.onChange}
                   />
@@ -166,14 +123,14 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
 
           <FormField
             control={form.control}
-            name="descEn"
+            name="descriptionEn"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("fields.en.description")}</FormLabel>
                 <FormControl>
                   <Editor
                     value={field.value}
-                    error={form.formState.errors.descEn?.message}
+                    error={form.formState.errors.descriptionEn?.message}
                     placeholder={t("fields.en.description")}
                     setValue={field.onChange}
                   />

@@ -1,25 +1,26 @@
- // eslint-disable-next-line @typescript-eslint/ban-ts-comment
- // @ts-nocheck
+
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { useIsRTL } from "./useIsRTL";
 
-type useFetchPops_TP = {
-  queryKey: [string];
+export interface APIResponse<T> {
+  data: T;
+}
+
+type UseFetchProps<T, R = T> = {
+  queryKey: string[];
   endpoint: string;
   enabled?: boolean;
-  select?: ((data: unknown) => unknown) | undefined;
-  onError?: (err: unknown) => void;
-  onSuccess?: (err: unknown) => void;
-  localization?: boolean;
-  useCompunknownToken?: boolean;
-  specificToken?: string;
+  select?: (data: APIResponse<T>) => R;
+  onError?: (err: AxiosError) => void;
+  onSuccess?: (data: R extends undefined ? APIResponse<T> : R) => void;
   general?: boolean;
 };
-function useFetch<T>({
+
+function useFetch<T, R = T>({
   general,
   endpoint,
   enabled,
@@ -27,14 +28,12 @@ function useFetch<T>({
   queryKey,
   onError: originalOnError,
   onSuccess,
-}: useFetchPops_TP) {
+}: UseFetchProps<T, R>) {
   const { logout } = useContext(AuthContext)!;
-  const user_token = Cookies.get("token");
-  const token = user_token;
+  const token = Cookies.get("token");
   const authorizationHeader = `Bearer ${token}`;
   const baseURL = import.meta.env.VITE_BASE_URL;
   const baseURLGeneral = import.meta.env.VITE_BASE_GENERAL_URL;
-
   const isRTL = useIsRTL();
 
   const config = {
@@ -43,28 +42,27 @@ function useFetch<T>({
       "Accept-Language": isRTL ? "ar" : "en",
     },
   };
-  const query = useQuery<T>({
+  return useQuery<APIResponse<T>, AxiosError, R>({
     queryKey: [...queryKey, isRTL],
     queryFn: () =>
       axios
-        .get(`${general ? baseURLGeneral : baseURL}/${endpoint}`, config)
-        .then((res: unknown) => res.data),
-
+        .get<APIResponse<T>>(
+          `${general ? baseURLGeneral : baseURL}/${endpoint}`,
+          config
+        )
+        .then((res: AxiosResponse<APIResponse<T>>) => res.data),
     enabled,
     select,
-    cacheTime: 1000*60*60,
-    onError: (err: unknown) => {
-    
+    cacheTime: 1000 * 60 * 60,
+    onError: (err: AxiosError) => {
       if (err.response?.status === 401) {
-        
         logout();
         window.location.replace("/login");
       }
-      if (originalOnError) originalOnError(err);
+      originalOnError?.(err);
     },
-    onSuccess,
+    onSuccess: (data: unknown) => onSuccess?.(data as R extends undefined ? APIResponse<T> : R),
   });
-  return query;
 }
 
 export default useFetch;

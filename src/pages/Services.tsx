@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import useFetch from "@/hooks/UseFetch";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import PageHeader from "@/components/util/PageHeader";
 import {
@@ -11,20 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ServicesTableRow from "@/components/sections/ServiceRow";
-import TableRowSkeleton from "@/components/util/TableRowSkeleton";
-import { Button } from "@/components/ui/button";
+import DataFetcher from "@/components/DataFetcher";
+import type { ServiceReaspose } from "@/util/responsesTypes";
 
 function Services() {
   const { t } = useTranslation();
-  const { data, isPending, error, refetch } = useFetch({
-    endpoint: "admin/our-features",
-    queryKey: ["our-features"],
-  });
 
   const { locale } = useThemeConfig();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
-  const services = data?.data as ServiceReaspose[];
 
   return (
     <div className="space-y-4 mt-6">
@@ -44,29 +36,29 @@ function Services() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {isPending && [...Array(5)].map(() => <TableRowSkeleton />)}
-              {error ? (
-                <div className="text-red-600">
-                  {t("error_loading_data")}:{" "}
-                  <Button variant={"destructive"} onClick={() => refetch()}>
-                    {t("retry")}
-                  </Button>
-                </div>
-              ) : services?.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
-                    {t("service.noResults")}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                services?.map((service) => (
-                  <ServicesTableRow
-                    key={service.id}
-                    service={service}
-                    locale={locale}
-                  />
-                ))
-              )}
+              <DataFetcher<ServiceReaspose[]>
+                endpoint="admin/our-features"
+                queryKey={["our-features"]}
+                isTable
+                renderData={(services: ServiceReaspose[]) => {
+                  if (services.length === 0) {
+                    return (
+                      <TableRow>
+                        <TableCell colSpan={4} className="h-24 text-center">
+                          {t("service.noResults")}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
+                  return services.map((service) => (
+                    <ServicesTableRow
+                      key={service.id}
+                      service={service}
+                      locale={locale}
+                    />
+                  ));
+                }}
+              />
             </TableBody>
           </Table>
         </div>

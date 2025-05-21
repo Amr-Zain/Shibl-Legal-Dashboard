@@ -1,6 +1,6 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
 import App from "../App";
-// import Dashboard from "@/pages/Dashboard";
+import Dashboard from "@/pages/Dashboard";
 // import Login from "@/pages/Login";
 // import Sections from "@/pages/Sections";
 // import Questions from "@/pages/Questions";
@@ -18,13 +18,11 @@ import { TitleFeatureForm } from "@/components/sections/TitleFeatueForm";
 import { WhyUsForm } from "@/components/whyUs/WhyUsForm";
 import ProfileFrom from "@/components/settings/ProfileForm";
 import UpdatePasswordForm from "@/components/settings/UpdatePasswordForm";
-// import Terms from "@/pages/terms";
 
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const Sections = lazy(() => import("@/pages/Sections"));
 const Questions = lazy(() => import("@/pages/Questions"));
-const Settings = lazy(() => import("@/pages/settings"));
+const Settings = lazy(() => import("@/pages/Settings"));
 const WhyUs = lazy(() => import("@/pages/WhyUs"));
 const Services = lazy(() => import("@/pages/Services"));
 const Terms = lazy(() => import("@/pages/terms"));
