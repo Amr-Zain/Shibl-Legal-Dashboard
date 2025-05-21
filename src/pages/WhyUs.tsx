@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { WhyUsResponse } from "@/util/responsesTypes";
 import PageHeader from "@/components/util/PageHeader";
-//import Skeleton from "@/components/util/Skeleton";
 import {
   Table,
   TableBody,

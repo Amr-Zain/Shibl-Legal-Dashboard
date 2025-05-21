@@ -22,8 +22,8 @@ import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "../util/ImageInput";
 import Swal from "sweetalert2";
-import { sectionSchema, type FormSection } from "@/schemas";
-import { formateSection } from "@/lib/utils";
+import { createSectionSchema, type FormSection } from "@/schemas";
+import { formateSection, formateSectionForm } from "@/lib/utils";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
@@ -44,25 +44,10 @@ const SectionForm = ({
   const queryClient = useQueryClient();
   const section = useLocation().state as SectionResponse;
   const navigate = useNavigate();
-
+  
   const form = useForm<FormSection>({
-    resolver: zodResolver(sectionSchema),
-    defaultValues: {
-      type: section?.type,
-      titleAr: section?.ar.title,
-      titleEn: section?.en.title,
-      descriptionAr: section?.ar.description,
-      descriptionEn: section?.en.title,
-      image: section?.image?.path,
-      icon: section?.icon?.path,
-      features: section?.features?.map((feature) => ({
-        valueAr: feature.ar.value,
-        valueEn: feature.en.value,
-        id: feature.id,
-        key: feature.key,
-        is_active: feature.is_active ?? true,
-      })),
-    },
+    resolver: zodResolver(createSectionSchema(t)),
+    defaultValues:formateSectionForm(section),
     mode: "onBlur",
   });
 

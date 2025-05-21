@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import Field from "../util/FormField";
-import { whyUsFeatureFormSchema, type WhyUsFormValues } from "@/schemas";
 import { useMutate } from "@/hooks/UseMutate";
 import ImageInput from "../util/ImageInput";
 import { useTranslation } from "react-i18next";
@@ -12,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
 import { useLocation, useNavigate } from "react-router";
 import PageHeader from "../util/PageHeader";
+import { createWhyUsFeatureFormSchema, type WhyUsFormValues } from "@/schemas";
 
 export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
   const queryClient = useQueryClient();
@@ -38,7 +38,7 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
       queryClient.invalidateQueries({
         queryKey: ["why-us"],
       });
-      navigate('/why-us')
+      navigate("/why-us");
     },
     onError: (error: unknown) => {
       form.setError("root", {
@@ -47,17 +47,14 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
       });
     },
   });
+  const { t } = useTranslation();
   const form = useForm<WhyUsFormValues>({
-    resolver: zodResolver(whyUsFeatureFormSchema),
+    resolver: zodResolver(createWhyUsFeatureFormSchema(t)),
     defaultValues: defaultValues || {
-      keyEn: "",
-      keyAr: "",
-      value: 0,
       is_active: true,
     },
     mode: "onBlur",
   });
-  const { t } = useTranslation();
 
   const handleSubmit = async (values: WhyUsFormValues) => {
     mutate(fromateKeyFeature(values));

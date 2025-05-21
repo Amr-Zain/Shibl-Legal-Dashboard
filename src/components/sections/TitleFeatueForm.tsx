@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import Field from "../util/FormField";
-import { TitleFeatureFormSchema, type TitleFeatureFormValues } from "@/schemas";
+import { createTitleFeatureFormSchema, type TitleFeatureFormValues } from "@/schemas";
 import ImageInput from "../util/ImageInput";
 import { useTranslation } from "react-i18next";
 import { useMutate } from "@/hooks/UseMutate";
@@ -16,16 +16,11 @@ import PageHeader from "../util/PageHeader";
 export function TitleFeatureForm({ isUpdate }: { isUpdate?: boolean }) {
   const queryClient = useQueryClient();
   const defaultValues = useLocation().state as TitleFeatureFormValues;
+  const { t } = useTranslation();
+
   const form = useForm<TitleFeatureFormValues>({
-    resolver: zodResolver(TitleFeatureFormSchema),
-    defaultValues: defaultValues || {
-      titleEn: "",
-      titleAr: "",
-      descriptionEn: "",
-      descriptionAr: "",
-      path: "",
-      is_active: true,
-    },
+    resolver: zodResolver(createTitleFeatureFormSchema(t)),
+    defaultValues: defaultValues,
     mode: "onBlur",
   });
     const navigate = useNavigate();
@@ -59,7 +54,6 @@ export function TitleFeatureForm({ isUpdate }: { isUpdate?: boolean }) {
       });
     },
   });
-  const { t } = useTranslation();
   const handleSubmit = async (values: TitleFeatureFormValues) => {
     mutate(fromateFeature(values));
   };

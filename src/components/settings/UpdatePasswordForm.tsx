@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-import { passwordFormSchema, type UpdatePasswordType } from "@/schemas";
+import { createPasswordFormSchema, type UpdatePasswordType } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Field from "../util/FormField";
 import { useMutate } from "@/hooks/UseMutate";
@@ -32,7 +32,7 @@ function UpdatePasswordForm() {
     },
   });
   const passwordForm = useForm<UpdatePasswordType>({
-    resolver: zodResolver(passwordFormSchema),
+    resolver: zodResolver(createPasswordFormSchema(t)),
   });
   const handlePasswordSubmit = async (values: UpdatePasswordType) => {
     mutate(values);

@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { contactFormSchema, type ContactFormValues } from "@/schemas";
+import { createContactFormSchema, type ContactFormValues } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -59,7 +59,7 @@ function ContactForm({ contactInfo }: { contactInfo?: ContactFormValues }) {
     mutate(data);
   };
   const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactFormSchema),
+    resolver: zodResolver(createContactFormSchema(t)),
     defaultValues: {
       email: contactInfo?.email || "",
       address: contactInfo?.address || "",

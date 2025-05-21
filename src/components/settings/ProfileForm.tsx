@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Field from "../util/FormField";
 import ImageInput from "../util/ImageInput";
-import { adminFormSchema, type AdminFrom } from "@/schemas";
+import { createAdminFormSchema, type AdminFrom } from "@/schemas";
 import { Form } from "../ui/form";
 import { useMutate } from "@/hooks/UseMutate";
 import Swal from "sweetalert2";
@@ -35,7 +35,7 @@ function ProfileFrom() {
     },
   });
   const adminForm = useForm<AdminFrom>({
-    resolver: zodResolver(adminFormSchema),
+    resolver: zodResolver(createAdminFormSchema(t)),
     defaultValues: {
       full_name: currentUser?.full_name || "",
       email: currentUser?.email || "",

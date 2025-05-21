@@ -1,9 +1,10 @@
 // src/pages/NotFound.tsx
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 export default function NotFound() {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center p-4">
       <div className="text-center space-y-8 max-w-2xl">
@@ -12,10 +13,10 @@ export default function NotFound() {
         </div>
         <div className="space-y-4">
           <h2 className="text-3xl font-semibold text-gray-800">
-            Oops! Page Not Found
+            {t("page_notFound")}
           </h2>
           <p className="text-xl text-gray-600">
-            The page you're looking for has vanished into the digital void...
+            {t('wrong_page')}
           </p>
         </div>
 
@@ -24,13 +25,13 @@ export default function NotFound() {
             onClick={() => navigate(-1)}
             className="mr-4 px-6 py-3 text-sm font-medium text-white bg-primary rounded-lg cursor-pointer transition-colors duration-300 transform hover:scale-105"
           >
-            ← Go Back
+            ← {t('buttons.back')}
           </button>
           <button
             onClick={() => navigate("/")}
             className="px-6 py-3 text-sm font-medium text-white bg-secondary rounded-lg cursor-pointer transition-colors duration-300 transform hover:scale-105"
           >
-            🏠 Return Home
+            🏠 {t('go_home')}
           </button>
         </div>
 

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import Field from "../util/FormField";
-import { questionFormSchema, type QuestionFormValues } from "@/schemas";
+import { createQuestionFormSchema, type QuestionFormValues } from "@/schemas";
 import { useMutate } from "@/hooks/UseMutate";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -50,7 +50,7 @@ export function QuestionsForm({ isUpdate }: QuestionsFormProps) {
     },
   });
   const form = useForm<QuestionFormValues>({
-    resolver: zodResolver(questionFormSchema),
+    resolver: zodResolver(createQuestionFormSchema(t)),
     defaultValues: defaultValues || {
       questionEn: "",
       questionAr: "",

@@ -17,7 +17,8 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 import type { SectionResponse } from "@/util/responsesTypes";
 import SubmitButton from "../util/SubmitButton";
-import { sectionSchema, type FormSection } from "@/schemas";
+import { createSectionSchema, type FormSection } from "@/schemas";
+import { formateSectionForm } from "@/lib/utils";
 
 function TermsPolicyForm({
   type,
@@ -52,7 +53,7 @@ function TermsPolicyForm({
   });
 
   const form = useForm<FormSection>({
-    resolver: zodResolver(sectionSchema),
+    resolver: zodResolver(createSectionSchema(t)),
   });
   const onSubmit = async (values: FormSection) => {
     mutate({
@@ -70,13 +71,7 @@ function TermsPolicyForm({
   };
   useEffect(() => {
     if (data) {
-      form.reset({
-        titleAr: data?.ar?.title || "",
-        titleEn: data?.en?.title || "",
-        descriptionAr: data?.ar?.description || "",
-        descriptionEn: data?.en?.description || "",
-        image: data?.image?.path || "",
-      });
+      form.reset(formateSectionForm(data));
     }
   }, [data, form, type]);
 

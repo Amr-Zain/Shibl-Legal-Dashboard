@@ -1,5 +1,5 @@
 import type { FormSection, QuestionFormValues, TitleFeatureFormValues, WhyUsFormValues } from "@/schemas";
-import type { QuestionResponse } from "@/util/responsesTypes";
+import type { QuestionResponse, SectionResponse } from "@/util/responsesTypes";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -90,3 +90,21 @@ export const FormateQuestionForm = (question: QuestionResponse) => ({
     answerEn: question.ar.answer,
     is_active: question.is_active,
   });
+export const formateSectionForm = (section: SectionResponse)=>{
+  return{
+      type: section?.type,
+      titleAr: section?.ar.title,
+      titleEn: section?.en.title,
+      descriptionAr: section?.ar.description,
+      descriptionEn: section?.en.title,
+      image: section?.image?.path,
+      icon: section?.icon?.path,
+      features: section?.features?.map((feature) => ({
+        valueAr: feature.ar.value,
+        valueEn: feature.en.value,
+        id: feature.id,
+        key: feature.key,
+        is_active: feature.is_active ?? true,
+      })),
+    }
+}
