@@ -27,7 +27,7 @@ function KeyValueFeatureRow({ feature }: { feature: WhyUsResponse }) {
       <TableCell>
         <span>{feature.value}</span>
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-end">
         <UpdateDeleteModals
           endpoint={`admin/why-us/${feature.id}`}
           mutationKey="why-us"

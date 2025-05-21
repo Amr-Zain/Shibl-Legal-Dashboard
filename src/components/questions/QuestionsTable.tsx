@@ -11,22 +11,48 @@ import type { QuestionResponse } from "@/util/responsesTypes";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import { FormateQuestionForm } from "@/lib/utils";
 import UpdateDeleteModals from "../util/UpdateDeleteModals";
+import { useTranslation } from "react-i18next";
+import TableRowSkeleton from "../util/TableRowSkeleton";
 
-function QuestionsTable({ questions }: { questions: QuestionResponse[] }) {
+function QuestionsTable({
+  questions,
+  isPending,
+}: {
+  questions: QuestionResponse[];
+  isPending: boolean;
+}) {
   const { locale } = useThemeConfig();
+  const { t } = useTranslation();
 
   return (
     <Card className="p-4">
-        <Table className="min-w-full">
-          <TableHeader>
+      <Table className="min-w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="min-w-[200px]">
+              {locale === "en" ? "Question" : "السؤال"}
+            </TableHead>
+
+            <TableHead className="min-w-[300px]">
+              {locale === "en" ? "Answer" : "الإجابة"}
+            </TableHead>
+
+            <TableHead className="text-end">
+              {locale === "en" ? "Actions" : "الإجراءات"}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isPending &&
+            [...Array(5)].map(() => <TableRowSkeleton icon={false} />)}
+          {questions?.length === 0 ? (
             <TableRow>
-              <TableHead className="min-w-[200px]">{locale === "en" ? "Question" : "السؤال"}</TableHead>
-              <TableHead className="min-w-[300px]">{locale === "en" ? "Answer" : "الإجابة"}</TableHead>
-              <TableHead className="text-right">{locale === "en" ? "Actions" : "الإجراءات"}</TableHead>
+              <TableCell colSpan={3} className="h-24 text-center">
+                {t("noDataFound")}
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {questions.map((question) => (
+          ) : (
+            questions?.map((question) => (
               <TableRow key={question.id} className="hover:bg-muted/50">
                 <TableCell className="font-medium">
                   {question[locale].question}
@@ -36,7 +62,7 @@ function QuestionsTable({ questions }: { questions: QuestionResponse[] }) {
                     {question[locale].answer}
                   </div>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-end">
                   <UpdateDeleteModals
                     endpoint={`admin/faq/${question.id}`}
                     mutationKey="faq"
@@ -45,9 +71,10 @@ function QuestionsTable({ questions }: { questions: QuestionResponse[] }) {
                   />
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            ))
+          )}
+        </TableBody>
+      </Table>
     </Card>
   );
 }

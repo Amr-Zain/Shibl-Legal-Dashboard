@@ -66,7 +66,7 @@ function UpdateDeleteModals({
 
   const handleOpenChange = (open: boolean) => {
     if (!open && (isPending || isError)) {
-      return; // Don't allow closing during pending state or when there's an error
+      return; 
     }
     setDeleteModal(open);
   };

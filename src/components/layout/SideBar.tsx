@@ -20,8 +20,8 @@ export default function Sidebar() {
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <nav className="grid items-start px-4 py-2 text-sm font-medium">
+        <div className="flex-1 overflow-hidden">
+          <nav className="grid items-start px-2 py-2 text-sm font-medium">
             {NavigationItems().map((item) => (
               <NavLink
                 key={item.path}
@@ -29,13 +29,14 @@ export default function Sidebar() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    "flex items-center gap-1 rounded-lg px-3 py-2 transition-all hover:text-primary group",
+                    "flex justify-center md:justify-start items-center gap-1 rounded-lg px-2 py-2 transition-all hover:text-primary group",
                     isActive ? "bg-muted text-primary" : "text-muted-foreground"
                   )
                 }
               >
-                <item.icon className="h-4 w-4" />
-                <div className="hidden md:block group-hover:block absolute start-14 bg-white px-3 py-1 rounded-md shadow-md md:shadow-none md:relative md:left-0 md:bg-transparent z-100">
+                <item.icon className='size-5' />
+                <div className="hidden md:block px-3 whitespace-nowrap">{item.label}</div>
+                <div className="hidden group-hover:block md:hidden md:group-hover:hidden absolute start-14 bg-white px-3 py-1 rounded-md shadow-md md:shadow-none md:relative md:left-0 z-100">
                   {item.label}
                 </div>
               </NavLink>
@@ -43,15 +44,17 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        <div className="p-4">
+        <div className="p-2 md:py-2 border-t-1">
           <button
             onClick={() => logout()}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary group"
+            className="flex w-full items-center gap-1 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary group"
           >
-            <LogOut className="h-4 w-4" />
-            <div className="hidden md:block group-hover:block absolute left-20 bg-white px-3 py-1 rounded-md shadow-md md:shadow-none md:relative md:left-0 md:bg-transparent">
-              {t("sidebar.logout")}
-            </div>
+            <LogOut className="size-5" />
+           
+             <div className="hidden md:block px-3 whitespace-nowrap">{t("sidebar.logout")}</div>
+                <div className="hidden group-hover:block md:hidden md:group-hover:hidden absolute start-12 bg-white px-3 py-1 whitespace-nowrap rounded-md shadow-md md:shadow-none md:relative md:left-0 z-100">
+                  {t("sidebar.logout")}
+                </div>
           </button>
         </div>
       </div>

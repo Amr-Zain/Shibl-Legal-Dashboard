@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import useFetch from "@/hooks/UseFetch";
 import type { QuestionResponse } from "@/util/responsesTypes";
 import PageHeader from "@/components/util/PageHeader";
-import Skeleton from "@/components/util/Skeleton";
+import { Button } from "@/components/ui/button";
 
 export default function QuestionsPage() {
-  const { data, isPending } = useFetch<{ data: QuestionResponse[] }>({
+  const { data, isPending, error, refetch } = useFetch<{ data: QuestionResponse[] }>({
     endpoint: "admin/faq",
     queryKey: ["faq"],
   });
@@ -19,21 +19,23 @@ export default function QuestionsPage() {
 
   const { t } = useTranslation();
   useEffect(() => {
-      document.title = "Dashboard | FAQs";
-    }, []);
+    document.title = "Dashboard | FAQs";
+  }, []);
   return (
     <div className="space-y-8 md:p-6 mt-6">
-      <PageHeader
-        header={t("sidebar.faqs")}
-        url="/faq/create"
-      />
-      {isPending ? (
-        <div className="container mx-auto p-6">
-          <Skeleton count={5} h={12} />
+      <PageHeader header={t("sidebar.faqs")} url="/faq/create" />
+      {error ?(
+        <div className="text-red-600">
+          {t("error_loading_data")}: <Button
+            variant={"destructive"}
+            onClick={() => refetch()}
+          >
+            {t('retry')}
+          </Button>
         </div>
-      ) : (
-        <QuestionsList questions={questions} />
-      )}     
+      )  : (
+        <QuestionsList questions={questions} isPending={isPending} />
+      )}
     </div>
   );
 }

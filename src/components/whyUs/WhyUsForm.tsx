@@ -10,12 +10,14 @@ import Swal from "sweetalert2";
 import { fromateKeyFeature } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import PageHeader from "../util/PageHeader";
 
 export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
   const queryClient = useQueryClient();
   const defaultValues = useLocation().state as WhyUsFormValues;
+  const navigate = useNavigate();
+
   const { isPending, mutate } = useMutate({
     endpoint: `admin/why-us${isUpdate ? "/" + defaultValues?.id : ""}`,
     method: "post",
@@ -36,6 +38,7 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
       queryClient.invalidateQueries({
         queryKey: ["why-us"],
       });
+      navigate('/why-us')
     },
     onError: (error: unknown) => {
       form.setError("root", {
@@ -64,7 +67,10 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
     <div className="space-y-8 md:p-6 mt-6">
       <PageHeader header={t("sidebar.whyUs")} />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-8 py-6 px-4 border rounded-md bg-white"
+        >
           <div className="grid gap-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Field<WhyUsFormValues>
@@ -97,12 +103,12 @@ export function WhyUsForm({ isUpdate }: { isUpdate?: boolean }) {
                 onChange={(path) => form.setValue("icon", path as string)}
               />
             </div>
-          <Field<WhyUsFormValues>
-            control={form.control}
-            name="is_active"
-            label={t("fields.active")}
-            checkbox
-          />
+            <Field<WhyUsFormValues>
+              control={form.control}
+              name="is_active"
+              label={t("fields.active")}
+              checkbox
+            />
           </div>
 
           {form.formState.errors.root && (

@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { fromateFeature } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import PageHeader from "../util/PageHeader";
 
 export function TitleFeatureForm({ isUpdate }: { isUpdate?: boolean }) {
@@ -28,7 +28,8 @@ export function TitleFeatureForm({ isUpdate }: { isUpdate?: boolean }) {
     },
     mode: "onBlur",
   });
-
+    const navigate = useNavigate();
+  
   const { isPending, mutate } = useMutate({
     endpoint: `admin/our-features${
       isUpdate ? "/" + defaultValues?.id?.toString() : ""
@@ -49,6 +50,7 @@ export function TitleFeatureForm({ isUpdate }: { isUpdate?: boolean }) {
         timer: 2000,
       });
       queryClient.invalidateQueries({ queryKey: ["our-features"] });
+      navigate('/services');
     },
     onError: (error: unknown) => {
       form.setError("root", {

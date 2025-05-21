@@ -9,6 +9,8 @@
   "session_expired": "Your session has expired",
   "pleaseLogin": "Please Login, Again",
   "success": "Success",
+  "noDataFound": "No Data Found",
+  "retry": "Retry",
   "formsTitle": {
     "createSection": "Add New Section From",
     "updateSection": "Update Section From",
@@ -16,7 +18,9 @@
     "questionCreateTitleDes": "Fill in the details for the new question in both English and Arabic.",
     "contactTitle": "Edit Contact Information",
     "addFeature": "Add New Feature",
-    "addService": "Add New Service"
+    "addService": "Add New Service",
+    "change_password": "Change Password",
+    "edit_profile": "Edit Profile"
   },
   "service": {
     "icon": "Icon",
@@ -32,6 +36,7 @@
     "actions": "Actions",
     "noResults": "No services found."
   },
+
   "sidebar": {
     "home": "Home",
     "dashboard": "Dashboard",
@@ -65,7 +70,8 @@
     "questionUpdated": "Question Updated Successfully",
     "contactUpdated": "Contacts Updated Successfully",
     "WayUsCreated": "Way Us Created Successfully",
-    "WayUsUpdated": "Way Us Updated Successfully"
+    "WayUsUpdated": "Way Us Updated Successfully",
+    "updatePassword": "Update Password Successfully"
   },
   "services": {
     "title": "Services",
@@ -114,13 +120,13 @@
     "usageLimitLessThanMaxLimit": "User usage limit field must be less than the maximum usage limit.",
     "noSpacesAllowed": "Spaces are not allowed"
   },
-  "formTitles":{
-    "createSection":"Add New Section",
-    "createBanner":"Add New Banner",
-    "updateSection":"Update Section",
+  "formTitles": {
+    "createSection": "Add New Section",
+    "createBanner": "Add New Banner",
+    "updateSection": "Update Section",
     "updateBanner": "Update Banner",
-    "createService":"Create Service",
-    "updateService":"Update Service",
+    "createService": "Create Service",
+    "updateService": "Update Service",
     "createWayUs": "Create Why Us",
     "updtaeWayUs": "Update Why Us",
     "createQuestion": "Create New Question",
@@ -331,8 +337,6 @@
     "total_item_price": "Total Price Item",
     "sub_orders": "Sub Orders",
     "product_name": "Product Name",
-    "edit_profile": "Edit Profile",
-    "change_password": "Change Password",
     "title": "Title",
     "name": "Name",
     "image": "Image",

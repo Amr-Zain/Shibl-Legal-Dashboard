@@ -1,49 +1,48 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Card } from "@/components/ui/card";
-import ProfileFrom from "@/components/settings/ProfileForm";
-import { useEffect } from "react";
-import UpdatePasswordForm from "@/components/settings/UpdatePasswordForm";
-import PageHeader from "@/components/util/PageHeader";
+import ContactForm from "@/components/contact/contactForm";
+import { Button } from "@/components/ui/button";
+import Skeleton from "@/components/util/Skeleton";
+import useFetch from "@/hooks/UseFetch";
+import type { ContactFormValues, ContactKeys } from "@/schemas";
+
 import { useTranslation } from "react-i18next";
 
-function Settings() {
-  const { t } = useTranslation()
-  useEffect(() => {
-    document.title = "Dashboard | Settings";
+function Contact() {
+  const { t } = useTranslation();
+  const { data, isPending, error, refetch } = useFetch({
+    endpoint: "admin/contact-info",
+    queryKey: ["contact"],
   });
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const contactData = data?.data as {
+    id: number;
+    key: ContactKeys;
+    value: string;
+  }[];
+
+  const contactObj = contactData?.reduce((acc, item) => {
+    return { ...acc, [item.key]: item.value };
+  }, {} as ContactFormValues);
   return (
     <div className="space-y-8 md:p-6 mt-6">
-      <PageHeader
-        header={t("sidebar.settings")}
-      />
-      <Card className="p-4">
-        <Accordion type="single" collapsible className="w-full px-4">
-          <AccordionItem value="profile">
-            <AccordionTrigger className="flex-1 text-left">
-              <span className="font-medium">{t('fields.updateProfile')}</span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-4 pt-2">
-              <ProfileFrom />
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="password">
-            <AccordionTrigger className="flex-1 text-left">
-              <span className="font-medium">{t('fields.updatePassword')}</span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-4 pt-2">
-                <UpdatePasswordForm />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </Card>
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-bold">{t("sidebar.settings")}</h1>
+      </div>
+      {error ? (
+        <div className="text-red-600">
+          {t("error_loading_data")}:{" "}
+          <Button variant={"destructive"} onClick={() => refetch()}>
+            {t("retry")}
+          </Button>
+        </div>
+      ) : isPending ? (
+        <Skeleton count={8} h={12} />
+      ) : (
+        <ContactForm contactInfo={contactObj} />
+      )}
     </div>
   );
 }
 
-export default Settings;
+export default Contact;

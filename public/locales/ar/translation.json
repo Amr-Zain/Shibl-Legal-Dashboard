@@ -9,6 +9,8 @@
   "session_expired": "انتهت صلاحية جلستك",
   "pleaseLogin": "يرجى تسجيل الدخول مرة أخرى",
   "success": "نجاح",
+  "noDataFound": "لا توجد بيانات",
+  "retry": "إعادة المحاولة",
   "formsTitle": {
     "createSection": "نموذج إضافة قسم جديد",
     "updateSection": "نموذج تحديث القسم",
@@ -16,7 +18,9 @@
     "questionCreateTitleDes": "املأ تفاصيل السؤال الجديد باللغتين الإنجليزية والعربية.",
     "contactTitle": "تعديل معلومات الاتصال",
     "addFeature": "إضافة ميزة جديدة",
-    "addService": "إضافة خدمة جديدة"
+    "addService": "إضافة خدمة جديدة",
+    "change_password": "تغيير كلمة المرور",
+    "edit_profile": "تعديل الحساب الشخصي"
   },
   "successMessages": {
     "SectionCreated": "تم إنشاء القسم بنجاح",
@@ -26,7 +30,8 @@
     "questionUpdated": "تم تحديث السؤال بنجاح",
     "contactUpdated": "تم تحديث جهات الاتصال بنجاح",
     "WayUsCreated": "تم إنشاء صفحة \"لماذا نحن\" بنجاح",
-    "WayUsUpdated": "تم تحديث صفحة \"لماذا نحن\" بنجاح"
+    "WayUsUpdated": "تم تحديث صفحة \"لماذا نحن\" بنجاح",
+    "updatePassword": "تم تحديث كلمة المرور بنجاح"
   },
   "sidebar": {
     "home": "الرئيسية",
@@ -467,8 +472,6 @@
     "total_item_price": "إجمالي سعر القطعة",
     "sub_orders": "طلبات فرعية",
     "product_name": "اسم المنتج",
-    "edit_profile": "تعديل الحساب الشخصي",
-    "change_password": "تغيير كلمة المرور",
     "title": "العنوان",
     "name": "الاسم",
     "image": "الصورة",

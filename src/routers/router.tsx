@@ -24,7 +24,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const Sections = lazy(() => import("@/pages/Sections"));
 const Questions = lazy(() => import("@/pages/Questions"));
-const Contact = lazy(() => import("@/pages/Contact"));
+const Settings = lazy(() => import("@/pages/settings"));
 const WhyUs = lazy(() => import("@/pages/WhyUs"));
 const Services = lazy(() => import("@/pages/Services"));
 const Terms = lazy(() => import("@/pages/terms"));
@@ -68,7 +68,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "settings",
-        element: <Contact />,
+        element: <Settings />,
       },
       {
         path: "why-us",

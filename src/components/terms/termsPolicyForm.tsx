@@ -20,6 +20,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import type { SectionResponse } from "@/util/responsesTypes";
 import SubmitButton from "../util/SubmitButton";
+import { Button } from "../ui/button";
 
 const formSchema = z.object({
   titleAr: z.string().min(10, "Arabic title must be at least 10 characters"),
@@ -36,22 +37,18 @@ const formSchema = z.object({
 function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
   const { t } = useTranslation();
   type TermsType = z.infer<typeof formSchema>;
-  const { isPending: getPending, data: response } = useFetch({
+  const {
+    isPending: getPending,
+    data: response,
+    error,
+    refetch
+  } = useFetch({
     endpoint: `admin/sections?type=${type}`,
     queryKey: [type],
-    onError: (error) => {
-      Swal.fire({
-        title: t("error"),
-        text: error instanceof Error ? error.message : t("errors.fetchFailed"),
-        icon: "error",
-        confirmButtonText: t("buttons.ok"),
-      });
-    },
   });
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   const data = (response?.data[0] as SectionResponse) || null;
-  console.log(data);
   const { isPending, mutate } = useMutate({
     endpoint: `admin/sections${data ? "/" + data.id : ""}`,
     mutationKey: ["terms"],
@@ -111,10 +108,27 @@ function TermsPolicyForm({ type }: { type: "terms" | "privacy_policy" }) {
       </div>
     );
   }
+  if (error) {
+    return (
+      (
+        <div className="text-red-600">
+          {t("error_loading_data")}: <Button
+            variant={"destructive"}
+            onClick={() => refetch()}
+          >
+            {t('retry')}
+          </Button>
+        </div>
+      ) 
+    );
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-6 px-4 border rounded-md bg-white">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 py-6 px-4 border rounded-md bg-white"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <Field<TermsType>
             name="titleAr"

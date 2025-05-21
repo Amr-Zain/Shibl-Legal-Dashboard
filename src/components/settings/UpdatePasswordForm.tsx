@@ -13,11 +13,11 @@ import PageHeader from "../util/PageHeader";
 function UpdatePasswordForm() {
   const { t } = useTranslation();
   const { isPending, mutate } = useMutate({
-    endpoint: `admin/profile`,
+    endpoint: `admin/profile/update-password`,
     method: "post",
-    mutationKey: ["profile"],
+    mutationKey: ["update-password"],
     onSuccess: (data: { message?: string }) => {
-      const title = data?.message || t("successMessages.SectionCreated");
+      const title = data?.message || t("successMessages.updatePassword");
       Swal.fire({
         title,
         icon: "success",
@@ -44,7 +44,7 @@ function UpdatePasswordForm() {
       <Form {...passwordForm}>
         <form
           onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)}
-          className="space-y-4"
+           className="space-y-8 py-6 px-4 border rounded-md bg-white"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field<UpdatePasswordType>

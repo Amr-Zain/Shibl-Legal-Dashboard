@@ -52,7 +52,7 @@ function ProfileFrom() {
       <Form {...adminForm}>
         <form
           onSubmit={adminForm.handleSubmit(handleAdminSubmit)}
-          className="space-y-4"
+           className="space-y-8 py-6 px-4 border rounded-md bg-white"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field<AdminFrom>

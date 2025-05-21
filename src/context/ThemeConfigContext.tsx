@@ -4,7 +4,7 @@ import i18next from "i18next";
 type ThemeConfigContextType = {
   theme: string;
   locale: 'ar'| 'en';
-  rtlClass: string;
+  rtlClass: 'rtl'|'ltr';
   toggleTheme: (payload?: string) => void;
   toggleLocale: () => void;
 };
@@ -12,7 +12,7 @@ type ThemeConfigContextType = {
 const ThemeConfigContext = createContext<ThemeConfigContextType>({
   theme: localStorage.getItem("theme") || "light",
   locale: localStorage.getItem("i18nextLng") as 'ar'|'en' || "ar",
-  rtlClass: localStorage.getItem("rtlClass") || "rtl",
+  rtlClass: localStorage.getItem("rtlClass") as 'rtl'|'ltr'|| "rtl",
   toggleTheme: () => {},
   toggleLocale: () => {},
 });
@@ -28,8 +28,8 @@ export const ThemeConfigProvider = ({
   const [locale, setLocale] = useState<'ar'|'en'>(
     () => localStorage.getItem("i18nextLng") as 'ar'|'en'|| "en"
   );
-  const [rtlClass, setRtlClass] = useState(
-    () => localStorage.getItem("rtlClass") || "ltr"
+  const [rtlClass, setRtlClass] = useState<'rtl'|'ltr'>(
+    () => localStorage.getItem("rtlClass") as 'rtl'|'ltr' || "ltr"
   );
 
   const toggleTheme = (payload?: string) => {

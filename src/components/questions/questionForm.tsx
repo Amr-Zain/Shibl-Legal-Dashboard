@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
 import { formateQuestion } from "@/lib/utils";
 import SubmitButton from "../util/SubmitButton";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import PageHeader from "../util/PageHeader";
 
 interface QuestionsFormProps {
@@ -21,6 +21,7 @@ export function QuestionsForm({ isUpdate }: QuestionsFormProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const defaultValues = useLocation().state as QuestionFormValues;
+  const navigate = useNavigate()
   const { isPending, mutate } = useMutate({
     endpoint: `admin/faq${isUpdate ? "/" + defaultValues?.id?.toString() : ""}`,
     method: "post",
@@ -45,6 +46,7 @@ export function QuestionsForm({ isUpdate }: QuestionsFormProps) {
         timer: 2000,
       });
       queryClient.refetchQueries({ queryKey: ["faq"] });
+      navigate('/faq')
     },
   });
   const form = useForm<QuestionFormValues>({

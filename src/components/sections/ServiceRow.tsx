@@ -35,7 +35,7 @@ function ServicesTableRow({
           {service[locale]?.description}
         </p>
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-end">
         <UpdateDeleteModals
           endpoint={`admin/our-features/${service?.id}`}
           mutationKey="our-features"

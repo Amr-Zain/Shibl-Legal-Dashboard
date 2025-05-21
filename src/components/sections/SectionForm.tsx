@@ -27,7 +27,7 @@ import { formateSection } from "@/lib/utils";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import { useQueryClient } from "@tanstack/react-query";
 import SubmitButton from "../util/SubmitButton";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import type { SectionResponse } from "@/util/responsesTypes";
 import PageHeader from "../util/PageHeader";
 
@@ -43,6 +43,7 @@ const SectionForm = ({
   const { locale } = useThemeConfig();
   const queryClient = useQueryClient();
   const section = useLocation().state as SectionResponse;
+  const navigate = useNavigate();
 
   const form = useForm<FormSection>({
     resolver: zodResolver(sectionSchema),
@@ -68,7 +69,7 @@ const SectionForm = ({
   const { isPending, mutate } = useMutate({
     endpoint: `admin/sections${isUpdate ? "/" + section?.id.toString() : ""}`,
     method: "post",
-    mutationKey: ["sections"],
+    mutationKey: [isBanner ? "banners" : "sections"],
     onSuccess: (data: { message?: string }) => {
       const title =
         data?.message ||
@@ -85,6 +86,7 @@ const SectionForm = ({
       queryClient.invalidateQueries({
         queryKey: [isBanner ? "banners" : "sections"],
       });
+      navigate('/'+isBanner ? "banners" : "sections")
     },
     onError: (error: unknown) => {
       form.setError("root", {

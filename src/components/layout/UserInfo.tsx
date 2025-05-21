@@ -7,21 +7,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useThemeConfig } from "@/context/ThemeConfigContext";
+import { useTranslation } from "react-i18next";
 
 const UserInfo = () => {
   const { currentUser, logout } = useContext(AuthContext)!;
+  const { t } = useTranslation();
   const navigation = [
-    { name: "Profile Data", href: "/profile-data" },
-    { name: "ResetPassword", href: "/reset-password" },
+    { name: t("formsTitle.edit_profile"), href: "/profile-data" },
+    { name: t("formsTitle.change_password"), href: "/reset-password" },
   ];
-
+  const { rtlClass } = useThemeConfig();
   return (
     <div className="flex flex-shrink-0 gap-2 items-center">
       <div className="hidden md:flex md:flex-col md:items-end md:leading-tight mr-4">
         <span className="font-semibold">{currentUser?.full_name}</span>
       </div>
 
-      <DropdownMenu>
+      <DropdownMenu dir={rtlClass}>
         <DropdownMenuTrigger asChild>
           <div className="relative size-8 rounded-full overflow-hidden cursor-pointer">
             <img
@@ -35,16 +38,14 @@ const UserInfo = () => {
         <DropdownMenuContent align="end" className="w-48">
           {navigation.map((item) => (
             <DropdownMenuItem key={item.name} asChild>
-              <Link
-                to={item.href}
-                onClick={() => window.scrollTo(0, 0)}
-                className="cursor-pointer"
-              >
+              <Link to={item.href} className="cursor-pointer">
                 {item.name}
               </Link>
             </DropdownMenuItem>
           ))}
-          <DropdownMenuItem onSelect={logout}>Logout</DropdownMenuItem>
+          <DropdownMenuItem onSelect={logout}>
+            {t("sidebar.logout")}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
