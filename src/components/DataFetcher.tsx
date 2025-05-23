@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
 import Skeleton from "./util/Skeleton";
 import { TableCell, TableRow } from "./ui/table";
-import TableRowSkeleton from "./util/TableRowSkeleton";
+import CompleteTableSkeleton from "./util/TableRowSkeleton";
 
 interface DataFetcherProps<T> {
   endpoint: string;
@@ -31,7 +31,7 @@ function DataFetcher<T>({
   if (isPending) {
     if(renderLoading)return <>{renderLoading()}</>
     return isTable ? (
-      [...Array(5)].map((_, idx) => <TableRowSkeleton key={idx} />)
+     <CompleteTableSkeleton  />
     ) : (
       <div className="container mx-auto p-6">
         <Skeleton count={3} h={24} />

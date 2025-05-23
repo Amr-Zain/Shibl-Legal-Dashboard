@@ -3,6 +3,7 @@ import UpdateDeleteModals from "../util/UpdateDeleteModals";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { WhyUsResponse } from "@/util/responsesTypes";
 import { TableCell, TableRow } from "../ui/table";
+import { formateKeyFeatureForm } from "@/lib/utils";
 
 function KeyValueFeatureRow({ feature }: { feature: WhyUsResponse }) {
   const { locale } = useThemeConfig();
@@ -32,15 +33,8 @@ function KeyValueFeatureRow({ feature }: { feature: WhyUsResponse }) {
           endpoint={`admin/why-us/${feature.id}`}
           mutationKey="why-us"
           updatUrl={`/why-us/edit/${feature.id}`}
-          state={{
-            id: feature.id,
-            keyEn: feature.en?.key,
-            keyAr: feature.ar?.key,
-            value: Number(feature?.value),
-            icon: feature?.icon?.path as string,
-            is_active: feature?.is_active,
-            url: feature?.icon?.url,
-          }}
+          is_active={feature.is_active}
+          state={formateKeyFeatureForm(feature)}
         />
       </TableCell>
     </TableRow>

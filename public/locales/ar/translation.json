@@ -6,7 +6,7 @@
     "features": "الميزات",
     "addSection": "إضافة قسم جديد"
   },
- 
+
   "formsTitle": {
     "createSection": "نموذج إضافة قسم جديد",
     "updateSection": "نموذج تحديث القسم",
@@ -224,12 +224,14 @@
     "profileImage": "صورة الملف الشخصي",
     "currentPassword": "كلمة المرور الحالية",
     "newPassword": "كلمة المرور الجديدة",
-    "confirmNewPassword": "تأكيد كلمة المرور الجديدة"
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "password": "كلمة المرور",
+    "login": "تسجيل الدخول"
   },
   "loginSuccessfully": "تم تسجيل الدخول بنجاح",
   "logoutSuccessfully": "تم تسجيل الخروج بنجاح",
   "error": "عذراً، يوجد خطأ!",
- "session_expired": "انتهت صلاحية جلستك",
+  "session_expired": "انتهت صلاحية جلستك",
   "pleaseLogin": "يرجى تسجيل الدخول مرة أخرى",
   "success": "نجاح",
   "noDataFound": "لا توجد بيانات",

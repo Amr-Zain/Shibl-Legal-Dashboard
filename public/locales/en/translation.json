@@ -207,7 +207,9 @@
     "profileImage": "Profile Image",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password"
+    "confirmNewPassword": "Confirm New Password",
+    "password": "Password",
+    "login":"Login"
   },
 
   "session_expired": "Your session has expired",

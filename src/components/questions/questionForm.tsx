@@ -45,7 +45,7 @@ export function QuestionsForm({ isUpdate }: QuestionsFormProps) {
         icon: "success",
         timer: 2000,
       });
-      queryClient.refetchQueries({ queryKey: ["faq"] });
+      queryClient.invalidateQueries({ queryKey: ["faq"] });
       navigate('/faq')
     },
   });

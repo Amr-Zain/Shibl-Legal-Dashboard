@@ -15,7 +15,7 @@ const Header = () => {
             onClick={toggleLocale}
           >
             <Globe className="h-5 w-5" />
-            {locale.toUpperCase()}
+            {locale =='ar'?'EN':'AR'}
           </div>
           <UserInfo />
         </div>

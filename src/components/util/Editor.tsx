@@ -3,7 +3,6 @@ import MDEditor from "@uiw/react-md-editor";
 function Editor({
   value,
   setValue,
-  error,
   placeholder,
 }: {
   value: string;
@@ -24,7 +23,6 @@ function Editor({
             placeholder,
             }}
         />
-        {error && <p className="startup-form_error">{error}</p>}
     </div>
 );
 }

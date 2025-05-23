@@ -41,6 +41,7 @@ function ServicesTableRow({
           mutationKey="our-features"
           updatUrl={`/services/edit/${service?.id}`}
           state={formatService(service)}
+          is_active={service.is_active}
         />
       </TableCell>
     </TableRow>

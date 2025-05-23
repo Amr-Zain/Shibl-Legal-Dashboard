@@ -9,7 +9,7 @@ interface User {
   full_name: string;
   image: {
     url: string;
-    path:string;
+    path: string;
   };
   token: string;
 }
@@ -47,35 +47,26 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
 
-  const login = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }): Promise<void> => {
+  const login = async (data): Promise<void> => {
     setLoading(true);
     try {
-      const response = await axios.post(
+     /*  const response = await axios.post(
         import.meta.env.VITE_BASE_URL + "/admin/auth/login",
         {
           email,
           password,
         }
-      );
-      Swal.fire({
-        title: response.data.message,
-        icon: "success",
-        timer: 2000,
-      });
-      const data = response.data.data;
+      ); */
+     
       const token = data.token;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(data));
       Cookies.set("token", token);
       setCurrentUser(data);
     } catch (error) {
-      const title = error instanceof Error ? error.message : "faild to login";
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const title = error.response.data.message;
       Swal.fire({
         title,
         icon: "error",

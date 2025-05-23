@@ -6,6 +6,9 @@ import DataFetcher from "@/components/DataFetcher";
 import type { SectionResponse } from "@/util/responsesTypes";
 import { Loader2 } from "lucide-react";
 
+interface APIResponse {
+  data: SectionResponse[];
+}
 function Terms() {
   const { t } = useTranslation();
 
@@ -16,7 +19,7 @@ function Terms() {
   return (
     <div className="space-y-8 md:p-6 mt-6">
       <PageHeader header={t("terms.title")} />
-      <DataFetcher<SectionResponse[]>
+      <DataFetcher<APIResponse>
         endpoint="admin/sections?type=terms"
         queryKey={["privacy_policy"]}
         renderLoading={() => (
@@ -24,8 +27,8 @@ function Terms() {
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         )}
-        renderData={(data: SectionResponse[]) => {
-          return <TermsPolicyForm type="terms" data={data[0]} />;
+        renderData={(data: APIResponse) => {
+          return <TermsPolicyForm type="terms" data={data.data[0]} />;
         }}
       />
     </div>

@@ -8,7 +8,6 @@ import Dashboard from "@/pages/Dashboard";
 // import WhyUs from "@/pages/WhyUs";
 // import Services from "@/pages/Services";
 import NotFound from "./NotFound";
-import PrivateRoute from "./protectedRoute";
 import { lazy } from "react";
 import Banners from "@/pages/Banners";
 import Policy from "@/pages/PrivacyPolicy";
@@ -30,11 +29,7 @@ const Terms = lazy(() => import("@/pages/terms"));
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <App />
-      </PrivateRoute>
-    ),
+    element: <App />,
     children: [
       {
         index: true,
@@ -70,7 +65,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "why-us",
-         children: [
+        children: [
           { index: true, element: <WhyUs /> },
           { path: "create", element: <WhyUsForm /> },
           { path: "edit/:id", element: <WhyUsForm isUpdate /> },
@@ -80,7 +75,7 @@ const routes: RouteObject[] = [
         path: "services",
         children: [
           { index: true, element: <Services /> },
-          { path: "create", element: <TitleFeatureForm  /> },
+          { path: "create", element: <TitleFeatureForm /> },
           { path: "edit/:id", element: <TitleFeatureForm isUpdate /> },
         ],
       },
@@ -104,7 +99,6 @@ const routes: RouteObject[] = [
         path: "reset-password",
         element: <UpdatePasswordForm />,
       },
-     
     ],
   },
   { path: "/login", element: <Login /> },

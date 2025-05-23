@@ -17,23 +17,43 @@ import { useMutate } from "@/hooks/UseMutate";
 import Swal from "sweetalert2";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { Switch } from "../ui/switch";
 
 interface UpdateDeleteModalsProps {
   endpoint: string;
   mutationKey: string;
   updatUrl: string;
-  state: unknown
+  state: unknown;
+  is_active: boolean;
+  hideActive?: boolean;
 }
 function UpdateDeleteModals({
   endpoint,
   mutationKey,
   updatUrl,
-  state
+  state,
+  is_active,
+  hideActive,
 }: UpdateDeleteModalsProps) {
   const [deleteModal, setDeleteModal] = useState(false);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [isActive, setIsActive] = useState(is_active);
 
+  const { mutateAsync: taggleActive } = useMutate<void>({
+    endpoint,
+    method: "put",
+    mutationKey: [mutationKey],
+    formData: true,
+    /*  onError: (error) => {
+     
+    },
+     */
+  });
+  const handleStatusToggle = async (checked: boolean) => {
+    await taggleActive({ is_active: checked });
+    setIsActive(checked);
+  };
   const [error, setError] = useState("");
   const {
     isPending,
@@ -66,15 +86,36 @@ function UpdateDeleteModals({
 
   const handleOpenChange = (open: boolean) => {
     if (!open && (isPending || isError)) {
-      return; 
+      return;
     }
     setDeleteModal(open);
   };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="flex justify-end gap-2">
       {/* Edit Dialog */}
-      <Button onClick={()=>navigate(updatUrl,{state})} variant="outline" size="sm" dir="ltr">
+      {!hideActive && (
+        <div className="flex items-center gap-2">
+          <Switch
+            dir="ltr"
+            checked={isActive}
+            onCheckedChange={handleStatusToggle}
+            className="data-[state=checked]:bg-green-500 scale-90 md:scale-100"
+          />
+         {/*  <Badge
+            variant={isActive ? "default" : "secondary"}
+            className="hidden sm:block"
+          >
+            {isActive ? t("sections.active") : t("sections.inactive")}
+          </Badge> */}
+        </div>
+      )}
+      <Button
+        onClick={() => navigate(updatUrl, { state })}
+        variant="outline"
+        size="sm"
+        dir="ltr"
+      >
         <PencilIcon className="w-4 h-4 mr-2" />
         <p className="hidden sm:block">{t("buttons.edit")}</p>
       </Button>

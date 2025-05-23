@@ -1,16 +1,20 @@
-import { cn } from "@/lib/utils"; 
-import { TableCell, TableRow } from "../ui/table";
+import { cn } from "@/lib/utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
-const Skeleton = ({
-  className,
-}: {
-  className: string;
-}) => {
+const Skeleton = ({ className }: { className: string }) => {
   return <div className={cn("animate-pulse rounded-md bg-muted", className)} />;
 };
 
 export { Skeleton };
-const TableRowSkeleton = ({ icon = true}: { icon?:boolean}) => (
+
+const TableRowSkeleton = ({ icon = true }: { icon?: boolean }) => (
   <TableRow>
     {icon && (
       <TableCell>
@@ -31,4 +35,26 @@ const TableRowSkeleton = ({ icon = true}: { icon?:boolean}) => (
     </TableCell>
   </TableRow>
 );
-export default TableRowSkeleton;
+
+// Complete Table Component with Skeletons
+const CompleteTableSkeleton = ({ rows = 5, showIcon = true }: { rows?: number, showIcon?: boolean }) => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {showIcon && <TableHead className="w-[50px]">Image</TableHead>}
+          <TableHead>Name</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: rows }).map((_, index) => (
+          <TableRowSkeleton key={index} icon={showIcon} />
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default CompleteTableSkeleton;

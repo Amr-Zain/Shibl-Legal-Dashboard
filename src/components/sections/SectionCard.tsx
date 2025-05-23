@@ -1,9 +1,4 @@
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useMutate } from "@/hooks/UseMutate";
-import { toast } from "sonner";
 import { fullbackImage } from "@/util/data";
 import { useThemeConfig } from "@/context/ThemeConfigContext";
 import type { SectionResponse } from "@/util/responsesTypes";
@@ -11,30 +6,11 @@ import UpdateDeleteModals from "../util/UpdateDeleteModals";
 
 interface SectionProps {
   section: SectionResponse;
-  isBanner: boolean;
+  isBanner?: boolean;
 }
 
 function SectionCard({ section, isBanner }: SectionProps) {
-  const [isActive, setIsActive] = useState(section.is_active);
-  const { t } = useTranslation();
   const { locale } = useThemeConfig();
-
-  const { mutateAsync: taggleActive } = useMutate<void>({
-    endpoint: `admin/sections/${section.id}`,
-    method: "put",
-    mutationKey: [`admin/sections/${section.id}`],
-    formData: true,
-    onError: (error) => {
-      toast("someting went wrong", {
-        description:
-          error instanceof Error ? error.message : "please try again",
-      });
-    },
-  });
-  const handleStatusToggle = async (checked: boolean) => {
-    await taggleActive({ is_active: checked });
-    setIsActive(checked);
-  };
 
   return (
     <div className="border rounded-lg p-4 md:p-6 mb-4 bg-card shadow-sm hover:shadow-md transition-shadow">
@@ -43,26 +19,13 @@ function SectionCard({ section, isBanner }: SectionProps) {
           <Badge variant="outline" className="hidden sm:block">
             {section.type}
           </Badge>
-          <div className="flex items-center gap-2">
-            <Switch
-              dir="ltr"
-              checked={isActive}
-              onCheckedChange={handleStatusToggle}
-              className="data-[state=checked]:bg-green-500 scale-90 md:scale-100"
-            />
-            <Badge
-              variant={isActive ? "default" : "secondary"}
-              className="hidden sm:block"
-            >
-              {isActive ? t("sections.active") : t("sections.inactive")}
-            </Badge>
-          </div>
         </div>
         <UpdateDeleteModals
           endpoint={`admin/sections/${section.id}`}
           mutationKey={isBanner ? "banners" : "sections"}
           updatUrl={`/${isBanner ? "banners" : "sections"}/edit/${section.id}`}
           state={section}
+          is_active={section.is_active!}
         />
       </div>
 
